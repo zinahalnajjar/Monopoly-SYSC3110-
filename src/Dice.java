@@ -42,7 +42,7 @@ public class Dice {
      * @return the generated random number on die1
      */
     public int getDie1(){
-        return die1;
+        return this.die1;
     }
 
     /**
@@ -50,7 +50,7 @@ public class Dice {
      * @return the generated random number on die2
      */
     public int getDie2(){
-        return die2;
+        return this.die2;
 
     }
 
