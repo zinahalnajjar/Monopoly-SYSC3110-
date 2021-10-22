@@ -42,4 +42,15 @@ public class Property {
         return rent;
     }
 
+    public void setRent(int rent) {
+        this.rent = rent;
+    }
+
+    public int getCost() {
+        return cost;
+    }
+
+    public void setCost(int cost) {
+        this.cost = cost;
+    }
 }
