@@ -67,7 +67,7 @@ public class Board {
         return newLocation;
     }
 
-    public List<Property> propertiesList(){
+    public ArrayList<Property> propertiesList(){
         return properties;
     }
 }
