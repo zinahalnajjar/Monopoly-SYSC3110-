@@ -63,6 +63,9 @@ public class Board {
     public Property move(int spaces, Property location){
         int i = properties.indexOf(location);
         i = i + spaces;
+        if(i > properties.size()){
+            i = i - properties.size();
+        }
         newLocation = properties.get(i);
         return newLocation;
     }
