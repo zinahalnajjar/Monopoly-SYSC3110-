@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.List;
 
 public class Board {
 
@@ -60,10 +61,13 @@ public class Board {
     }
 
     public Property move(int spaces, Property location){
+        int i = properties.indexOf(location);
+        i = i + spaces;
+        newLocation = properties.get(i);
         return newLocation;
     }
 
-    public ArrayList propertiesList(){
+    public List<Property> propertiesList(){
         return properties;
     }
 }
