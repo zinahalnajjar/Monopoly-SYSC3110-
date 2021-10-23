@@ -65,7 +65,17 @@ public class Game {
         System.out.println("Player " + currentPlayer.getId() + "'s turn");
     }
 
-    public void CheckWin(){
+    public void payRent(Property property){
+        int rent = property.getRent();
+        currentPlayer.removeMoney(rent);
+        checkBankruptcy();
+    }
+
+    public void checkBankruptcy(){
+
+    }
+
+    public void checkWin(){
 
     }
 
