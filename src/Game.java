@@ -71,8 +71,13 @@ public class Game {
         checkBankruptcy();
     }
 
-    public void checkBankruptcy(){
-
+    public boolean checkBankruptcy(){
+        if(currentPlayer.getMoney() < 0){
+            currentPlayer.setBankruptcy(true);
+            System.out.println("Player " + currentPlayer.getId());
+            return true;
+        }
+        return false;
     }
 
     public void checkWin(){
