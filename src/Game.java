@@ -20,7 +20,7 @@ public class Game {
 
     private void initPlayers() {
         for(int i = 1; i < 5; i++){
-            players.add(new Player(i, 1500));
+            players.add(new Player(i, 1500)); //player id and rent
         }
 
         currentPlayer = players.get(0);
@@ -32,8 +32,20 @@ public class Game {
         }
     }
 
-    public void buy(){
+    public void buy(Property property){
+        int cost = property.getCost();
+        int money = currentPlayer.getMoney(); //return players total money
 
+        if (cost > money){
+            System.out.println("You don't have enough money.");
+        } else{
+
+            property.setOwner(currentPlayer);
+            currentPlayer.addProperty(property);
+            currentPlayer.removeMoney(cost);
+            System.out.println("You have successfully bought the property.");
+            System.out.println("You have " + currentPlayer.getMoney() +"$ left.");
+        }
     }
 
     public void sell(){
