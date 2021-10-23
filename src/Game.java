@@ -110,7 +110,7 @@ public class Game {
         }
         if(i == 3){
             gameOver = true;
-            System.out.println("Player " + p.getId() + " is the winner!!");
+            System.out.println("Player " + winner.getId() + " is the winner!!");
         }
     }
 
