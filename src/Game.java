@@ -39,17 +39,19 @@ public class Game {
         if (cost > money){
             System.out.println("You don't have enough money.");
         } else{
-
             property.setOwner(currentPlayer);
             currentPlayer.addProperty(property);
             currentPlayer.removeMoney(cost);
+
             System.out.println("You have successfully bought the property.");
             System.out.println("You have " + currentPlayer.getMoney() +"$ left.");
         }
     }
 
-    public void sell(){
-
+    public void sell(Property property){
+        currentPlayer.addMoney(property.getCost());
+        currentPlayer.removeProperty(property);
+        property.setOwner(null);
     }
 
     public void pass(){
