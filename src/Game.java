@@ -99,7 +99,7 @@ public class Game {
 
     public void checkWin(){
         int i = 0;
-        Player winner;
+        Player winner = new Player();
         for(Player p : players){
             if(p.getBankruptcy() == true){
                 i++;
