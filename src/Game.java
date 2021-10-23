@@ -81,7 +81,16 @@ public class Game {
     }
 
     public void checkWin(){
+        int i = 0;
+        for(Player p : players){
+            if(p.getBankruptcy() == true){
+                i++;
+            }
+        }
 
+        if(i == 3){
+
+        }
     }
 
     public static void main(String[] args) {
