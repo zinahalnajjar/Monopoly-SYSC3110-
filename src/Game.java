@@ -76,6 +76,7 @@ public class Game {
         }
     }
 
+    //Does not work yet
     public void payRent(Property property){
         int rent = property.getRent();
         currentPlayer.removeMoney(rent);
@@ -98,14 +99,18 @@ public class Game {
 
     public void checkWin(){
         int i = 0;
+        Player winner;
         for(Player p : players){
             if(p.getBankruptcy() == true){
                 i++;
             }
+            else{
+                winner = p;
+            }
         }
-
         if(i == 3){
-
+            gameOver = true;
+            System.out.println("Player " + p.getId() + " is the winner!!");
         }
     }
 
