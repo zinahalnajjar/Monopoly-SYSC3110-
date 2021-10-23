@@ -65,10 +65,24 @@ public class Game {
         System.out.println("Player " + currentPlayer.getId() + "'s turn");
     }
 
+    public void nextPlayer(){
+        if(players.size() == players.indexOf(currentPlayer)){
+            currentPlayer = players.get(0);
+        }
+        else {
+            currentPlayer = players.get(players.indexOf(currentPlayer) + 1);
+        }
+    }
+
     public void payRent(Property property){
         int rent = property.getRent();
         currentPlayer.removeMoney(rent);
-        checkBankruptcy();
+
+        boolean  b = checkBankruptcy();
+
+        property.getOwner().addMoney(rent);
+
+        checkWin();
     }
 
     public boolean checkBankruptcy(){
