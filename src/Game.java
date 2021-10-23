@@ -55,14 +55,16 @@ public class Game {
     }
 
     public void pass(){
-        System.out.println("Player " + currentPlayer.getId() +" has finished his turn ");
-        if(players.size() == players.indexOf(currentPlayer)){
-            currentPlayer = players.get(0);
-        }
-        else {
-            currentPlayer = players.get(players.indexOf(currentPlayer) + 1);
-        }
+        System.out.println("Player " + currentPlayer.getId() +" has finished his turn");
+        nextPlayer();
         System.out.println("Player " + currentPlayer.getId() + "'s turn");
+    }
+
+    public void quit(){
+        System.out.println("Player " + currentPlayer.getId() + " has quit the game");
+        currentPlayer.setBankruptcy(true);
+        nextPlayer();
+        checkWin();
     }
 
     public void nextPlayer(){
