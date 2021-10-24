@@ -73,4 +73,17 @@ public class Board {
     public ArrayList<Property> propertiesList(){
         return properties;
     }
+
+    public int getValidLocation(int newLocation) {
+        if (getProperty(newLocation) == null) {
+            return 0;
+        } else {
+            return newLocation;
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "Board [properties Count=" + properties.size() + "]";
+    }
 }
