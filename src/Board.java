@@ -73,6 +73,4 @@ public class Board {
     public ArrayList<Property> propertiesList(){
         return properties;
     }
-
-    // getValidLocation method
 }

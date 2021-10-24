@@ -92,6 +92,7 @@ public class Property {
     public void setCost(int cost) {
         this.cost = cost;
     }
-
-    //method that returns which properties are stll avaliable
+  
+  //mathod for properties
 }
+

@@ -1,44 +1,44 @@
 import java.util.ArrayList;
 import java.util.Scanner;
 
+
 public class Game {
 
     private Board board;
     private ArrayList<Player> players;
-    private static Scanner scan;
     private boolean gameOver;
     private Dice dice;
-    private int playerCount;
+    private Player currentPlayer;
+    private static Scanner scan;
+    private Dice dice;
     private Player currentPlayer;
     private int currentPlayerIndex = 0; //index of the current player
-
-    public Game(int playerCount) {
-        this.playerCount = playerCount;
+      
+    public Game() {
         board = new Board();
         players = new ArrayList<Player>();
         gameOver = false;
+
+        this.playerCount = playerCount;
         this.dice = new Dice();
 
         scan = new Scanner(System.in);
-
-
+        
+        
         initPlayers();
-
-
+        run();
     }
 
     private void initPlayers() {
-        for(int i = 1; i <= playerCount; i++){
-            players.add(new Player("Start", 1500,i )); //player id and rent
+        for(int i = 1; i < playerCount;; i++){
+            players.add(new Player(i, 1500)); //player id and rent
         }
 
-
+        currentPlayer = players.get(0);
     }
 
     private void run() {
         while(gameOver != true){
-            // do stuff
-
         }
     }
 
@@ -76,29 +76,38 @@ public class Game {
         nextPlayer();
         checkWin();
     }
+  
     /**
      * decide the next player, in the orser as found in the list starting from index 0
      */
 
-    public void nextPlayer(){
-        if (currentPlayer == null) {
+    //public void nextPlayer(){
+    //    if (currentPlayer == null) {
             // Take the first player created as the current player
-            currentPlayerIndex = 0;
-        } else {
-            currentPlayerIndex++;
+    //        currentPlayerIndex = 0;
+    //    } else {
+      //      currentPlayerIndex++;
+      //  }
+      //  if (currentPlayerIndex == players.size()) {
+       //     currentPlayerIndex = 0;
         }
-        if (currentPlayerIndex == players.size()) {
-            currentPlayerIndex = 0;
+      //  currentPlayer = players.get(currentPlayerIndex);
+   // }*/
+  
+    public void nextPlayer(){
+        if(players.size() == players.indexOf(currentPlayer)){
+            currentPlayer = players.get(0);
         }
-        currentPlayer = players.get(currentPlayerIndex);
-    }
+        else {
+            currentPlayer = players.get(players.indexOf(currentPlayer) + 1);
+        }
 
     /**
      *
      * @param property
      */
     public void payRent(Property property){
-
+  
         boolean  bankrupt = checkBankruptcy();// taks the status of banckruptcy
         //if the player is bankrupt then don't add money
         if(!bankrupt){
@@ -112,22 +121,20 @@ public class Game {
 
         }
         checkWin();
-
-
     }
-
+     
     public boolean checkBankruptcy(){
         if(currentPlayer.getMoney() < 0){
             currentPlayer.setBankruptcy(true);
-            System.out.println("Bankrupt Player " + currentPlayer.getPlayerId());
+            System.out.println("Player " + currentPlayer.getId() + "is bankrupt!");
             return true;
         }
         return false;
     }
 
     public void checkWin(){
-        int bankruptCount = 0; //starting with 0 banckrupt players
-        Player winner = null; // no winner announced yet
+        int bankruptCount = 0;
+        Player winner = new Player();
         for(Player p : players){
             if(p.getBankruptcy() == true){
                 bankruptCount++;
@@ -142,18 +149,7 @@ public class Game {
             gameOver = true;
             System.out.println("Player " + winner.getPlayerId() + " is the winner!!");
         }
-
     }
-
-
-    //player properties method
-    //money
-    // what property
-    // their id
-
-
-
-
 
     public static void main(String[] args) {
         // scanner
@@ -162,8 +158,5 @@ public class Game {
         int playerCount = Integer.parseInt(scan.nextLine());
         Game game = new Game(playerCount);
         game.run();
-
-
-
     }
 }
