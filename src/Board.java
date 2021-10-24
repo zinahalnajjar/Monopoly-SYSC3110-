@@ -86,4 +86,5 @@ public class Board {
     public String toString() {
         return "Board [properties Count=" + properties.size() + "]";
     }
+
 }

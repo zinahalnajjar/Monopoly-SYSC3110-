@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+
 import java.util.List;
 import java.util.Scanner;
 
@@ -9,23 +10,28 @@ public class Game {
     private boolean gameOver;
     private Dice dice;
     private Player currentPlayer;
-    Scanner sc = new Scanner(System.in);
-
+    private static Scanner scan;
+    private Dice dice;
+    private Player currentPlayer;
+    private int currentPlayerIndex = 0; //index of the current player
+      
     public Game() {
         board = new Board();
         players = new ArrayList<Player>();
         gameOver = false;
+        this.playerCount = playerCount;
+        this.dice = new Dice();
 
+        scan = new Scanner(System.in);
+       
         initPlayers();
         run();
-
     }
 
     private void initPlayers() {
-        for(int i = 1; i < 5; i++){
+        for(int i = 1; i < playerCount;; i++){
             players.add(new Player(i, 1500)); //player id and rent
         }
-
         currentPlayer = players.get(0);
     }
 
@@ -113,7 +119,6 @@ public class Game {
 		return command;
     }
 
-
     public void buy(Property property){
         int cost = property.getCost();
         int money = currentPlayer.getMoney(); //return players total money
@@ -137,18 +142,35 @@ public class Game {
     }
 
     public void pass(){
-        System.out.println("Player " + currentPlayer.getId() +" has finished his turn");
+        System.out.println("Player " + currentPlayer.getPlayerId() +" has finished his turn");
         nextPlayer();
-        System.out.println("Player " + currentPlayer.getId() + "'s turn");
+        System.out.println("Player " + currentPlayer.getPlayerId() + "'s turn");
     }
 
     public void quit(){
-        System.out.println("Player " + currentPlayer.getId() + " has quit the game");
+        System.out.println("Player " + currentPlayer.getPlayerId() + " has quit the game");
         currentPlayer.setBankruptcy(true);
         nextPlayer();
         checkWin();
     }
+  
+    /**
+     * decide the next player, in the orser as found in the list starting from index 0
+     */
 
+    //public void nextPlayer(){
+    //    if (currentPlayer == null) {
+            // Take the first player created as the current player
+    //        currentPlayerIndex = 0;
+    //    } else {
+      //      currentPlayerIndex++;
+      //  }
+      //  if (currentPlayerIndex == players.size()) {
+       //     currentPlayerIndex = 0;
+      //  }
+      //  currentPlayer = players.get(currentPlayerIndex);
+   // }*/
+  
     public void nextPlayer(){
         if(players.size() == players.indexOf(currentPlayer)){
             currentPlayer = players.get(0);
@@ -156,55 +178,71 @@ public class Game {
         else {
             currentPlayer = players.get(players.indexOf(currentPlayer) + 1);
         }
-    }
 
-    //Does not work yet
+    /**
+     *
+     * @param property
+     */
     public void payRent(Property property){
-        int rent = property.getRent();
-        currentPlayer.removeMoney(rent);
+  
+        boolean  bankrupt = checkBankruptcy();// taks the status of banckruptcy
+        //if the player is bankrupt then don't add money
+        if(!bankrupt){
+            int rent = property.getRent();// get rent amount
+            System.out.println(currentPlayer.getPlayerId() + " has $" + currentPlayer.getMoney()); //dispay how much the player owns
+            currentPlayer.removeMoney(rent);// remove money from player based on what they paid
+            System.out.println(currentPlayer.getPlayerId() + " PAID rent: " + rent);// dispay how much the player paid for rent
+            System.out.println(currentPlayer.getPlayerId() + " has $" + currentPlayer.getMoney());
+            property.getOwner().addMoney(rent);// the owner of the property will receive the rent money
 
-        boolean  b = checkBankruptcy();
 
-        property.getOwner().addMoney(rent);
-
+        }
         checkWin();
     }
-
+     
     public boolean checkBankruptcy(){
         if(currentPlayer.getMoney() < 0){
             currentPlayer.setBankruptcy(true);
-            System.out.println("Player " + currentPlayer.getId());
+            System.out.println("Player " + currentPlayer.getId() + "is bankrupt!");
             return true;
         }
         return false;
     }
 
     public void checkWin(){
-        int i = 0;
+
+        int bankruptCount = 0;
         Player winner = new Player();
         for(Player p : players){
             if(p.getBankruptcy() == true){
-                i++;
+                bankruptCount++;
             }
             else{
                 winner = p;
             }
         }
-        if(i == 3){
+              
+        // if bankrupt count is one less than the total player count
+        // declare winner
+        if (bankruptCount == playerCount - 1) {
             gameOver = true;
-            System.out.println("Player " + winner.getId() + " is the winner!!");
+            System.out.println("Player " + winner.getPlayerId() + " is the winner!!");
         }
     }
 
     public static void main(String[] args) {
-
+        scan = new Scanner(System.in);
+        System.out.println("Enter the Number of Players:");
+        int playerCount = Integer.parseInt(scan.nextLine());
+        Game game = new Game(playerCount);
+        game.run();
     }
+          
     public void displayPlayerInfo() {
         for (Player player : players) {
             System.out.println(player);
         }
         System.out.println();
-    }
 }
 
 
