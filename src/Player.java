@@ -1,5 +1,4 @@
 import java.util.*;
-import java.lang.Object;
 
 public class Player {
 
@@ -7,12 +6,14 @@ public class Player {
     private List<Property> properties;
     private int money;
     private String propertyLocation;
+    private boolean isBankrupt;
 
     public Player(String aPropertyLocation, int money, int aPlayerID) {
         this.playerId = aPlayerID;
         this.money = money;
         this.propertyLocation = aPropertyLocation;
         this.properties = new ArrayList<>();
+        this.isBankrupt = false;
     }
 
     public int getPlayerId(){
@@ -25,6 +26,19 @@ public class Player {
 
     public int getMoney(){
         return this.money;
+    }
+
+    public boolean getBankrupcy(){
+        return this.isBankrupt;
+    }
+
+    public void setBankrupcy(boolean status){
+        isBankrupt = status;
+        if(!isBankrupt){ // if the player hasn't lost all of their money
+            isBankrupt = true;
+
+        }
+
     }
 
     // this class returns the list of properties for each player
