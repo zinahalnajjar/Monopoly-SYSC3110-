@@ -126,6 +126,8 @@ public class Player {
         return location;
     }
 
+    public String getInfo(){ return toString();}
+
     @Override
     public String toString() {
         return "Player [playerId=" + playerId + ", money=" + money + ", isBankrupt=" + isBankrupt + ", location="

@@ -100,6 +100,6 @@ public class Property {
     }
   
   //mathod for properties
-    
+
 }
 
