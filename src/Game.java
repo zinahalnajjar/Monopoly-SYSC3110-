@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
@@ -11,11 +12,10 @@ public class Game {
     private Dice dice;
     private Player currentPlayer;
     private static Scanner scan;
-    private Dice dice;
-    private Player currentPlayer;
+    private int playerCount;
     private int currentPlayerIndex = 0; //index of the current player
       
-    public Game() {
+    public Game(int playerCount) {
         board = new Board();
         players = new ArrayList<Player>();
         gameOver = false;
@@ -23,13 +23,13 @@ public class Game {
         this.dice = new Dice();
 
         scan = new Scanner(System.in);
-       
+
         initPlayers();
         run();
     }
 
     private void initPlayers() {
-        for(int i = 1; i < playerCount;; i++){
+        for(int i = 1; i < playerCount; i++){
             players.add(new Player(i, 1500)); //player id and rent
         }
         currentPlayer = players.get(0);
@@ -39,7 +39,7 @@ public class Game {
         String command;
         while (gameOver != true) {
             // if game isn't over, go to next Player using nextPlayer method.
-            nextPlayer();
+
             System.out.format("It is now %s turn!\n", currentPlayer.getPlayerId());
 
 //			command = getUserCommand(null);//original
@@ -53,36 +53,35 @@ public class Game {
                 System.out.println("Die 2: " + dice.getDie2());
             }
 
-//            currentPlayer.setLocation(currentPlayer.getPropertyLocation() + dice.getDie1() + dice.getDie2());//ORIGINAL
-            int newLocation = board.getValidLocation(currentPlayer.getLocation() + dice.getDie1() + dice.getDie2());
+
+            Property newLocation = board.move(dice.sumOfDice(), currentPlayer.getLocation());
             currentPlayer.setLocation(newLocation);
-            Property property = board.getProperty(newLocation);
+
             // is property found
-            if (property != null) {
-                Player owner = property.getOwner();
+            if (newLocation != null) {
+                Player owner = newLocation.getOwner();
+
                 // is property available
                 if (owner == null) {
-                    System.out.println("Property available for purchase: " + property);
+                    System.out.println("Property available for purchase: " + newLocation.getPropertyName());
                     System.out.println("What do you want to do (buy OR pass)?");
-//					command = getUserCommand(Arrays.asList("buy", "pass"));//original
-                    command = "buy";//temporary - testing purpose.
+
+					command = getUserCommand(Arrays.asList("buy", "pass"));
+
                     if ("buy".equals(command)) {
-                        buy(property);
+                        buy(newLocation);
                     } else if ("pass".equals(command)) {
-                        // do nothing
                         System.out.println("Turn passed.");
+                        pass();
                     }
                 } else if (owner != currentPlayer){
-                    if (owner.isSetOwnedProperty(property)) {
-                        System.out.println("***** Set owned property: " + property);
-                        payRent(property);
-                    }
-                    else {
-                        System.out.println("***** Stay without RENT on: " + property);
+                    if (owner.isSetOwnedProperty(newLocation)) {
+                        System.out.println("***** Set owned property: " + newLocation.getPropertyName());
+                        payRent(newLocation);
                     }
                 }
                 else {
-                    System.out.println("***** MY own property: " + property);
+                    System.out.println("***** MY own property: " + newLocation.getPropertyName());
                 }
             }
             // printing out current board state along with the players.
@@ -96,7 +95,7 @@ public class Game {
     }
 
     private String getUserCommand(List<String> list) {
-        String command;
+        String command = "";
         while (true) {
             if (list == null || list.isEmpty()) {
                 // if list is empty/null
@@ -116,7 +115,6 @@ public class Game {
             }
 
         }
-		return command;
     }
 
     public void buy(Property property){
@@ -178,6 +176,7 @@ public class Game {
         else {
             currentPlayer = players.get(players.indexOf(currentPlayer) + 1);
         }
+    }
 
     /**
      *
@@ -203,7 +202,7 @@ public class Game {
     public boolean checkBankruptcy(){
         if(currentPlayer.getMoney() < 0){
             currentPlayer.setBankruptcy(true);
-            System.out.println("Player " + currentPlayer.getId() + "is bankrupt!");
+            System.out.println("Player " + currentPlayer.getPlayerId() + "is bankrupt!");
             return true;
         }
         return false;
@@ -212,7 +211,7 @@ public class Game {
     public void checkWin(){
 
         int bankruptCount = 0;
-        Player winner = new Player();
+        Player winner = null;
         for(Player p : players){
             if(p.getBankruptcy() == true){
                 bankruptCount++;
@@ -221,7 +220,7 @@ public class Game {
                 winner = p;
             }
         }
-              
+
         // if bankrupt count is one less than the total player count
         // declare winner
         if (bankruptCount == playerCount - 1) {
@@ -237,12 +236,13 @@ public class Game {
         Game game = new Game(playerCount);
         game.run();
     }
-          
+
     public void displayPlayerInfo() {
         for (Player player : players) {
             System.out.println(player);
         }
         System.out.println();
+    }
 }
 
 

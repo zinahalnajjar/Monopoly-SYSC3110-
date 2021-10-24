@@ -8,16 +8,15 @@ public class Player {
     private String propertyLocation;
     private boolean isBankrupt;
     private Property location;
-    private int location;
     private Map<String, List<Property>> colourPropertyMap = new HashMap<>();
-  
-    public Player(String aLocation, int money, int aPlayerID) {
-        if ("Start".equals(aLocation)) {// set the start postion of each player to square 0 which is the GO square in board
-            this.location =0;
-        }
+
+    public Player(int money, int aPlayerID) {
+
+        this. location = new Property();
+
         this.playerId = aPlayerID;
         this.money = money;
-        this.propertyLocation = aLocation;
+        this.propertyLocation = "";
         this.properties = new ArrayList<>();
         this.isBankrupt = false;
     }
@@ -32,18 +31,6 @@ public class Player {
     // setter for property location
     public void setPropertyLocation(String propertyLocation){
         this.propertyLocation = propertyLocation;
-    }
-      
-    //setLocation-method
-    // sets the current location of the player on the board
-    public void setLocation(int location){
-        this.location = location;
-
-    }
-    //getter for location
-    public int getLocation(int location){
-        return this.location;
-
     }
 
     public int getMoney(){
@@ -115,9 +102,7 @@ public class Player {
 
     }
 
-    // addMoney
-    //removeMoney
-    public void setLocation(int location) {
+    public void setLocation(Property location) {
         this.location = location;
 
     }
@@ -130,7 +115,8 @@ public class Player {
     public String toString() {
         return "Player [playerId=" + playerId + ", money=" + money + ", isBankrupt=" + isBankrupt + ", location="
                 + location + ", properties=" + properties + "]";
-      
+    }
+
     /*
     the player will get money when they sell a property
      */
@@ -146,17 +132,14 @@ public class Player {
 
      */
     public void removeMoney(int propertyBuyCost){
-        if(propertyBuyCost>= 0){ // make sure that the property has a valid price
-            if (propertyBuyCost> money){
-                this.money =0;
+        if (propertyBuyCost >= 0) { // make sure that the property has a valid price
+            if (propertyBuyCost > money) {
+                this.money = 0;
                 this.setBankruptcy(true);
-            }
-            else{
-              this.money -=  propertyBuyCost;
+            } else {
+                this.money -= propertyBuyCost;
 
             }
-
-
         }
     }
 }
