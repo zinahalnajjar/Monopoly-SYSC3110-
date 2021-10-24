@@ -7,9 +7,10 @@ public class Player {
     private int money;
     private String propertyLocation;
     private boolean isBankrupt;
+    private Property location;
     private int location;
     private Map<String, List<Property>> colourPropertyMap = new HashMap<>();
-
+  
     public Player(String aLocation, int money, int aPlayerID) {
         if ("Start".equals(aLocation)) {// set the start postion of each player to square 0 which is the GO square in board
             this.location =0;
@@ -32,6 +33,7 @@ public class Player {
     public void setPropertyLocation(String propertyLocation){
         this.propertyLocation = propertyLocation;
     }
+      
     //setLocation-method
     // sets the current location of the player on the board
     public void setLocation(int location){
@@ -113,6 +115,22 @@ public class Player {
 
     }
 
+    // addMoney
+    //removeMoney
+    public void setLocation(int location) {
+        this.location = location;
+
+    }
+
+    public Property getLocation(){
+        return location;
+    }
+
+    @Override
+    public String toString() {
+        return "Player [playerId=" + playerId + ", money=" + money + ", isBankrupt=" + isBankrupt + ", location="
+                + location + ", properties=" + properties + "]";
+      
     /*
     the player will get money when they sell a property
      */
@@ -140,27 +158,5 @@ public class Player {
 
 
         }
-
-        //method to get information about each player
-        //money
-        //properties
-        //their ID
-
-
-
-
-
     }
-
-
-
-
-
-
-
-
-
-
-
-
 }
