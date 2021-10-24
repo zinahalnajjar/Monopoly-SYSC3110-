@@ -36,20 +36,7 @@ public class Property {
     public void setPropertyName(String propertyName) {
         this.propertyName = propertyName;
     }
-
-    /**
-     * @return
-     */
-    public String getColor() {
-        return color;
-    }
-
-    /**
-     * @param color
-     */
-    public void setColor(String color) {
-        this.color = color;
-    }
+    
 
     /**
      * @return
@@ -91,5 +78,17 @@ public class Property {
      */
     public void setCost(int cost) {
         this.cost = cost;
+    }
+    /**
+     *@return
+     */
+    public String getColor(){
+        return color;
+    }
+    /**
+     * @param color
+     */
+    public void setColor(String color){
+        this.color = color;
     }
 }
