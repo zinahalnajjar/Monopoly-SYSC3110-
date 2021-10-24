@@ -30,7 +30,7 @@ public class Game {
 
     private void initPlayers() {
         for(int i = 1; i < playerCount; i++){
-            players.add(new Player(i, 1500)); //player id and rent
+            players.add(new Player(1500, i)); //player id and rent
         }
         currentPlayer = players.get(0);
     }
@@ -40,7 +40,7 @@ public class Game {
         while (gameOver != true) {
             // if game isn't over, go to next Player using nextPlayer method.
 
-            System.out.format("It is now %s turn!\n", currentPlayer.getPlayerId());
+            System.out.format("It is now Player %s's turn!\n", currentPlayer.getPlayerId());
 
 //			command = getUserCommand(null);//original
             command = "roll";//temporary - testing purpose.
@@ -64,6 +64,10 @@ public class Game {
                 // is property available
                 if (owner == null) {
                     System.out.println("Property available for purchase: " + newLocation.getPropertyName());
+                    System.out.println(" - Price: " + newLocation.getCost());
+                    System.out.println(" - Rent: " + newLocation.getRent());
+                    System.out.println(" - Color: " + newLocation.getColor());
+                    System.out.println("");
                     System.out.println("What do you want to do (buy OR pass)?");
 
 					command = getUserCommand(Arrays.asList("buy", "pass"));
@@ -75,7 +79,7 @@ public class Game {
                         pass();
                     }
                 } else if (owner != currentPlayer){
-                    if (owner.isSetOwnedProperty(newLocation)) {
+                    if (owner.isSetOwned(newLocation)) {
                         System.out.println("***** Set owned property: " + newLocation.getPropertyName());
                         payRent(newLocation);
                     }
@@ -88,7 +92,7 @@ public class Game {
             System.out.println(board);
             displayPlayerInfo();
 
-            System.out.format("Your new location is,  %s . Press Enter to continue", currentPlayer.getLocation());
+            System.out.format("Press Enter to continue", currentPlayer.getLocation());
             scan.nextLine();
             System.out.println("-------------------");
         }
@@ -184,7 +188,7 @@ public class Game {
      */
     public void payRent(Property property){
   
-        boolean  bankrupt = checkBankruptcy();// taks the status of banckruptcy
+        boolean  bankrupt = checkBankruptcy();
         //if the player is bankrupt then don't add money
         if(!bankrupt){
             int rent = property.getRent();// get rent amount
