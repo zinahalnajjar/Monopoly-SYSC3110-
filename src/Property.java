@@ -92,4 +92,7 @@ public class Property {
     public void setCost(int cost) {
         this.cost = cost;
     }
+  
+  //mathod for properties
 }
+
