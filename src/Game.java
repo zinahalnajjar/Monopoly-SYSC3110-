@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class Game {
 
@@ -7,6 +8,7 @@ public class Game {
     private boolean gameOver;
     private Dice dice;
     private Player currentPlayer;
+    Scanner sc = new Scanner(System.in);
 
     public Game() {
         board = new Board();
@@ -41,10 +43,26 @@ public class Game {
             // calling the roll method from Dice class.
             dice.Roll();
 
-            currentPlayer.setLocation(currentPlayer.getLocation() + dice.getDie1() + dice.getDie2());
+            //currentPlayer.setLocation(currentPlayer.getLocation() + dice.getDie1() + dice.getDie2());
             System.out.format("Your new location is,  %s . Press Enter to continue", currentPlayer.getLocation());
-            System.console().readLine();
+            Board.move(dice.sumOfDice(), currentPlayer.getLocation());
+            System.out.format("Your new location is,  %s . Press Enter to continue", currentPlayer.getLocation());
 
+            if(currentPlayer.getLocation().owner == null) {
+                System.out.print("The current location is unowned. Would you like to buy the location? (Y/N)");
+                System.console().readLine();
+                String playerOption = sc.nextLine();
+
+                if (playerOption == "Y") {
+                    // remove money
+                    // add property to player's properties
+                    buy(currentPlayer.getLocation());
+                    currentPlayer.addProperty(currentPlayer.getLocation());
+                }
+            } else {
+                payRent(currentPlayer.getLocation());
+            }
+            pass();
 
         }
     }

@@ -17,15 +17,10 @@ public class Dice {
     /**
      * creates a pair of dice
      * calls Roll() method to roll the dice
-     * @param dieVal1
-     * @param dieVal2
      */
-    public Dice(int dieVal1, int dieVal2){
-        this.die1 = dieVal1;
-        this.die2 = dieVal2;
-
-        Roll();
-
+    public Dice(){
+        this.die1 = 0;
+        this.die2 = 0;
     }
 
     /**
