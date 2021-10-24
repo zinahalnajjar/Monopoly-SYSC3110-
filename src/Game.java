@@ -31,7 +31,6 @@ public class Game {
     private void run() {
         while(gameOver != true){
             // if game isn't over, go to next Player using nextPlayer method.
-            nextPlayer();
             System.out.format("It is now %s turn!", currentPlayer.getPlayerId());
 
             // printing out current board state along with the players.
@@ -62,8 +61,16 @@ public class Game {
             } else {
                 payRent(currentPlayer.getLocation());
             }
-            pass();
 
+            System.out.format("Would you like to take any other actions? (Sell/Pass})");
+            System.console().readLine();
+            String playerOption = sc.nextLine();
+
+            if (playerOption == "Sell") {
+                sell(currentPlayer.getLocation());
+                System.out.format("Sold the following location, %s", currentPlayer.getLocation());
+            }
+            pass();
         }
     }
 
