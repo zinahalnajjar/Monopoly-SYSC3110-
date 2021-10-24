@@ -92,7 +92,14 @@ public class Property {
     public void setCost(int cost) {
         this.cost = cost;
     }
+
+    @Override
+    public String toString(){
+        String ownerInfo = (owner ==null) ? "" : owner.getPlayerId() + "";
+        return "Property [color=" + color + ",owner id: =" + ownerInfo + "]";
+    }
   
   //mathod for properties
+    
 }
 
