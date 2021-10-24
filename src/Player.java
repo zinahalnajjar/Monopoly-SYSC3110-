@@ -76,6 +76,12 @@ public class Player {
         return location;
     }
 
+    @Override
+    public String toString() {
+        return "Player [playerId=" + playerId + ", money=" + money + ", isBankrupt=" + isBankrupt + ", location="
+                + location + ", properties=" + properties + "]";
+    }
+
 
 
 
