@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class Game {
@@ -29,49 +30,87 @@ public class Game {
     }
 
     private void run() {
-        while(gameOver != true){
+        String command;
+        while (gameOver != true) {
             // if game isn't over, go to next Player using nextPlayer method.
-            System.out.format("It is now %s turn!", currentPlayer.getPlayerId());
+            nextPlayer();
+            System.out.format("It is now %s turn!\n", currentPlayer.getPlayerId());
 
+//			command = getUserCommand(null);//original
+            command = "roll";//temporary - testing purpose.
+            if ("roll".equals(command)) {
+//				System.out.println("Rolling the dice as soon as you press Enter.");
+                System.out.println("Rolling the dice...");
+                // calling the roll method from Dice class.
+                dice.Roll();
+                System.out.println("Die 1: " + dice.getDie1());
+                System.out.println("Die 2: " + dice.getDie2());
+            }
+
+//            currentPlayer.setLocation(currentPlayer.getPropertyLocation() + dice.getDie1() + dice.getDie2());//ORIGINAL
+            int newLocation = board.getValidLocation(currentPlayer.getLocation() + dice.getDie1() + dice.getDie2());
+            currentPlayer.setLocation(newLocation);
+            Property property = board.getProperty(newLocation);
+            // is property found
+            if (property != null) {
+                Player owner = property.getOwner();
+                // is property available
+                if (owner == null) {
+                    System.out.println("Property available for purchase: " + property);
+                    System.out.println("What do you want to do (buy OR pass)?");
+//					command = getUserCommand(Arrays.asList("buy", "pass"));//original
+                    command = "buy";//temporary - testing purpose.
+                    if ("buy".equals(command)) {
+                        buy(property);
+                    } else if ("pass".equals(command)) {
+                        // do nothing
+                        System.out.println("Turn passed.");
+                    }
+                } else if (owner != currentPlayer){
+                    if (owner.isSetOwnedProperty(property)) {
+                        System.out.println("***** Set owned property: " + property);
+                        payRent(property);
+                    }
+                    else {
+                        System.out.println("***** Stay without RENT on: " + property);
+                    }
+                }
+                else {
+                    System.out.println("***** MY own property: " + property);
+                }
+            }
             // printing out current board state along with the players.
             System.out.println(board);
-            System.out.println(players);
+            displayPlayerInfo();
 
-            System.out.println("Rolling the dice as soon as you press Enter.");
-            System.console().readLine();
-            // calling the roll method from Dice class.
-            dice.Roll();
-
-            //currentPlayer.setLocation(currentPlayer.getLocation() + dice.getDie1() + dice.getDie2());
             System.out.format("Your new location is,  %s . Press Enter to continue", currentPlayer.getLocation());
-            Board.move(dice.sumOfDice(), currentPlayer.getLocation());
-            System.out.format("Your new location is,  %s . Press Enter to continue", currentPlayer.getLocation());
-
-            if(currentPlayer.getLocation().owner == null) {
-                System.out.print("The current location is unowned. Would you like to buy the location? (Y/N)");
-                System.console().readLine();
-                String playerOption = sc.nextLine();
-
-                if (playerOption == "Y") {
-                    // remove money
-                    // add property to player's properties
-                    buy(currentPlayer.getLocation());
-                    currentPlayer.addProperty(currentPlayer.getLocation());
-                }
-            } else {
-                payRent(currentPlayer.getLocation());
-            }
-
-            System.out.format("Would you like to take any other actions? (Sell/Pass})");
-            System.console().readLine();
-            String playerOption = sc.nextLine();
-
-            if (playerOption == "Sell") {
-                sell(currentPlayer.getLocation());
-                System.out.format("Sold the following location, %s", currentPlayer.getLocation());
-            }
-            pass();
+            scan.nextLine();
+            System.out.println("-------------------");
         }
+    }
+
+    private String getUserCommand(List<String> list) {
+        String command;
+        while (true) {
+            if (list == null || list.isEmpty()) {
+                // if list is empty/null
+                // Print the ALL available commands
+                list = Command.getCommands();
+            }
+            System.out.println("Commands: " + list);
+
+            System.out.format("Enter command: ");
+
+            command = scan.nextLine();
+            if (list.contains(command)) {
+                // valid command
+                return command;
+            } else {
+                System.out.format("INVALID command.");
+            }
+
+        }
+		return command;
     }
 
 
@@ -160,5 +199,12 @@ public class Game {
     public static void main(String[] args) {
 
     }
+    public void displayPlayerInfo() {
+        for (Player player : players) {
+            System.out.println(player);
+        }
+        System.out.println();
+    }
 }
+
 
