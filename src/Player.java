@@ -63,8 +63,36 @@ public class Player {
 
     }
 
-    // addMoney
-    //removeMoney
+    /*
+    the player will get money when they sell a property
+     */
+    public void addMoney(int propertySellCost){
+        if(propertySellCost>= 0){
+            this.money += propertySellCost;
+        }
+
+    }
+
+    /*
+    when the player buys a property the amount of money they own gets reduced based on the cost of the property they bought
+
+     */
+    public void removeMoney(int propertyBuyCost){
+        if(propertyBuyCost>= 0){ // make sure that the property has a valid price
+            if (propertyBuyCost> money){
+                this.money =0;
+                this.setBankruptcy(true);
+            }
+            else{
+              this.money -=  propertyBuyCost;
+
+            }
+
+
+        }
+
+    }
+
     //setLocation
 
 
