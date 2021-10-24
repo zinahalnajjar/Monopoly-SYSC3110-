@@ -28,11 +28,11 @@ public class Player {
         return this.money;
     }
 
-    public boolean getBankrupcy(){
+    public boolean getBankruptcy(){
         return this.isBankrupt;
     }
 
-    public void setBankrupcy(boolean status){
+    public void setBankruptcy(boolean status){
         isBankrupt = status;
         if(!isBankrupt){ // if the player hasn't lost all of their money
             isBankrupt = true;
