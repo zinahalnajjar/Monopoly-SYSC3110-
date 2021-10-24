@@ -36,7 +36,7 @@ public class Property {
     public void setPropertyName(String propertyName) {
         this.propertyName = propertyName;
     }
-    
+
 
     /**
      * @return
