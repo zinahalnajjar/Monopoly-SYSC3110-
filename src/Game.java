@@ -23,6 +23,13 @@ public class Game {
     private int playerCount;
     private int currentPlayerIndex = 0; //index of the current player
 
+    /**
+     *
+     * Initializes the game, sets up the scanner
+     * Calls a function to initialize player
+     *
+     * @param playerCount the number of player in the game
+     */
     public Game(int playerCount) {
         board = new Board();
         players = new ArrayList<Player>();
@@ -33,10 +40,14 @@ public class Game {
         scan = new Scanner(System.in);
 
         initPlayers();
-        System.out.println(playerCount);
         run();
     }
 
+    /**
+     *
+     * Initializes the number of players and fills out the list of players
+     *
+     */
     private void initPlayers() {
         for(int i = 1; i <= playerCount; i++){
             players.add(new Player(1500, i)); //player id and rent
@@ -45,6 +56,19 @@ public class Game {
     }
 
 
+    /**
+     *
+     * Implements the run loop that goes till the game is ended by finding a winner
+     * Implements all the commands
+     *  -roll: rolls the dice
+     *  -buy: helps player buy the property
+     *  -pass: ends the turn
+     *  -status: print the status
+     *  -help: calls help
+     *  -quit: sets the current player to bankrupt and goes to the next player
+     *
+     *  Checks
+     */
     private void run() {
         String command;
 
@@ -52,15 +76,17 @@ public class Game {
         System.out.println("Game Start!\n");
 
         while (gameOver != true) {
-            // if game isn't over, go to next Player using nextPlayer method.
-
+            // if game isn't over
+            //check if the player is bankrupt
             if(currentPlayer.getBankruptcy() == true){
                 System.out.println("Player " + currentPlayer.getPlayerId() + " is bankrupt.");
                 nextPlayer();
             }
 
+            //if player wasn't bankrupt initiate the turn
             System.out.format("It is now Player %s's turn!\n", currentPlayer.getPlayerId());
 
+            //Displays and gets avalid command from the user
             command = getUserCommand(Arrays.asList("roll","quit", "help", "status"));//original
             if ("roll".equals(command)) {
                 System.out.println("Rolling the dice...");
@@ -85,6 +111,7 @@ public class Game {
                         System.out.println(newLocation);
                         System.out.println("What do you want to do (buy OR pass)?");
 
+                        //ask user if they want to buy or pass
                         command = getUserCommand(Arrays.asList("buy", "pass", "quit", "help", "status"));
 
                         if ("buy".equals(command)) {
@@ -102,12 +129,14 @@ public class Game {
                             pass();
                         }
                     } else if (owner != currentPlayer){
+                        //if owner is not current player
                         if (owner.isSetOwned(newLocation)) {
                             System.out.println("***** Set owned property: " + newLocation.getPropertyName());
                         }
                         payRent(newLocation);
                     }
                     else {
+                        //if landed on own property, will just pass
                         System.out.println("***** MY own property: " + newLocation.getPropertyName());
                         pass();
                     }
@@ -118,12 +147,15 @@ public class Game {
                 }
             }
             if("quit".equals(command)){
+                //helps user quit game
                 quit();
             }
             if("help".equals(command)){
+                //displays the help info
                 help();
             }
             if("status".equals(command)) {
+                //displays player info
                 displayPlayerInfo();
             }
 
@@ -133,6 +165,14 @@ public class Game {
     }
 
 
+    /**
+     *
+     * Checks for invalid commands
+     * loops till user enter a valid
+     *
+     * @param list
+     * @return the vaild command
+     */
     private String getUserCommand(List<String> list) {
         String command = "";
 
@@ -196,7 +236,7 @@ public class Game {
     }
 
     /**
-     * player has quit the game/ bankrupt
+     * player has quit the game/bankrupt
      */
     public void quit(){
         System.out.println("Player " + currentPlayer.getPlayerId() + " has quit the game");
@@ -221,7 +261,7 @@ public class Game {
     /**
      *
      * If a player lands in a property owned by opposing player rent has to be payed
-     * @param property
+     * @param property the property for which the rent needs to be paid
      */
     public void payRent(Property property){
         int rent = property.getRent();// get rent amount
@@ -240,7 +280,7 @@ public class Game {
 
     /**
      * checks if a player still has enough money to play the game before losing
-     * @return
+     * @return true if player has gone bankrupt
      */
     public boolean checkBankruptcy(){
         if(currentPlayer.getMoney() < 0){
@@ -252,11 +292,13 @@ public class Game {
     }
 
     /**
-     * winner is whoever is not bankrupt
+     * Winner is whoever is not bankrupt
      */
     public void checkWin(){
         int bankruptCount = 0;
         Player winner = null;
+
+        //loop to tally the number of the bankrupts
         for(Player p : players){
             if(p.getBankruptcy() == true){
                 bankruptCount++;
@@ -276,21 +318,8 @@ public class Game {
     }
 
     /**
-     * welcomes player to the game
-     * checks how many players are playing
-     * @param args
+     * Displays all the player Information
      */
-    public static void main(String[] args) {
-
-        System.out.println("Welcome to Monopoly\n");
-
-        scan = new Scanner(System.in);
-        System.out.println("Enter the Number of Players:");
-        int playerCount = Integer.parseInt(scan.nextLine());
-        Game game = new Game(playerCount);
-        game.run();
-    }
-
     public void displayPlayerInfo() {
         for (Player player : players) {
             System.out.println(player);
@@ -298,6 +327,9 @@ public class Game {
         System.out.println();
     }
 
+    /**
+     * Prints out all the goals, and rules of the game.
+     */
     public void help(){
         System.out.println("Game Goal: \n" +
                 "- To be the player who isn't bankrupt.\n");
@@ -318,5 +350,21 @@ public class Game {
                 "- sell: used to sell your property\n" +
                 "- quit: will change player's status to quit and player can exit the game\n" +
                 "- help: can be used to view the instructions again\n");
+    }
+
+    /**
+     * welcomes player to the game
+     * checks how many players are playing
+     * @param args
+     */
+    public static void main(String[] args) {
+
+        System.out.println("Welcome to Monopoly\n");
+
+        scan = new Scanner(System.in);
+        System.out.println("Enter the Number of Players:");
+        int playerCount = Integer.parseInt(scan.nextLine());
+        Game game = new Game(playerCount);
+        game.run();
     }
 }
