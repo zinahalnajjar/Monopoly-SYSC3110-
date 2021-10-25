@@ -9,6 +9,7 @@ import java.util.*;
  * lose all of their money
  *
  * @author Zinah
+ * @author Kareem
  */
 
 public class Player {
