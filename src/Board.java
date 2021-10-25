@@ -5,7 +5,7 @@ import java.util.List;
  * implements the move and check validity to assign new location
  *
  * @author Tooba
- * @author Kareem getValidlocation and toString
+ * @author Kareem
  */
 public class Board {
 
