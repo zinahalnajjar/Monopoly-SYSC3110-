@@ -72,10 +72,7 @@ public class Game {
                     // is property available
                     if (owner == null) {
                         System.out.println("Property available for purchase: " + newLocation.getPropertyName());
-                        System.out.println(" - Price: " + newLocation.getCost());
-                        System.out.println(" - Rent: " + newLocation.getRent());
-                        System.out.println(" - Color: " + newLocation.getColor());
-                        System.out.println("");
+                        System.out.println("\n"+newLocation);
                         System.out.println("What do you want to do (buy OR pass)?");
 
                         command = getUserCommand(Arrays.asList("buy", "pass", "quit", "help", "status"));
