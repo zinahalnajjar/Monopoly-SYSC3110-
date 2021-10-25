@@ -9,6 +9,9 @@ public class Property {
     private int rent;
     private int cost;
 
+    public Property() {
+    }
+
     /**
      * @param propertyName
      * @param color
