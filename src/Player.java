@@ -19,7 +19,7 @@ public class Player {
      */
     public Player(int money, int aPlayerID) {
 
-        this. location = new Property();
+        this. location = new Property("Start");
 
         this.playerId = aPlayerID;
         this.money = money;

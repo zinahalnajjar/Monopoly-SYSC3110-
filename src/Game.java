@@ -25,6 +25,7 @@ public class Game {
         scan = new Scanner(System.in);
 
         initPlayers();
+        System.out.println(playerCount);
         run();
     }
 
@@ -80,9 +81,9 @@ public class Game {
 
 					command = getUserCommand(Arrays.asList("buy", "pass"));
 
-                    if ("buy".equals(command)) {
+                    if ("buy".equals(command) && command.equals("buy")) {
                         buy(newLocation);
-                    } else if ("pass".equals(command)) {
+                    } else if ("pass".equals(command) && command.equals("pass")) {
                         System.out.println("Turn passed.");
                         pass();
                     }
@@ -100,8 +101,15 @@ public class Game {
             System.out.println(board);
             displayPlayerInfo();
 
-            System.out.format("Press Enter to continue", currentPlayer.getLocation());
-            scan.nextLine();
+            System.out.format("Type pass to continue \n");
+            command = scan.nextLine();
+            if ("pass".equals("pass") && "pass".equals(command)) {
+                System.out.println("Turn passed.");
+                pass();
+            }
+            else{
+                System.out.format("INVALID command.");
+            }
             System.out.println("-------------------");
         }
     }
@@ -183,18 +191,16 @@ public class Game {
      * @param property
      */
     public void payRent(Property property){
-  
+        int rent = property.getRent();// get rent amount
+        System.out.println(currentPlayer.getPlayerId() + " has $" + currentPlayer.getMoney()); //dispay how much the player owns
+        currentPlayer.removeMoney(rent);// remove money from player based on what they paid
         boolean  bankrupt = checkBankruptcy();
+
         //if the player is bankrupt then don't add money
         if(!bankrupt){
-            int rent = property.getRent();// get rent amount
-            System.out.println(currentPlayer.getPlayerId() + " has $" + currentPlayer.getMoney()); //dispay how much the player owns
-            currentPlayer.removeMoney(rent);// remove money from player based on what they paid
-            System.out.println(currentPlayer.getPlayerId() + " PAID rent: " + rent);// dispay how much the player paid for rent
+            System.out.println(currentPlayer.getPlayerId() + " PAID rent: " + rent);// display how much the player paid for rent
             System.out.println(currentPlayer.getPlayerId() + " has $" + currentPlayer.getMoney());
             property.getOwner().addMoney(rent);// the owner of the property will receive the rent money
-
-
         }
         checkWin();
     }
