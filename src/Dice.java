@@ -16,7 +16,7 @@ public class Dice {
 
     /**
      * creates a pair of dice
-     * calls Roll() method to roll the dice
+     *
      */
     public Dice(){
         this.die1 = 0;
