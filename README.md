@@ -9,7 +9,7 @@ Zip Flie containing
  - execuatable jar file
  - Sequence diagram - Kareem
  - UML diagram - Zinah
- - Manual - Tooba
+ - Manual - Zinah
  - readme - Tooba
 
 The program has 6 classes:
