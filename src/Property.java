@@ -1,4 +1,5 @@
 /**
+ * Acts as the deed cards in Monopoly
  * Property holds all the properties of each of the monopoly property card
  *
  * @author Tooba
