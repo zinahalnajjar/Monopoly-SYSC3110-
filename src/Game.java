@@ -14,7 +14,7 @@ public class Game {
     private static Scanner scan;
     private int playerCount;
     private int currentPlayerIndex = 0; //index of the current player
-      
+
     public Game(int playerCount) {
         board = new Board();
         players = new ArrayList<Player>();
@@ -36,6 +36,7 @@ public class Game {
         currentPlayer = players.get(0);
     }
 
+
     private void run() {
         String command;
 
@@ -53,9 +54,7 @@ public class Game {
             System.out.format("It is now Player %s's turn!\n", currentPlayer.getPlayerId());
 
             command = getUserCommand(Arrays.asList("roll","quit", "help", "status"));//original
-
             if ("roll".equals(command)) {
-;
                 System.out.println("Rolling the dice...");
                 // calling the roll method from Dice class.
                 dice.Roll();
@@ -116,13 +115,15 @@ public class Game {
             if("status".equals(command)) {
                 displayPlayerInfo();
             }
+
             System.out.println("-------------------");
 
         }
     }
 
+
     private String getUserCommand(List<String> list) {
-        String command ;
+        String command = "";
 
         while (true) {
             if (list == null || list.isEmpty()) {
@@ -145,6 +146,10 @@ public class Game {
         }
     }
 
+    /**
+     * The player will be able to buy once he lands on an unowned property
+     * @param property
+     */
     public void buy(Property property){
         int cost = property.getCost();
         int money = currentPlayer.getMoney(); //return players total money
@@ -161,26 +166,36 @@ public class Game {
         }
     }
 
+    /**
+     * The player will be able to sell
+     * @param property
+     */
     public void sell(Property property){
         currentPlayer.addMoney(property.getCost());
         currentPlayer.removeProperty(property);
         property.setOwner(null);
     }
 
+    /**
+     * turn is passed to next player
+     */
     public void pass(){
         System.out.println("Player " + currentPlayer.getPlayerId() +" has finished his turn");
         nextPlayer();
     }
 
+    /**
+     * player has quit the game/ bankrupt
+     */
     public void quit(){
         System.out.println("Player " + currentPlayer.getPlayerId() + " has quit the game");
         currentPlayer.setBankruptcy(true);
         nextPlayer();
         checkWin();
     }
-  
+
     /**
-     * decide the next player, in the porser as found in the list starting from index 0
+     * decide the next player, in the order as found in the list starting from index 0
      */
     public void nextPlayer(){
         if(players.size() == players.indexOf(currentPlayer) + 1){
@@ -194,7 +209,7 @@ public class Game {
 
     /**
      *
-     *
+     * If a player lands in a property owned by opposing player rent has to be payed
      * @param property
      */
     public void payRent(Property property){
@@ -211,7 +226,11 @@ public class Game {
         }
         checkWin();
     }
-     
+
+    /**
+     * checks if a player still has enough money to play the game before losing
+     * @return
+     */
     public boolean checkBankruptcy(){
         if(currentPlayer.getMoney() < 0){
             currentPlayer.setBankruptcy(true);
@@ -221,6 +240,9 @@ public class Game {
         return false;
     }
 
+    /**
+     * winner is whoever is not bankrupt
+     */
     public void checkWin(){
         int bankruptCount = 0;
         Player winner = null;
@@ -242,6 +264,11 @@ public class Game {
         }
     }
 
+    /**
+     * welcomes player to the game
+     * checks how many players are playing
+     * @param args
+     */
     public static void main(String[] args) {
 
         System.out.println("Welcome to Monopoly\n");
@@ -282,5 +309,3 @@ public class Game {
                 "- help: can be used to view the instructions again\n");
     }
 }
-
-
