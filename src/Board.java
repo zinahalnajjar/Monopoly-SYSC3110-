@@ -70,13 +70,6 @@ public class Board {
         return newLocation;
     }
 
-    public boolean checkColorSets(Player player){
-
-
-
-        return false;
-    }
-
     public ArrayList<Property> propertiesList(){
         return properties;
     }

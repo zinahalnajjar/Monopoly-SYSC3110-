@@ -8,7 +8,10 @@ public class Player {
     private String propertyLocation;
     private boolean isBankrupt;
     private Property location;
-    private Map<String, Boolean> colourPropertyMap = new HashMap<>();
+
+    private Map<String, List<Property>> colourPropertyMap = new HashMap<>();
+
+    //private Map<String, Boolean> colourPropertyMap = new HashMap<>();
 
     /**
      * @param money
@@ -24,14 +27,14 @@ public class Player {
         this.properties = new ArrayList<>();
         this.isBankrupt = false;
 
-        colourPropertyMap.put("Brown", false);
+        /*colourPropertyMap.put("Brown", false);
         colourPropertyMap.put("Light Blue", false);
         colourPropertyMap.put("Pink", false);
         colourPropertyMap.put("Orange", false);
         colourPropertyMap.put("Red", false);
         colourPropertyMap.put("Yellow", false);
         colourPropertyMap.put("Green", false);
-        colourPropertyMap.put("Dark Blue", false);
+        colourPropertyMap.put("Dark Blue", false);*/
     }
 
     /**
@@ -103,9 +106,8 @@ public class Player {
     public void addProperty(Property property) {
         this.properties.add(property);
 
-        checkSet(property);
+        //checkSet(property);
 
-        /*
         //group properties based on Color
         String colour = property.getColor();
         List<Property> list = colourPropertyMap.get(colour);
@@ -117,10 +119,11 @@ public class Player {
         }
         // add property to the list for (current colour).
         list.add(property);
-        */
+
 
     }
 
+    //Tooba version color set - incomplete
     public void checkSet(Property property){
         // going to check if the property is in a colored set
         // if it is set to true the player owns all the properties of that color.
@@ -136,13 +139,13 @@ public class Player {
      */
 
     public boolean isSetOwned(Property property){
-       // String colour = property.getColor();
-        //List<Property> list = colourPropertyMap.get(colour);
-        //return (list != null) && (list.size() == 3);
+        String colour = property.getColor();
+        List<Property> list = colourPropertyMap.get(colour);
+        return (list != null) && (list.size() == 3);
         //for the purpose of testing fast we will make the list size 2 instead of 3
         //return (list != null) && (list.size() == 2);
 
-        return colourPropertyMap.get(property.getColor());
+       // return colourPropertyMap.get(property.getColor());
     }
 
     //removes a property from the list of properties for each player

@@ -29,7 +29,7 @@ public class Game {
     }
 
     private void initPlayers() {
-        for(int i = 1; i < playerCount; i++){
+        for(int i = 1; i <= playerCount; i++){
             players.add(new Player(1500, i)); //player id and rent
         }
         currentPlayer = players.get(0);
@@ -37,13 +37,21 @@ public class Game {
 
     private void run() {
         String command;
+
+        help();
+        System.out.println("Game Start!\n");
+
         while (gameOver != true) {
             // if game isn't over, go to next Player using nextPlayer method.
 
+            if(currentPlayer.getBankruptcy() == true){
+                System.out.println("Player " + currentPlayer.getPlayerId() + " is bankrupt.");
+                nextPlayer();
+            }
+
             System.out.format("It is now Player %s's turn!\n", currentPlayer.getPlayerId());
 
-//			command = getUserCommand(null);//original
-            command = "roll";//temporary - testing purpose.
+			command = getUserCommand(null);//original
             if ("roll".equals(command)) {
 //				System.out.println("Rolling the dice as soon as you press Enter.");
                 System.out.println("Rolling the dice...");
@@ -81,8 +89,8 @@ public class Game {
                 } else if (owner != currentPlayer){
                     if (owner.isSetOwned(newLocation)) {
                         System.out.println("***** Set owned property: " + newLocation.getPropertyName());
-                        payRent(newLocation);
                     }
+                    payRent(newLocation);
                 }
                 else {
                     System.out.println("***** MY own property: " + newLocation.getPropertyName());
@@ -100,10 +108,11 @@ public class Game {
 
     private String getUserCommand(List<String> list) {
         String command = "";
+
         while (true) {
             if (list == null || list.isEmpty()) {
                 // if list is empty/null
-                // Print the ALL available commands
+                // Print the all available commands
                 list = Command.getCommands();
             }
             System.out.println("Commands: " + list);
@@ -159,20 +168,6 @@ public class Game {
     /**
      * decide the next player, in the orser as found in the list starting from index 0
      */
-
-    //public void nextPlayer(){
-    //    if (currentPlayer == null) {
-            // Take the first player created as the current player
-    //        currentPlayerIndex = 0;
-    //    } else {
-      //      currentPlayerIndex++;
-      //  }
-      //  if (currentPlayerIndex == players.size()) {
-       //     currentPlayerIndex = 0;
-      //  }
-      //  currentPlayer = players.get(currentPlayerIndex);
-   // }*/
-  
     public void nextPlayer(){
         if(players.size() == players.indexOf(currentPlayer)){
             currentPlayer = players.get(0);
@@ -183,6 +178,7 @@ public class Game {
     }
 
     /**
+     *
      *
      * @param property
      */
@@ -213,7 +209,6 @@ public class Game {
     }
 
     public void checkWin(){
-
         int bankruptCount = 0;
         Player winner = null;
         for(Player p : players){
@@ -234,6 +229,9 @@ public class Game {
     }
 
     public static void main(String[] args) {
+
+        System.out.println("Welcome to Monopoly\n");
+
         scan = new Scanner(System.in);
         System.out.println("Enter the Number of Players:");
         int playerCount = Integer.parseInt(scan.nextLine());
@@ -246,6 +244,28 @@ public class Game {
             System.out.println(player);
         }
         System.out.println();
+    }
+
+    public void help(){
+        System.out.println("Game Goal: \n" +
+                "- To be the player who isn't bankrupt.\n");
+
+        System.out.println("Game Settings: \n" +
+                "- There are 22 properties on the board\n" +
+                "- Every player starts with 1500$\n");
+
+        System.out.println("Game Rules: \n" +
+                "- Player rolls the dice and moves that many spaces on the board \n" +
+                "- When a player lands on an unowned property, players can either buy or pass\n" +
+                "- When a player lands on an owned property, players have to pay rent\n" +
+                "- If players don't have enough money to pay rent, they go bankrupt\n" +
+                "- Goal is to balance your budget so that you won't go bankrupt.");
+        System.out.println("\n\nGame Commands: \n" +
+                "- buy: can be used to buy a property\n" +
+                "- pass: can be used to skip your turn\n" +
+                "- sell: used to sell your property\n" +
+                "- quit: will change player's status to quit and player can exit the game\n" +
+                "- help: can be used to view the instructions again\n");
     }
 }
 
