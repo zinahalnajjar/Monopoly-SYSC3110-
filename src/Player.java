@@ -8,6 +8,7 @@ import java.util.*;
  * Player has a location on the board, can own properties, gain/lose money from buying and renting properties.They can also go bankrupt if they
  * lose all of their money
  *
+ * @author Zinah
  */
 
 public class Player {
