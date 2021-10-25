@@ -9,6 +9,7 @@ import java.util.List;
  * the command consists of one word. It is checked for being valid or not
  *If the user entered an invalid command (a word that is not
  * known) then the command word is <null>.
+ * @author Zinah
  */
 
 /**
