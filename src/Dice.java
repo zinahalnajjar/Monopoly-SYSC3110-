@@ -7,16 +7,14 @@
  * Player roll the dice and advance a piece clockwise around the board corresponding to
  * the sum of both die1 and die2
  *
+ * @author Zinah - made the program
  */
-
-
 public class Dice {
     public int die1;
     public int die2;
 
     /**
      * creates a pair of dice
-     * calls Roll() method to roll the dice
      */
     public Dice(){
         this.die1 = 0;
