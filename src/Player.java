@@ -1,5 +1,15 @@
 import java.util.*;
 
+/**
+ * Class Player- Player in monopoly game
+ * this class is part of the "Monopoly Game" application
+ *
+ *
+ * Player has a location on the board, can own properties, gain/lose money from buying and renting properties.They can also go bankrupt if they
+ * lose all of their money
+ *
+ */
+
 public class Player {
 
     public int playerId;
@@ -14,6 +24,7 @@ public class Player {
     //private Map<String, Boolean> colourPropertyMap = new HashMap<>();
 
     /**
+     * creates a player on the board
      * @param money
      * @param aPlayerID
      */
@@ -38,14 +49,14 @@ public class Player {
     }
 
     /**
-     * @return
+     * @return the current player ID number
      */
     public int getPlayerId(){
         return this.playerId;
     }
 
     /**
-     * @return
+     * @return the property location where the player is currently on
      */
     public String getPropertyLocation(){
         return this.propertyLocation;
@@ -60,14 +71,14 @@ public class Player {
     }
 
     /**
-     * @return
+     * @return current amount of money for each player
      */
     public int getMoney(){
         return this.money;
     }
 
     /**
-     * @return
+     * @return true if the player is bankrupt
      */
     public boolean getBankruptcy(){
         return this.isBankrupt;
@@ -86,9 +97,9 @@ public class Player {
     }
 
     /**
-     *
+     * Print the list of property for each player
      */
-    // this class returns the list of properties for each player
+
     public void getProperty(){
         if(properties.isEmpty()){
             System.out.println("You do not own any properties yet");
@@ -100,9 +111,9 @@ public class Player {
     }
 
     /**
+     * adds a property to the list of properties for each player
      * @param property
      */
-    //adds a property to the list of properties for each player
     public void addProperty(Property property) {
         this.properties.add(property);
 
@@ -135,7 +146,7 @@ public class Player {
      * one list  contains 3 properies of the same colour and it must be owned by the same owner
      *
      * @param property
-     * @return
+     * @return true if the set is owned
      */
 
     public boolean isSetOwned(Property property){
@@ -148,31 +159,53 @@ public class Player {
        // return colourPropertyMap.get(property.getColor());
     }
 
-    //removes a property from the list of properties for each player
+    /**
+     * removes a property from the list of properties for each player
+     * @param property
+     */
+
     public void removeProperty(Property property) {
         this.properties.remove(property);
 
     }
+
+    /**
+     *
+     * @param location
+     */
 
     public void setLocation(Property location) {
         this.location = location;
 
     }
 
+    /**
+     *
+     * @return location
+     */
     public Property getLocation(){
         return location;
     }
 
+    /**
+     *
+     * @return toString
+     */
     public String getInfo(){ return toString();}
 
+    /**
+     *
+     * @return the playerID, money, isBankrupt, location
+     */
     @Override
     public String toString() {
         return "Player [playerId=" + playerId + ", money=" + money + ", isBankrupt=" + isBankrupt + ", location="
                 + location.getPropertyName() + "]";
     }
 
-    /*
-    the player will get money when they sell a property
+    /**
+     * the player will get money when they sell a property
+     * @param propertySellCost
      */
     public void addMoney(int propertySellCost){
         if(propertySellCost>= 0){
@@ -181,9 +214,12 @@ public class Player {
 
     }
 
-    /*
-    when the player buys a property the amount of money they own gets reduced based on the cost of the property they bought
 
+
+    /**
+     *
+     * when the player buys a property the amount of money they own gets reduced based on the cost of the property they bought
+     * @param propertyBuyCost
      */
     public void removeMoney(int propertyBuyCost){
         if (propertyBuyCost >= 0) { // make sure that the property has a valid price
