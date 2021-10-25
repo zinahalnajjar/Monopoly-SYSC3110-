@@ -1,18 +1,35 @@
 import java.util.ArrayList;
 import java.util.List;
-
+/**
+ * Creates and initializes the board
+ * implements the move and check validity to assign new location
+ *
+ * @author Tooba
+ * @author Kareem getValidlocation and toString
+ */
 public class Board {
 
     private ArrayList<Property> properties;
     private Property newLocation;
 
+    /**
+     * Initializes the array that will hold the properties.
+     * And then calls a method to create properties to add.
+     */
     public Board() {
         this.properties = new ArrayList<>();
         this.newLocation = null;
         createProperties();
     }
 
+    /**
+     *
+     * Initializes the property
+     * Adds the created property to the list
+     *
+     */
     private void createProperties(){
+        //All the spaces on the board
         Property space1 = new Property("Mediterranean Avenue", "Brown", 2, 60);
         Property space2 = new Property("Baltic Avenue", "Brown", 4, 60);
         Property space3 = new Property("Oriental Avenue", "Light Blue", 6, 100);
@@ -60,6 +77,14 @@ public class Board {
         properties.add(space22);
     }
 
+    /**
+     *
+     * Is used to find the new location of the property.
+     *
+     * @param spaces the sum of the two dice.
+     * @param location the current location of the player.
+     * @return the new location of the player
+     */
     public Property move(int spaces, Property location){
         int i = properties.indexOf(location);
         i = i + spaces;
@@ -70,20 +95,30 @@ public class Board {
         return newLocation;
     }
 
+    /**
+     * @return the list of properties
+     */
     public ArrayList<Property> propertiesList(){
         return properties;
     }
 
-
-    /*
-    public int getValidLocation(int newLocation) {
-       // if (getProperty(newLocation) == null) {
-            return 0;
+    /**
+     * checks if the property chosen is valid spot on the board
+     *
+     * @param newLocation the location to be checked
+     * @return true if the location is valid
+     */
+    public boolean getValidLocation(Property newLocation) {
+        if (newLocation == null) {
+            return false;
         } else {
-            return newLocation;
+            return true;
         }
-    }*/
+    }
 
+    /**
+     * @return the string description of the board
+     */
     @Override
     public String toString() {
         return "Board [properties Count=" + properties.size() + "]";
