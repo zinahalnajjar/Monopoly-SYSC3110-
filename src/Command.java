@@ -4,7 +4,7 @@ import java.util.List;
 public class Command {
 
     private String userCommand; // the command that is issued by the user
-    private static final List <String> gameCommandsList  = Arrays.asList("buy", "pass", "help", "roll" );
+    private static final List <String> gameCommandsList  = Arrays.asList("buy", "pass", "help", "roll", "quit", "status");
 
     public Command(String word){
         this.userCommand = word;
