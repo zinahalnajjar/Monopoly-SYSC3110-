@@ -7,7 +7,7 @@
  * Player roll the dice and advance a piece clockwise around the board corresponding to
  * the sum of both die1 and die2
  *
- * @author Zinah - made the program
+ * @author Zinah
  */
 public class Dice {
     public int die1;
