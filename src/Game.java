@@ -202,14 +202,14 @@ public class Game {
      */
     public void payRent(Property property){
         int rent = property.getRent();// get rent amount
-        System.out.println(currentPlayer.getPlayerId() + " has $" + currentPlayer.getMoney()); //dispay how much the player owns
+        System.out.println("Player "+currentPlayer.getPlayerId() + " has $" + currentPlayer.getMoney()); //dispay how much the player owns
         currentPlayer.removeMoney(rent);// remove money from player based on what they paid
         boolean  bankrupt = checkBankruptcy();
 
         //if the player is bankrupt then don't add money
         if(!bankrupt){
-            System.out.println(currentPlayer.getPlayerId() + " PAID rent: " + rent);// display how much the player paid for rent
-            System.out.println(currentPlayer.getPlayerId() + " has $" + currentPlayer.getMoney());
+            System.out.println("Player " + currentPlayer.getPlayerId() + " PAID rent: " + rent);// display how much the player paid for rent
+            System.out.println("Player " + currentPlayer.getPlayerId() + " has $" + currentPlayer.getMoney());
             property.getOwner().addMoney(rent);// the owner of the property will receive the rent money
         }
         checkWin();
