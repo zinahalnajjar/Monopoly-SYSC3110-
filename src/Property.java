@@ -100,7 +100,7 @@ public class Property {
     @Override
     public String toString(){
         String ownerInfo = (owner ==null) ? "" : owner.getPlayerId() + "";
-        return "Property [color=" + color + ",owner id: =" + ownerInfo + "]";
+        return "Property [property name=" + propertyName + ", cost=" + cost +", rent="+ rent +", color=" + color + ", owner id=" + ownerInfo + "]";
     }
   
   //mathod for properties
