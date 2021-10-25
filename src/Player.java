@@ -8,52 +8,74 @@ public class Player {
     private String propertyLocation;
     private boolean isBankrupt;
     private Property location;
-    private int location;
+
     private Map<String, List<Property>> colourPropertyMap = new HashMap<>();
-  
-    public Player(String aLocation, int money, int aPlayerID) {
-        if ("Start".equals(aLocation)) {// set the start postion of each player to square 0 which is the GO square in board
-            this.location =0;
-        }
+
+    //private Map<String, Boolean> colourPropertyMap = new HashMap<>();
+
+    /**
+     * @param money
+     * @param aPlayerID
+     */
+    public Player(int money, int aPlayerID) {
+
+        this. location = new Property("Start");
+
         this.playerId = aPlayerID;
         this.money = money;
-        this.propertyLocation = aLocation;
+        this.propertyLocation = "";
         this.properties = new ArrayList<>();
         this.isBankrupt = false;
+
+        /*colourPropertyMap.put("Brown", false);
+        colourPropertyMap.put("Light Blue", false);
+        colourPropertyMap.put("Pink", false);
+        colourPropertyMap.put("Orange", false);
+        colourPropertyMap.put("Red", false);
+        colourPropertyMap.put("Yellow", false);
+        colourPropertyMap.put("Green", false);
+        colourPropertyMap.put("Dark Blue", false);*/
     }
 
+    /**
+     * @return
+     */
     public int getPlayerId(){
         return this.playerId;
     }
 
+    /**
+     * @return
+     */
     public String getPropertyLocation(){
         return this.propertyLocation;
     }
+
+    /**
+     * @param propertyLocation
+     */
     // setter for property location
     public void setPropertyLocation(String propertyLocation){
         this.propertyLocation = propertyLocation;
     }
-      
-    //setLocation-method
-    // sets the current location of the player on the board
-    public void setLocation(int location){
-        this.location = location;
 
-    }
-    //getter for location
-    public int getLocation(int location){
-        return this.location;
-
-    }
-
+    /**
+     * @return
+     */
     public int getMoney(){
         return this.money;
     }
 
+    /**
+     * @return
+     */
     public boolean getBankruptcy(){
         return this.isBankrupt;
     }
 
+    /**
+     * @param status
+     */
     public void setBankruptcy(boolean status){
         isBankrupt = status;
         if(!isBankrupt){ // if the player hasn't lost all of their money
@@ -63,6 +85,9 @@ public class Player {
 
     }
 
+    /**
+     *
+     */
     // this class returns the list of properties for each player
     public void getProperty(){
         if(properties.isEmpty()){
@@ -74,9 +99,14 @@ public class Player {
         }
     }
 
+    /**
+     * @param property
+     */
     //adds a property to the list of properties for each player
     public void addProperty(Property property) {
         this.properties.add(property);
+
+        //checkSet(property);
 
         //group properties based on Color
         String colour = property.getColor();
@@ -93,6 +123,13 @@ public class Player {
 
     }
 
+    //Tooba version color set - incomplete
+    public void checkSet(Property property){
+        // going to check if the property is in a colored set
+        // if it is set to true the player owns all the properties of that color.
+    }
+
+
     /**
      * check if the property is part of a "set" of 3 properties of the same colour
      * one list  contains 3 properies of the same colour and it must be owned by the same owner
@@ -101,12 +138,14 @@ public class Player {
      * @return
      */
 
-    public boolean isSetOwnedProperty(Property property){
+    public boolean isSetOwned(Property property){
         String colour = property.getColor();
         List<Property> list = colourPropertyMap.get(colour);
         return (list != null) && (list.size() == 3);
         //for the purpose of testing fast we will make the list size 2 instead of 3
         //return (list != null) && (list.size() == 2);
+
+       // return colourPropertyMap.get(property.getColor());
     }
 
     //removes a property from the list of properties for each player
@@ -115,9 +154,7 @@ public class Player {
 
     }
 
-    // addMoney
-    //removeMoney
-    public void setLocation(int location) {
+    public void setLocation(Property location) {
         this.location = location;
 
     }
@@ -131,8 +168,9 @@ public class Player {
     @Override
     public String toString() {
         return "Player [playerId=" + playerId + ", money=" + money + ", isBankrupt=" + isBankrupt + ", location="
-                + location + ", properties=" + properties + "]";
-      
+                + location.getPropertyName() + "]";
+    }
+
     /*
     the player will get money when they sell a property
      */
@@ -148,17 +186,14 @@ public class Player {
 
      */
     public void removeMoney(int propertyBuyCost){
-        if(propertyBuyCost>= 0){ // make sure that the property has a valid price
-            if (propertyBuyCost> money){
-                this.money =0;
+        if (propertyBuyCost >= 0) { // make sure that the property has a valid price
+            if (propertyBuyCost > money) {
+                this.money = 0;
                 this.setBankruptcy(true);
-            }
-            else{
-              this.money -=  propertyBuyCost;
+            } else {
+                this.money -= propertyBuyCost;
 
             }
-
-
         }
     }
 }
