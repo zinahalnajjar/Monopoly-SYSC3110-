@@ -74,15 +74,13 @@ public class Board {
         return properties;
     }
 
-
-    /*
-    public int getValidLocation(int newLocation) {
-       // if (getProperty(newLocation) == null) {
-            return 0;
+    public boolean getValidLocation(Property newLocation) {
+        if (newLocation == null) {
+            return false;
         } else {
-            return newLocation;
+            return true;
         }
-    }*/
+    }
 
     @Override
     public String toString() {

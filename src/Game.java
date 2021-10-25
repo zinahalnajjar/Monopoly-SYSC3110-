@@ -1,9 +1,17 @@
 import java.util.ArrayList;
-
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
+/**
+ * Initializes the board and the players.
+ * Starts going through a while loop, that goes till the game ends.
+ * Game ends with when all but one player have quit or gone bankrupt.
+ *
+ * @author Tooba
+ * @author Zinah
+ * @author Kareem
+ */
 public class Game {
 
     private Board board;
@@ -62,7 +70,10 @@ public class Game {
                 System.out.println("Die 2: " + dice.getDie2());
 
                 Property newLocation = board.move(dice.sumOfDice(), currentPlayer.getLocation());
-                currentPlayer.setLocation(newLocation);
+
+                if(board.getValidLocation(newLocation) == true){
+                    currentPlayer.setLocation(newLocation);
+                }
 
                 // is property found
                 if (newLocation != null) {
