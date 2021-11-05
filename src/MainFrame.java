@@ -17,7 +17,7 @@ public class MainFrame extends JFrame implements MonopolyView {
 
         boardPanel = new JPanel();
         sidePanel = new JPanel();
-        sidePanel.setLayout(new GridLayout(6,1));
+        sidePanel.setLayout(new BoxLayout(sidePanel, BoxLayout.Y_AXIS));
 
         this.add(boardPanel);
         this.add(sidePanel);
