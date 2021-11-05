@@ -43,7 +43,7 @@ public class MainFrame extends JFrame implements MonopolyView {
     }
 
     public void addButton(JButton button){
-        button.setAlignmentX(Component.CENTER_ALIGNMENT);
+        button.setAlignmentX(Component.RIGHT_ALIGNMENT);
         sidePanel.add(button);
     }
 
