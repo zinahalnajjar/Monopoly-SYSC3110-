@@ -118,14 +118,22 @@ public class Game {
                             buy(newLocation);
 
                             System.out.format("You, have no moves available. Type pass to end turn\n");
-                            command = getUserCommand(Arrays.asList("pass", "quit", "help", "status"));;
+                            command = getUserCommand(Arrays.asList("pass", "quit", "help", "status", "sell"));;
                             if (command.equals("pass")) {
                                 System.out.println("Turn passed.");
                                 pass();
                             }
 
-                        } else if ("pass".equals(command)) {
+                        }
+
+                        if ("pass".equals(command)) {
                             System.out.println("Turn passed.");
+                            pass();
+                        }
+
+                        if ("sell".equals(command)) {
+                            System.out.println("Would you like to sell property to the bank?");
+
                             pass();
                         }
                     } else if (owner != currentPlayer){
