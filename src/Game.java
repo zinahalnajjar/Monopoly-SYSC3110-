@@ -43,6 +43,8 @@ public class Game {
 
         scan = new Scanner(System.in);
 
+        views = new ArrayList<>();
+
         initPlayers();
     }
 
