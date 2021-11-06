@@ -24,12 +24,16 @@ public class CardFrame extends JFrame implements MonopolyView, ActionListener {
     private JButton sell;
     private JButton pass;
 
-    public CardFrame(String pName, Board board){
+    MonopolyController mc;
+
+    public CardFrame(String pName, Board board, MonopolyController mc){
         super("Monopoly!!");
 
         this.board = board;
 
         property = board.getProperty(pName);
+
+        this.mc = mc;
 
         this.setLayout(new FlowLayout(FlowLayout.CENTER));
 
@@ -50,9 +54,9 @@ public class CardFrame extends JFrame implements MonopolyView, ActionListener {
         initInfoPanel("Cost: "+ property.getCost(), propertyCost);
         initInfoPanel("Owner: None", propertyOwner);
 
-        initButtonPanel("buy", buy);
-        initButtonPanel("sell", sell);
-        initButtonPanel("pass", pass);
+        initButtonPanel("buy", buy, mc);
+        initButtonPanel("sell", sell, mc);
+        initButtonPanel("pass", pass, mc);
 
         this.add(titlePanel);
         this.add(infoPanel);
@@ -67,16 +71,22 @@ public class CardFrame extends JFrame implements MonopolyView, ActionListener {
         infoPanel.add(label);
     }
 
-    private void initButtonPanel(String bttnLabel, JButton bttn){
+    private void initButtonPanel(String bttnLabel, JButton bttn, MonopolyController mc){
         bttn = new JButton(bttnLabel);
         bttn.setEnabled(false);
+        bttn.setActionCommand(bttn.getText());
+        bttn.addActionListener(mc);
         buttonPanel.setBorder(new EmptyBorder(15,20,10,20));
         buttonPanel.add(bttn);
+    }
 
+    private void updateInfo() {
+        if(property.getOwner()!=null){
+            propertyOwner.setText("Owner: Player " + property.getOwner().getPlayerId());
+        }
     }
 
     public static void main(String[] args){
-        new CardFrame("Mediterranean Avenue", new Board());
     }
 
     @Override
@@ -86,6 +96,7 @@ public class CardFrame extends JFrame implements MonopolyView, ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-       this.setVisible(true);
+        updateInfo();
+        this.setVisible(true);
     }
 }

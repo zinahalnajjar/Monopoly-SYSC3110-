@@ -54,16 +54,16 @@ public class MainFrame extends JFrame implements MonopolyView  {
         //Set up the content pane.
         addComponentsToPane(this.getContentPane(), mc);
 
-        addListeners(model);
+        addListeners(model, mc);
 
         //Display the window.
         this.pack();
         this.setVisible(true);
     }
 
-    private void addListeners(Game m) {
+    private void addListeners(Game m, MonopolyController mc) {
         for(JButton bttn : properties){
-            CardFrame c = new CardFrame(bttn.getText(), m.getBoard());
+            CardFrame c = new CardFrame(bttn.getText(), m.getBoard(), mc);
             bttn.addActionListener(c);
         }
     }
