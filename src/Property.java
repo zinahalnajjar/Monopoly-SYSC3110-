@@ -1,3 +1,5 @@
+import java.awt.*;
+
 /**
  * Acts as the deed cards in Monopoly
  * Property holds all the properties of each of the monopoly property card
@@ -7,7 +9,7 @@
 public class Property {
 
     private String propertyName;
-    private String color;
+    private Color color;
     private Player owner;
     private int rent;
     private int cost;
@@ -31,7 +33,7 @@ public class Property {
      * @param rent the rent of the property
      * @param cost the cost of the property
      */
-    public Property(String propertyName, String color, int rent, int cost) {
+    public Property(String propertyName, Color color, int rent, int cost) {
         this.propertyName = propertyName;
         this.color = color;
         this.rent = rent;
@@ -56,14 +58,14 @@ public class Property {
     /**
      * @return the color
      */
-    public String getColor() {
+    public Color getColor() {
         return color;
     }
 
     /**
      * @param color holds the color
      */
-    public void setColor(String color) {
+    public void setColor(Color color) {
         this.color = color;
     }
 
@@ -118,11 +120,5 @@ public class Property {
 
         return "Property [property name=" + propertyName + ", cost=" + cost +", rent="+ rent +", color=" + color + ", owner id=" + ownerInfo + "]";
     }
-
-
-
-
-
-
 }
 
