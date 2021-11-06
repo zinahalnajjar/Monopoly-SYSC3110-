@@ -11,14 +11,15 @@ public class MainFrame extends JFrame implements MonopolyView {
     JButton playerInfo;
 
     public MainFrame(){
+
         super("Monopoly!!");
 
-       this.setLayout(new FlowLayout());
+        this.setLayout(new FlowLayout());
 
         boardPanel = new JPanel();
         sidePanel = new JPanel();
-       // boardPanel.setLayout()
-       sidePanel.setLayout(new GridLayout(6,1));
+        // boardPanel.setLayout()
+        sidePanel.setLayout(new GridLayout(6,1));
 
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setSize(800, 500);

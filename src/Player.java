@@ -1,4 +1,6 @@
+import java.awt.*;
 import java.util.*;
+import java.util.List;
 
 /**
  * Class Player- Player in monopoly game
@@ -21,7 +23,7 @@ public class Player {
     private boolean isBankrupt;
     private Property location;
 
-    private Map<String, List<Property>> colourPropertyMap = new HashMap<>();
+    private Map<Color, List<Property>> colourPropertyMap = new HashMap<>();
 
     //private Map<String, Boolean> colourPropertyMap = new HashMap<>();
 
@@ -122,7 +124,7 @@ public class Player {
         //checkSet(property);
 
         //group properties based on Color
-        String colour = property.getColor();
+        Color colour = property.getColor();
         List<Property> list = colourPropertyMap.get(colour);
         if(list == null){
             //first property for this colour
@@ -152,7 +154,7 @@ public class Player {
      */
 
     public boolean isSetOwned(Property property){
-        String colour = property.getColor();
+        Color colour = property.getColor();
         List<Property> list = colourPropertyMap.get(colour);
         return (list != null) && (list.size() == 3);
         //for the purpose of testing fast we will make the list size 2 instead of 3

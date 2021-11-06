@@ -360,6 +360,10 @@ public class Game {
                 "- help: can be used to view the instructions again\n");
     }
 
+    public int getPlayerCount(){
+        return playerCount;
+    }
+
     /**
      * welcomes player to the game
      * checks how many players are playing
