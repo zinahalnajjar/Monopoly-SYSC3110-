@@ -23,6 +23,10 @@ public class Game {
     private int playerCount;
     private int currentPlayerIndex = 0; //index of the current player
 
+    public enum Status {X_WON, O_WON, TIE, UNDECIDED};
+
+    private List<MonopolyView> views;
+
     /**
      *
      * Initializes the game, sets up the scanner
@@ -40,7 +44,7 @@ public class Game {
         scan = new Scanner(System.in);
 
         initPlayers();
-        run();
+        runTextBased();
     }
 
     /**
@@ -69,7 +73,7 @@ public class Game {
      *
      *  Checks
      */
-    private void run() {
+    private void runTextBased() {
         String command;
 
         help();
@@ -160,7 +164,7 @@ public class Game {
             }
             if("help".equals(command)){
                 //displays the help info
-                help();
+                System.out.println(help());
             }
             if("status".equals(command)) {
                 //displays player info
@@ -172,6 +176,62 @@ public class Game {
         }
     }
 
+    /**
+     *
+     * Implements the run loop that goes till the game is ended by finding a winner
+     * Implements all the commands
+     *  -roll: rolls the dice
+     *  -buy: helps player buy the property
+     *  -pass: ends the turn
+     *  -status: print the status
+     *  -help: calls help
+     *  -quit: sets the current player to bankrupt and goes to the next player
+     *
+     *  Checks
+     */
+    public void run(String command) {
+        if(currentPlayer.getBankruptcy()){
+            nextPlayer();
+        }
+
+        //Displays and gets a valid command from the user
+        if ("roll".equals(command)) {
+            dice.Roll();
+            Property newLocation = board.move(dice.sumOfDice(), currentPlayer.getLocation());
+            if(board.getValidLocation(newLocation) == true){
+                currentPlayer.setLocation(newLocation);
+            }
+        }
+
+        if ("buy".equals(command)) {
+            dice.Roll();
+            Property newLocation = board.move(dice.sumOfDice(), currentPlayer.getLocation());
+            if(board.getValidLocation(newLocation) == true){
+                currentPlayer.setLocation(newLocation);
+            }
+        }
+
+        if ("pass".equals(command)) {
+            dice.Roll();
+            Property newLocation = board.move(dice.sumOfDice(), currentPlayer.getLocation());
+            if(board.getValidLocation(newLocation) == true){
+                currentPlayer.setLocation(newLocation);
+            }
+        }
+
+        if("quit".equals(command)){
+            //helps user quit game
+            quit();
+        }
+        if("help".equals(command)){
+            //displays the help info
+            help();
+        }
+        if("player Info".equals(command)) {
+            //displays player info
+            displayPlayerInfo();
+        }
+    }
 
     /**
      *
@@ -338,30 +398,38 @@ public class Game {
     /**
      * Prints out all the goals, and rules of the game.
      */
-    public void help(){
-        System.out.println("Game Goal: \n" +
-                "- To be the player who isn't bankrupt.\n");
-
-        System.out.println("Game Settings: \n" +
+    public String help(){
+        String help = "Game Goal: \n" +
+                "- To be the player who isn't bankrupt.\n\n" +
+                "Game Settings: \n" +
                 "- There are 22 properties on the board\n" +
-                "- Every player starts with 1500$\n");
-
-        System.out.println("Game Rules: \n" +
+                "- Every player starts with 1500$\n\n" +
+                "Game Rules: \n" +
                 "- Player rolls the dice and moves that many spaces on the board \n" +
                 "- When a player lands on an unowned property, players can either buy or pass\n" +
                 "- When a player lands on an owned property, players have to pay rent\n" +
                 "- If players don't have enough money to pay rent, they go bankrupt\n" +
-                "- Goal is to balance your budget so that you won't go bankrupt.");
-        System.out.println("\n\nGame Commands: \n" +
+                "- Goal is to balance your budget so that you won't go bankrupt.\n\n" +
+                "Game Commands: \n" +
                 "- buy: can be used to buy a property\n" +
                 "- pass: can be used to skip your turn\n" +
                 "- sell: used to sell your property\n" +
                 "- quit: will change player's status to quit and player can exit the game\n" +
-                "- help: can be used to view the instructions again\n");
+                "- help: can be used to view the instructions again\n";
+
+        return help;
     }
 
     public int getPlayerCount(){
         return playerCount;
+    }
+
+    public void addMonopolyView(MonopolyView view){
+        views.add(view);
+    }
+
+    public void removeMonopolyView(MonopolyView view){
+        views.remove(view);
     }
 
     /**
@@ -377,6 +445,5 @@ public class Game {
         System.out.println("Enter the Number of Players:");
         int playerCount = Integer.parseInt(scan.nextLine());
         Game game = new Game(playerCount);
-        game.run();
     }
 }

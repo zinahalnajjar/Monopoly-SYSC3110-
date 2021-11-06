@@ -12,9 +12,17 @@ public class MainFrame extends JFrame implements MonopolyView {
     JButton roll;
     JButton playerInfo;
 
+    MonopolyController mc;
+
     public MainFrame(){
 
         super("Monopoly!!");
+
+        Game model = new Game(2);
+
+        model.addMonopolyView(this);
+
+        mc = new MonopolyController(model);
 
         this.setLayout(new FlowLayout());
 
@@ -54,6 +62,11 @@ public class MainFrame extends JFrame implements MonopolyView {
 
     public static void main(String[] args){
         new MainFrame();
+    }
+
+    @Override
+    public void handleMonopolyStatusUpdate() {
+
     }
 }
 

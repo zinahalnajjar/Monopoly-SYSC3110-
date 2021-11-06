@@ -79,4 +79,8 @@ public class CardFrame extends JFrame implements MonopolyView {
         new CardFrame("Mediterranean Avenue", new Board());
     }
 
+    @Override
+    public void handleMonopolyStatusUpdate() {
+
+    }
 }
