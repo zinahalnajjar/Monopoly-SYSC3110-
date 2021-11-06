@@ -6,7 +6,7 @@ import java.awt.FlowLayout;
 public class WelcomeScreen {
     JFrame frame;
     int numPlayers;
-    WelcomeScreen() {
+    public WelcomeScreen() {
         final FlowLayout layout = new FlowLayout();
         layout.setVgap(10);
 
@@ -31,6 +31,7 @@ public class WelcomeScreen {
                                                  numPlayers = Integer.parseInt(input);
                                                  if (numPlayers > 0) {
                                                      frame.dispose();
+                                                     new MainFrame(numPlayers);
                                                  } else {
                                                      err.setVisible(true);
                                                  }
@@ -52,5 +53,9 @@ public class WelcomeScreen {
 
     public int getNumPlayers() {
         return this.numPlayers;
+    }
+
+    public static void main(String[] args) {
+        WelcomeScreen w = new WelcomeScreen();
     }
 }

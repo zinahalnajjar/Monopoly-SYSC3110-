@@ -32,10 +32,10 @@ public class MainFrame extends JFrame implements MonopolyView  {
     private static JLabel Go;
     private static JLabel empty;
 
-    public MainFrame(){
+    public MainFrame(int playerCount){
         super("Monopoly!!");
 
-        Game model = new Game(2);
+        Game model = new Game(playerCount);
 
         model.addMonopolyView(this);
 
@@ -373,7 +373,7 @@ public class MainFrame extends JFrame implements MonopolyView  {
 
 
     public static void main(String[] args) {
-        new MainFrame();
+        new MainFrame(2);
     }
 
     @Override
