@@ -28,43 +28,29 @@ public class CardFrame extends JFrame implements MonopolyView {
         this.board = board;
         property = board.getProperty(pName);
 
-        this.setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
+        this.setLayout(new FlowLayout(FlowLayout.CENTER));
 
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setSize(300, 400);
+        this.setSize(250, 290);
 
         titlePanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         infoPanel = new JPanel(new GridLayout(4,1));
         buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
 
-        infoPanel.setBorder(new EmptyBorder(10,10,10,10));
-
         propertyName = new JLabel(property.getPropertyName());
-
-        propertyInfo = new JLabel("Property Information");
-        propertyRent = new JLabel(String.valueOf("Rent: "+ property.getRent()));
-        propertyCost = new JLabel(String.valueOf("Cost: "+ property.getCost()));
-        propertyOwner = new JLabel("Owner: None");
-
-        buy = new JButton("buy");
-        sell = new JButton("sell");
-        pass = new JButton("pass");
-
+        propertyName.setFont(new Font("SANS_SERIF", Font.BOLD, 20));
         titlePanel.add(propertyName);
         titlePanel.setBackground(property.getColor());
+        titlePanel.setBorder(new EmptyBorder(10,20,10,20));
 
-        infoPanel.add(propertyInfo);
-        infoPanel.add(propertyCost);
-        infoPanel.add(propertyRent);
-        infoPanel.add(propertyOwner);
+        initInfoPanel("Property Information", propertyInfo);
+        initInfoPanel("Rent: "+ property.getRent(), propertyRent);
+        initInfoPanel("Cost: "+ property.getCost(), propertyCost);
+        initInfoPanel("Owner: None", propertyOwner);
 
-        buy.setEnabled(false);
-        sell.setEnabled(false);
-        pass.setEnabled(false);
-
-        buttonPanel.add(buy);
-        buttonPanel.add(sell);
-        buttonPanel.add(pass);
+        initButtonPanel("buy", buy);
+        initButtonPanel("sell", sell);
+        initButtonPanel("pass", pass);
 
         this.add(titlePanel);
         this.add(infoPanel);
@@ -73,18 +59,20 @@ public class CardFrame extends JFrame implements MonopolyView {
         this.setVisible(true);
     }
 
-    private void initTitlePanel(){
-
-    }
-
-    private void initInfoPanel(){
-
+    private void initInfoPanel(String labelText, JLabel label){
+        label = new JLabel(labelText);
+        label.setFont(new Font("SANS_SERIF", Font.BOLD, 15));
+        label.setBorder(new EmptyBorder(5,5,5,5));
+        label.setHorizontalAlignment(SwingConstants.CENTER);
+        infoPanel.add(label);
     }
 
     private void initButtonPanel(String bttnLabel, JButton bttn){
         bttn = new JButton(bttnLabel);
         bttn.setEnabled(false);
+        buttonPanel.setBorder(new EmptyBorder(15,20,10,20));
         buttonPanel.add(bttn);
+
     }
 
     public static void main(String[] args){
