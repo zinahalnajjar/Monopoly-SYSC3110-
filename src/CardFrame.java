@@ -86,9 +86,6 @@ public class CardFrame extends JFrame implements MonopolyView, ActionListener {
         }
     }
 
-    public static void main(String[] args){
-    }
-
     @Override
     public void handleMonopolyStatusUpdate() {
 

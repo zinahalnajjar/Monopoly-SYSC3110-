@@ -407,11 +407,6 @@ public class MainFrame extends JFrame implements MonopolyView  {
         sidePanel.add(button);
     }
 
-
-    public static void main(String[] args) {
-        new MainFrame(2);
-    }
-
     @Override
     public void handleMonopolyStatusUpdate() {
 
