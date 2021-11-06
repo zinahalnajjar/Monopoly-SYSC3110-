@@ -15,7 +15,7 @@ public class WelcomeScreen {
         //frame.setLayout(new GridLayout(10, 1, 5, 5));
         frame.setLayout(layout);
         JLabel l = new JLabel("Enter the number of players:");
-        JLabel err = new JLabel("Enter some integer value please");
+        JLabel err = new JLabel("Invalid Entry. Input must be an integer above 1.");
         err.setVisible(false);
         JTextField in = new JTextField(20);
         // creates instance of JButton
@@ -29,7 +29,7 @@ public class WelcomeScreen {
                                          } else {
                                              try {
                                                  numPlayers = Integer.parseInt(input);
-                                                 if (numPlayers > 0) {
+                                                 if (numPlayers > 1) {
                                                      frame.dispose();
                                                      new MainFrame(numPlayers);
                                                  } else {
