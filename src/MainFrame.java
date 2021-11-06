@@ -1,4 +1,6 @@
 import java.awt.*;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import javax.swing.*;
 
 public class MainFrame extends JFrame implements MonopolyView  {
@@ -20,6 +22,7 @@ public class MainFrame extends JFrame implements MonopolyView  {
     private MonopolyController mc;
 
     //Each spot on the board
+    private static ArrayList<JButton> properties;
     private static JButton Property;
     private static JLabel FreeParking;
     private static JLabel Chance;
@@ -41,20 +44,31 @@ public class MainFrame extends JFrame implements MonopolyView  {
 
         mc = new MonopolyController(model);
 
+        properties = new ArrayList<>();
+
         //Make sure we have nice window decorations.
         this.setDefaultLookAndFeelDecorated(true);
 
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         //Set up the content pane.
-        addComponentsToPane(this.getContentPane());
+        addComponentsToPane(this.getContentPane(), mc);
+
+        addListeners(model);
 
         //Display the window.
         this.pack();
         this.setVisible(true);
     }
 
-    public static void addComponentsToPane(Container pane) {
+    private void addListeners(Game m) {
+        for(JButton bttn : properties){
+            CardFrame c = new CardFrame(bttn.getText(), m.getBoard());
+            bttn.addActionListener(c);
+        }
+    }
+
+    public static void addComponentsToPane(Container pane, MonopolyController mc) {
         if (RIGHT_TO_LEFT) {
             pane.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
         }
@@ -82,11 +96,11 @@ public class MainFrame extends JFrame implements MonopolyView  {
         c.gridy = 0;
         boardPanel.add(FreeParking, c);
 
-
         Property = new JButton("Kentucky Avenue");
         c.gridx = 1;
         c.gridy = 0;
         boardPanel.add(Property, c);
+        properties.add(Property);
 
         Chance = new JLabel("Chance");
         c.gridx = 2;
@@ -97,12 +111,13 @@ public class MainFrame extends JFrame implements MonopolyView  {
         c.gridx = 3;
         c.gridy = 0;
         boardPanel.add(Property, c);
-
+        properties.add(Property);
 
         Property = new JButton("Illinois Avenue");
         c.gridx = 4;
         c.gridy = 0;
         boardPanel.add(Property, c);
+        properties.add(Property);
 
         RailRoad = new JLabel("B. & O. RAILROAD");
         c.gridx = 5;
@@ -113,11 +128,13 @@ public class MainFrame extends JFrame implements MonopolyView  {
         c.gridx = 6;
         c.gridy = 0;
         boardPanel.add(Property, c);
+        properties.add(Property);
 
         Property = new JButton("Ventnor Avenue");
         c.gridx = 7;
         c.gridy = 0;
         boardPanel.add(Property, c);
+        properties.add(Property);
 
         WaterWorks = new JLabel("WATER WORKS");
         c.gridx = 8;//col
@@ -128,6 +145,7 @@ public class MainFrame extends JFrame implements MonopolyView  {
         c.gridx = 9;
         c.gridy = 0;
         boardPanel.add(Property, c);
+        properties.add(Property);
 
         GoToJail = new JLabel("GO TO JAIL");
         c.gridx = 10;
@@ -159,11 +177,13 @@ public class MainFrame extends JFrame implements MonopolyView  {
         c.gridx = 10;
         c.gridy = 1;
         boardPanel.add(Property, c);
+        properties.add(Property);
 
         Property = new JButton("North Carolina Avenue");
         c.gridx = 10;
         c.gridy = 2;
         boardPanel.add(Property, c);
+        properties.add(Property);
 
         empty = new JLabel(" ");
         c.gridx = 10;
@@ -175,6 +195,7 @@ public class MainFrame extends JFrame implements MonopolyView  {
         c.gridx = 10;
         c.gridy = 4;
         boardPanel.add(Property, c);
+        properties.add(Property);
 
         RailRoad = new JLabel("SHORT LINE");
         c.gridx = 10;
@@ -190,6 +211,7 @@ public class MainFrame extends JFrame implements MonopolyView  {
         c.gridx = 10;
         c.gridy = 7;
         boardPanel.add(Property, c);
+        properties.add(Property);
 
         empty = new JLabel(" ");
         c.gridx = 10;//col
@@ -200,6 +222,7 @@ public class MainFrame extends JFrame implements MonopolyView  {
         c.gridx = 10;
         c.gridy = 9;
         boardPanel.add(Property, c);
+        properties.add(Property);
 
         Go = new JLabel("GO");
         c.gridx = 10;
@@ -243,11 +266,13 @@ public class MainFrame extends JFrame implements MonopolyView  {
         c.gridx = 1;// col
         c.gridy = 10; // row
         boardPanel.add(Property, c);
+        properties.add(Property);
 
         Property = new JButton("Vermont Avenue");
         c.gridx = 2;//col
         c.gridy = 10;//row
         boardPanel.add(Property, c);
+        properties.add(Property);
 
         Chance = new JLabel("Chance");
         c.gridx = 3;
@@ -259,6 +284,7 @@ public class MainFrame extends JFrame implements MonopolyView  {
         c.gridx = 4;
         c.gridy = 10;
         boardPanel.add(Property, c);
+        properties.add(Property);
 
         RailRoad = new JLabel("READING RAILROAD");
         c.gridx = 5;
@@ -274,6 +300,7 @@ public class MainFrame extends JFrame implements MonopolyView  {
         c.gridx = 7;
         c.gridy = 10;
         boardPanel.add(Property, c);
+        properties.add(Property);
 
         empty = new JLabel(" ");
         c.gridx = 8;//col
@@ -284,6 +311,7 @@ public class MainFrame extends JFrame implements MonopolyView  {
         c.gridx = 9;
         c.gridy = 10;
         boardPanel.add(Property, c);
+        properties.add(Property);
 
         empty = new JLabel(" ");
         c.gridx = 10;//col
@@ -307,11 +335,13 @@ public class MainFrame extends JFrame implements MonopolyView  {
         c.gridx = 0;
         c.gridy = 1;
         boardPanel.add(Property, c);
+        properties.add(Property);
 
         Property = new JButton("Tennessee Avenue");
         c.gridx = 0;
         c.gridy = 2;
         boardPanel.add(Property, c);
+        properties.add(Property);
 
         empty = new JLabel("Indiana Avenue");
         c.gridx = 0;
@@ -323,6 +353,7 @@ public class MainFrame extends JFrame implements MonopolyView  {
         c.gridx = 0;
         c.gridy = 4;
         boardPanel.add(Property, c);
+        properties.add(Property);
 
         RailRoad = new JLabel("PENNSYLVANIA RAILROAD");
         c.gridx = 0;
@@ -333,11 +364,13 @@ public class MainFrame extends JFrame implements MonopolyView  {
         c.gridx = 0;
         c.gridy = 6;
         boardPanel.add(Property, c);
+        properties.add(Property);
 
         Property = new JButton("States Avenue");
         c.gridx = 0;
         c.gridy = 7;
         boardPanel.add(Property, c);
+        properties.add(Property);
 
         ElectricCompany = new JLabel("ELECTRIC COMPANY");
         c.gridx = 0;//col
@@ -348,6 +381,7 @@ public class MainFrame extends JFrame implements MonopolyView  {
         c.gridx = 0;
         c.gridy = 9;
         boardPanel.add(Property, c);
+        properties.add(Property);
 
         Jail = new JLabel("JAIL ");
         c.gridx = 0;
@@ -359,15 +393,17 @@ public class MainFrame extends JFrame implements MonopolyView  {
         //sidePanel.setSize(111, 111);
         pane.add(sidePanel);
 
-        addButton(roll, "roll");
-        addButton(pass, "pass");
-        addButton(help, "help");
-        addButton(quit, "quit");
-        addButton(playerInfo, "player info");
+        addButton(roll, "roll", mc);
+        addButton(pass, "pass", mc);
+        addButton(help, "help", mc);
+        addButton(quit, "quit", mc);
+        addButton(playerInfo, "player info", mc);
     }
 
-    public static void addButton(JButton button, String text){
+    public static void addButton(JButton button, String text, MonopolyController mc){
         button = new JButton(text);
+        button.setActionCommand(button.getText());
+        button.addActionListener(mc);
         sidePanel.add(button);
     }
 

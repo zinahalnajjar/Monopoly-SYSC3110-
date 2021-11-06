@@ -1,8 +1,10 @@
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-public class CardFrame extends JFrame implements MonopolyView {
+public class CardFrame extends JFrame implements MonopolyView, ActionListener {
 
     private Board board;
     private Property property;
@@ -26,11 +28,11 @@ public class CardFrame extends JFrame implements MonopolyView {
         super("Monopoly!!");
 
         this.board = board;
+
         property = board.getProperty(pName);
 
         this.setLayout(new FlowLayout(FlowLayout.CENTER));
 
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setSize(250, 290);
 
         titlePanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
@@ -55,8 +57,6 @@ public class CardFrame extends JFrame implements MonopolyView {
         this.add(titlePanel);
         this.add(infoPanel);
         this.add(buttonPanel);
-
-        this.setVisible(true);
     }
 
     private void initInfoPanel(String labelText, JLabel label){
@@ -82,5 +82,10 @@ public class CardFrame extends JFrame implements MonopolyView {
     @Override
     public void handleMonopolyStatusUpdate() {
 
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+       this.setVisible(true);
     }
 }

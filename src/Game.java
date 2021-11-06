@@ -198,6 +198,8 @@ public class Game {
         //Displays and gets a valid command from the user
         if ("roll".equals(command)) {
             dice.Roll();
+
+            System.out.println("I got here");
             Property newLocation = board.move(dice.sumOfDice(), currentPlayer.getLocation());
             if(board.getValidLocation(newLocation) == true){
                 currentPlayer.setLocation(newLocation);
@@ -424,6 +426,8 @@ public class Game {
     public int getPlayerCount(){
         return playerCount;
     }
+
+    public Board getBoard(){return board;}
 
     public void addMonopolyView(MonopolyView view){
         views.add(view);
