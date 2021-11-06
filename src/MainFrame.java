@@ -13,14 +13,12 @@ public class MainFrame extends JFrame implements MonopolyView {
     public MainFrame(){
         super("Monopoly!!");
 
-       this.setLayout(new BorderLayout());
+       this.setLayout(new FlowLayout());
 
         boardPanel = new JPanel();
         sidePanel = new JPanel();
-        sidePanel.setLayout(new BoxLayout(sidePanel, BoxLayout.Y_AXIS));
-
-        this.add(boardPanel);
-        this.add(sidePanel);
+       // boardPanel.setLayout()
+       sidePanel.setLayout(new GridLayout(6,1));
 
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setSize(800, 500);
@@ -30,6 +28,12 @@ public class MainFrame extends JFrame implements MonopolyView {
 
         boardPanel.setBorder(BorderFactory.createLineBorder(Color.black));
         sidePanel.setBorder(BorderFactory.createLineBorder(Color.black));
+
+        boardPanel.setAlignmentX(this.LEFT_ALIGNMENT);
+        sidePanel.setAlignmentX(this.RIGHT_ALIGNMENT);
+
+        this.add(boardPanel);
+        this.add(sidePanel);
 
         pass = new JButton("Pass");
         roll = new JButton("Roll");
@@ -43,7 +47,7 @@ public class MainFrame extends JFrame implements MonopolyView {
     }
 
     public void addButton(JButton button){
-        button.setAlignmentX(Component.RIGHT_ALIGNMENT);
+        //button.setAlignmentX(sidePanel.CENTER_ALIGNMENT);
         sidePanel.add(button);
     }
 
