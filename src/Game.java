@@ -44,7 +44,6 @@ public class Game {
         scan = new Scanner(System.in);
 
         initPlayers();
-        runTextBased();
     }
 
     /**
@@ -445,5 +444,6 @@ public class Game {
         System.out.println("Enter the Number of Players:");
         int playerCount = Integer.parseInt(scan.nextLine());
         Game game = new Game(playerCount);
+        game.runTextBased();
     }
 }
