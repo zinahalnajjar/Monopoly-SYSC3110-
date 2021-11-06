@@ -7,6 +7,8 @@ public class MainFrame extends JFrame implements MonopolyView {
     JPanel sidePanel; // For the buttons and player info
 
     JButton pass;
+    JButton quit;
+    JButton help;
     JButton roll;
     JButton playerInfo;
 
@@ -36,19 +38,17 @@ public class MainFrame extends JFrame implements MonopolyView {
         this.add(boardPanel);
         this.add(sidePanel);
 
-        pass = new JButton("Pass");
-        roll = new JButton("Roll");
-        playerInfo = new JButton("Player Info");
-
-        addButton(pass);
-        addButton(roll);
-        addButton(playerInfo);
+        addButton(roll, "roll");
+        addButton(pass, "pass");
+        addButton(help, "help");
+        addButton(quit, "quit");
+        addButton(playerInfo, "player info");
 
         this.setVisible(true);
     }
 
-    public void addButton(JButton button){
-        //button.setAlignmentX(sidePanel.CENTER_ALIGNMENT);
+    public void addButton(JButton button, String text){
+        button = new JButton(text);
         sidePanel.add(button);
     }
 
