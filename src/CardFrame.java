@@ -4,23 +4,23 @@ import java.awt.*;
 
 public class CardFrame extends JFrame implements MonopolyView {
 
-    Board board;
-    Property property;
+    private Board board;
+    private Property property;
 
-    JPanel titlePanel;
-    JPanel infoPanel;
-    JPanel buttonPanel;
+    private JPanel titlePanel;
+    private JPanel infoPanel;
+    private JPanel buttonPanel;
 
-    JLabel propertyName;
+    private JLabel propertyName;
 
-    JLabel propertyInfo;
-    JLabel propertyRent;
-    JLabel propertyCost;
-    JLabel propertyOwner;
+    private JLabel propertyInfo;
+    private JLabel propertyRent;
+    private JLabel propertyCost;
+    private JLabel propertyOwner;
 
-    JButton buy;
-    JButton sell;
-    JButton pass;
+    private JButton buy;
+    private JButton sell;
+    private JButton pass;
 
     public CardFrame(String pName, Board board){
         super("Monopoly!!");

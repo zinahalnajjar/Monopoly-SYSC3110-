@@ -6,30 +6,58 @@ public class MainFrame extends JFrame implements MonopolyView  {
     final static boolean shouldWeightX = true;
     final static boolean RIGHT_TO_LEFT = false;
 
+    private static JPanel boardPanel; //For the grid of properties
+    private static JPanel sidePanel; // For the buttons and player info
+
+    //for the functionality buttons
+    private static JButton pass;
+    private static JButton quit;
+    private static JButton help;
+    private static JButton roll;
+    private static JButton playerInfo;
+
+    //To communicate with the model
+    private MonopolyController mc;
+
+    //Each spot on the board
+    private static JButton Property;
+    private static JLabel FreeParking;
+    private static JLabel Chance;
+    private static JLabel RailRoad;
+    private static JLabel Monopoly;
+    private static JLabel WaterWorks;
+    private static JLabel GoToJail;
+    private static JLabel ElectricCompany;
+    private static JLabel Jail;
+    private static JLabel Go;
+    private static JLabel empty;
+
+    public MainFrame(int playerCount){
+        super("Monopoly!!");
+
+        Game model = new Game(playerCount);
+
+        model.addMonopolyView(this);
+
+        mc = new MonopolyController(model);
+
+        //Make sure we have nice window decorations.
+        this.setDefaultLookAndFeelDecorated(true);
+
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        //Set up the content pane.
+        addComponentsToPane(this.getContentPane());
+
+        //Display the window.
+        this.pack();
+        this.setVisible(true);
+    }
 
     public static void addComponentsToPane(Container pane) {
         if (RIGHT_TO_LEFT) {
             pane.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
         }
-
-
-        JPanel sidePanel;
-        JPanel boardPanel;
-        JButton pass;
-        JButton roll;
-        JButton playerInfo;
-        JButton Property;
-        JLabel FreeParking;
-        JLabel Chance;
-        JLabel RailRoad;
-        JLabel Monopoly;
-        JLabel WaterWorks;
-        JLabel GoToJail;
-        JLabel ElectricCompany;
-        JLabel Jail;
-        JLabel Go;
-        JLabel emptey;
-
 
         // top fixed row which is row 0 gridy = 0
 
@@ -40,15 +68,6 @@ public class MainFrame extends JFrame implements MonopolyView  {
         boardPanel.setLayout(new GridBagLayout());
 
         pane.add(boardPanel);
-
-
-        pass = new JButton("Pass");
-        roll = new JButton("Roll");
-        playerInfo = new JButton("Player Info");
-
-
-
-
 
         GridBagConstraints c = new GridBagConstraints();
         if (shouldFill) {
@@ -146,10 +165,10 @@ public class MainFrame extends JFrame implements MonopolyView  {
         c.gridy = 2;
         boardPanel.add(Property, c);
 
-        emptey = new JLabel(" ");
+        empty = new JLabel(" ");
         c.gridx = 10;
         c.gridy = 3;
-        boardPanel.add(emptey, c);
+        boardPanel.add(empty, c);
 
 
         Property = new JButton("Pennsylvania Avenue");
@@ -172,10 +191,10 @@ public class MainFrame extends JFrame implements MonopolyView  {
         c.gridy = 7;
         boardPanel.add(Property, c);
 
-        emptey = new JLabel(" ");
+        empty = new JLabel(" ");
         c.gridx = 10;//col
         c.gridy = 8;//row
-        boardPanel.add(emptey, c);
+        boardPanel.add(empty, c);
 
         Property = new JButton("Boardwalk");
         c.gridx = 10;
@@ -211,13 +230,13 @@ public class MainFrame extends JFrame implements MonopolyView  {
 
         // fixed down row gridy = 10
 
-        emptey = new JLabel(" ");
+        empty = new JLabel(" ");
         if (shouldWeightX) {
             c.weightx = 0.5;
         }
         c.gridx = 0;//col
         c.gridy = 10;//row
-        boardPanel.add(emptey, c);
+        boardPanel.add(empty, c);
 
 
         Property = new JButton("Connecticut Avenue");
@@ -246,30 +265,30 @@ public class MainFrame extends JFrame implements MonopolyView  {
         c.gridy = 10;
         boardPanel.add(RailRoad, c);
 
-        emptey = new JLabel(" ");
+        empty = new JLabel(" ");
         c.gridx = 6;
         c.gridy = 10;
-        boardPanel.add(emptey, c);
+        boardPanel.add(empty, c);
 
         Property = new JButton("Baltic Avenue");
         c.gridx = 7;
         c.gridy = 10;
         boardPanel.add(Property, c);
 
-        emptey = new JLabel(" ");
+        empty = new JLabel(" ");
         c.gridx = 8;//col
         c.gridy = 10;//row
-        boardPanel.add(emptey, c);
+        boardPanel.add(empty, c);
 
         Property = new JButton("Mediterranean Avenue");
         c.gridx = 9;
         c.gridy = 10;
         boardPanel.add(Property, c);
 
-        emptey = new JLabel(" ");
+        empty = new JLabel(" ");
         c.gridx = 10;//col
         c.gridy = 10;//row
-        boardPanel.add(emptey, c);
+        boardPanel.add(empty, c);
 
 
 
@@ -294,10 +313,10 @@ public class MainFrame extends JFrame implements MonopolyView  {
         c.gridy = 2;
         boardPanel.add(Property, c);
 
-        emptey = new JLabel("Indiana Avenue");
+        empty = new JLabel("Indiana Avenue");
         c.gridx = 0;
         c.gridy = 3;
-        boardPanel.add(emptey, c);
+        boardPanel.add(empty, c);
 
 
         Property = new JButton("St. James Place");
@@ -335,51 +354,31 @@ public class MainFrame extends JFrame implements MonopolyView  {
         c.gridy = 10;
         boardPanel.add(Jail, c);
 
-
-
-
         sidePanel = new JPanel();
         sidePanel.setLayout(new GridLayout(6,2));
         //sidePanel.setSize(111, 111);
         pane.add(sidePanel);
 
-        sidePanel.add(pass);
-        sidePanel.add(roll);
-        sidePanel.add(playerInfo);
-
-
-
-
-
+        addButton(roll, "roll");
+        addButton(pass, "pass");
+        addButton(help, "help");
+        addButton(quit, "quit");
+        addButton(playerInfo, "player info");
     }
 
-    /**
-     * Create the GUI and show it.  For thread safety,
-     * this method should be invoked from the
-     * event-dispatching thread.
-     */
-    private static void createAndShowGUI() {
-        //Make sure we have nice window decorations.
-        JFrame.setDefaultLookAndFeelDecorated(true);
-
-        //Create and set up the window.
-        JFrame frame = new JFrame("GridBagLayoutDemo");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-        //Set up the content pane.
-        addComponentsToPane(frame.getContentPane());
-
-        //Display the window.
-        frame.pack();
-        frame.setVisible(true);
+    public static void addButton(JButton button, String text){
+        button = new JButton(text);
+        sidePanel.add(button);
     }
+
 
     public static void main(String[] args) {
-        javax.swing.SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                createAndShowGUI();
-            }
-        });
+        new MainFrame(2);
+    }
+
+    @Override
+    public void handleMonopolyStatusUpdate() {
+
     }
 }
 
