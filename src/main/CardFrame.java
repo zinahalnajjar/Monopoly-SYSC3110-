@@ -82,7 +82,7 @@ public class CardFrame extends JFrame implements MonopolyView, ActionListener {
 
     private void initButtonPanel(String bttnLabel, JButton bttn, MonopolyController mc){
         bttn = new JButton(bttnLabel);
-        bttn.setEnabled(false);
+        bttn.setEnabled(true);
         bttn.setActionCommand(bttn.getText());
         bttn.addActionListener(mc);
         buttonPanel.setBorder(new EmptyBorder(15,20,10,20));
@@ -96,13 +96,43 @@ public class CardFrame extends JFrame implements MonopolyView, ActionListener {
     }
 
     @Override
-    public void handleMonopolyStatusUpdate() {
+    public void actionPerformed(ActionEvent e) {
+        updateInfo();
+        this.setVisible(true);
+    }
+
+    @Override
+    public void handleMonopolyBuy(boolean success) {
+        if(success){
+            updateInfo();
+        } else{
+            JOptionPane.showMessageDialog(this,"You don't have enough money");
+        }
 
     }
 
     @Override
-    public void actionPerformed(ActionEvent e) {
-        updateInfo();
-        this.setVisible(true);
+    public void handleMonopolyRoll() {
+
+    }
+
+    @Override
+    public void handleMonopolyPass() {
+
+    }
+
+    @Override
+    public void handleMonopolyQuit() {
+
+    }
+
+    @Override
+    public void handleMonopolyHelp() {
+
+    }
+
+    @Override
+    public void handleMonopolyPlayerInfo() {
+
     }
 }
