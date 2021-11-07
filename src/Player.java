@@ -116,7 +116,7 @@ public class Player {
      * adds a property to the list of properties for each player
      * @param property
      */
-    public void addProperty(Property property) {
+    public boolean addProperty(Property property) {
         this.properties.add(property);
 
         //checkSet(property);
@@ -133,7 +133,7 @@ public class Player {
         // add property to the list for (current colour).
         list.add(property);
 
-
+        return true;
     }
 
     //Tooba version color set - incomplete
@@ -166,9 +166,9 @@ public class Player {
      * @param property
      */
 
-    public void removeProperty(Property property) {
+    public boolean removeProperty(Property property) {
         this.properties.remove(property);
-
+        return true;
     }
 
     /**

@@ -51,7 +51,6 @@ public class Command {
 
     }
 
-
     /**
      * returns true if the command provided was invalid or not understood
      * @return

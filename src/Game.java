@@ -104,7 +104,7 @@ public class Game {
             if ("roll".equals(command)) {
                 System.out.println("Rolling the dice...");
                 // calling the roll method from Dice class.
-                dice.Roll();
+                dice.roll();
                 System.out.println("Die 1: " + dice.getDie1());
                 System.out.println("Die 2: " + dice.getDie2());
 
@@ -204,7 +204,7 @@ public class Game {
         }
 
         if ("roll".equals(command)) {
-            dice.Roll();
+            dice.roll();
 
             newLocation = board.move(dice.sumOfDice(), currentPlayer.getLocation());
             if(board.getValidLocation(newLocation) == true){

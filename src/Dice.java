@@ -26,7 +26,7 @@ public class Dice {
     /**
      * Roll the Dice which sets each of die1 and die2 to be a random number between 1 and 6
      */
-    public void Roll(){
+    public void roll(){
 
         die1 = (int)(Math.random()*6) + 1;
         die2 = (int)(Math.random()*6) + 1;
@@ -56,6 +56,17 @@ public class Dice {
     public int sumOfDice(){
         return die1+die2;
 
+    }
+
+    /**
+     * For testing purposes
+     */
+    public void setDie1(int a){
+        die1 = a;
+    }
+
+    public void setDie2(int a){
+        die2 = a;
     }
 
 }
