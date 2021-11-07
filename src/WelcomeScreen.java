@@ -1,4 +1,4 @@
-import com.sun.tools.javac.comp.Flow;
+
 
 import javax.swing.*;
 import java.awt.event.ActionListener;
@@ -6,10 +6,17 @@ import java.awt.event.ActionEvent;
 import java.awt.FlowLayout;
 import java.awt.Dialog.ModalityType;
 
+/**
+ * Welcome Screen
+ *
+ * @author Kareem
+ */
 public class WelcomeScreen {
     JFrame frame;
+    int numPlayers;
+  
+    public WelcomeScreen() {
 
-    WelcomeScreen() {
         final FlowLayout layout = new FlowLayout();
         layout.setVgap(10);
 
@@ -18,7 +25,7 @@ public class WelcomeScreen {
         //frame.setLayout(new GridLayout(10, 1, 5, 5));
         frame.setLayout(layout);
         JLabel l = new JLabel("Enter the number of players:");
-        JLabel err = new JLabel("Enter some integer value please");
+        JLabel err = new JLabel("Invalid Entry. Input must be an integer above 1.");
         err.setVisible(false);
         JTextField in = new JTextField(20);
         // creates instance of JButton
@@ -31,11 +38,10 @@ public class WelcomeScreen {
                                             err.setVisible(true);
                                          } else {
                                              try {
-                                                 int numPlayers = Integer.parseInt(input);
-                                                 if (numPlayers > 0) {
+                                                 numPlayers = Integer.parseInt(input);
+                                                 if (numPlayers > 1) {
                                                      frame.dispose();
-                                                     Game game = new Game(numPlayers);
-                                                     game.run();
+                                                     new MainFrame(numPlayers);
                                                  } else {
                                                      err.setVisible(true);
                                                  }
@@ -91,5 +97,13 @@ public class WelcomeScreen {
         frame.setSize(300, 200);
         // makes the frame visible
         frame.setVisible(true);
+    }
+
+    public int getNumPlayers() {
+        return this.numPlayers;
+    }
+
+    public static void main(String[] args) {
+        WelcomeScreen w = new WelcomeScreen();
     }
 }

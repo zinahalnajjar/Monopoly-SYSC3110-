@@ -1,3 +1,6 @@
+
+
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 /**
@@ -30,28 +33,28 @@ public class Board {
      */
     private void createProperties(){
         //All the spaces on the board
-        Property space1 = new Property("Mediterranean Avenue", "Brown", 2, 60);
-        Property space2 = new Property("Baltic Avenue", "Brown", 4, 60);
-        Property space3 = new Property("Oriental Avenue", "Light Blue", 6, 100);
-        Property space4 = new Property("Vermont Avenue", "Light Blue", 6, 100);
-        Property space5 = new Property("Connecticut Avenue", "Light Blue", 8, 120);
-        Property space6 = new Property("St. Charles Place", "Pink", 10, 140);
-        Property space7 = new Property("States Avenue", "Pink", 10, 140);
-        Property space8 = new Property("Virginia Avenue", "Pink", 12, 160);
-        Property space9 = new Property("St. James Place", "Orange", 14, 180);
-        Property space10 = new Property("Tennessee Avenue", "Orange", 14, 180);
-        Property space11 = new Property("New York Avenue", "Orange", 16, 200);
-        Property space12 = new Property("Kentucky Avenue", "Red", 18, 220);
-        Property space13  = new Property("Indiana Avenue", "Red", 18, 220);
-        Property space14 = new Property("Illinois Avenue", "Red", 20, 240);
-        Property space15 = new Property("Atlantic Avenue", "Yellow", 22, 260);
-        Property space16 = new Property("Ventnor Avenue", "Yellow", 22, 260);
-        Property space17 = new Property("Marvin Gardens", "Yellow", 24, 280);
-        Property space18 = new Property("Pacific Avenue", "Green", 26, 300);
-        Property space19 = new Property("North Carolina Avenue", "Green", 26, 300);
-        Property space20 = new Property("Pennsylvania Avenue", "Green", 28, 320);
-        Property space21 = new Property("Park Place", "Dark Blue", 35, 350);
-        Property space22 = new Property("Boardwalk", "Dark Blue", 50, 400);
+        Property space1 = new Property("Mediterranean Avenue", new Color(139,69,19), 2, 60);
+        Property space2 = new Property("Baltic Avenue", new Color(139,69,19), 4, 60);
+        Property space3 = new Property("Oriental Avenue", Color.CYAN, 6, 100);
+        Property space4 = new Property("Vermont Avenue", Color.CYAN, 6, 100);
+        Property space5 = new Property("Connecticut Avenue", Color.CYAN, 8, 120);
+        Property space6 = new Property("St. Charles Place", Color.PINK, 10, 140);
+        Property space7 = new Property("States Avenue",Color.PINK, 10, 140);
+        Property space8 = new Property("Virginia Avenue", Color.PINK, 12, 160);
+        Property space9 = new Property("St. James Place", Color.ORANGE, 14, 180);
+        Property space10 = new Property("Tennessee Avenue", Color.ORANGE, 14, 180);
+        Property space11 = new Property("New York Avenue", Color.ORANGE, 16, 200);
+        Property space12 = new Property("Kentucky Avenue", Color.RED, 18, 220);
+        Property space13  = new Property("Indiana Avenue", Color.RED, 18, 220);
+        Property space14 = new Property("Illinois Avenue", Color.RED, 20, 240);
+        Property space15 = new Property("Atlantic Avenue", Color.YELLOW, 22, 260);
+        Property space16 = new Property("Ventnor Avenue", Color.YELLOW, 22, 260);
+        Property space17 = new Property("Marvin Gardens", Color.YELLOW, 24, 280);
+        Property space18 = new Property("Pacific Avenue", Color.GREEN, 26, 300);
+        Property space19 = new Property("North Carolina Avenue", Color.GREEN, 26, 300);
+        Property space20 = new Property("Pennsylvania Avenue", Color.GREEN, 28, 320);
+        Property space21 = new Property("Park Place", Color.BLUE, 35, 350);
+        Property space22 = new Property("Boardwalk", Color.BLUE, 50, 400);
 
         properties.add(space1);
         properties.add(space2);
@@ -100,6 +103,18 @@ public class Board {
      */
     public ArrayList<Property> propertiesList(){
         return properties;
+    }
+
+    /**
+     * @return property identified by name
+     */
+    public Property getProperty(String name){
+        for(Property p : properties){
+            if(p.getPropertyName().equals(name)){
+                return p;
+            }
+        }
+        return null;
     }
 
     /**
