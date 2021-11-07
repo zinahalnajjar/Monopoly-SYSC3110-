@@ -23,8 +23,9 @@ public class Game {
     private Player currentPlayer;
     private static Scanner scan;
     private int playerCount;
-    private int currentPlayerIndex = 0; //index of the current player
+    private Player previousPlayer;
     Property newLocation;
+    boolean win = false;
 
     public enum Status {X_WON, O_WON, TIE, UNDECIDED};
 
@@ -43,6 +44,8 @@ public class Game {
         gameOver = false;
         this.playerCount = playerCount;
         this.dice = new Dice();
+
+        previousPlayer = null;
 
         newLocation = null;
 
@@ -234,6 +237,9 @@ public class Game {
         if("player Info".equals(command)) {
             displayPlayerInfo();
         }
+        if(win){
+            notifyView("win");
+        }
     }
 
     /**
@@ -331,8 +337,8 @@ public class Game {
      * decide the next player, in the order as found in the list starting from index 0
      */
     public void nextPlayer(){
+        previousPlayer = currentPlayer;
         if(players.size() == players.indexOf(currentPlayer) + 1){
-
             currentPlayer = players.get(0);
         }
         else {
@@ -398,12 +404,15 @@ public class Game {
             }
         }
 
+        String info = "";
+
         // if bankrupt count is one less than the total player count
         // declare winner
         if (bankruptCount == playerCount - 1) {
             gameOver = true;
-            System.out.println("Player " + winner.getPlayerId() + " is the winner!!");
-            System.exit(0);
+            win = true;
+            info = "Player " + winner.getPlayerId() + " is the winner!!" ;
+            System.out.println(info);
         }
     }
 
@@ -475,6 +484,9 @@ public class Game {
         views.remove(view);
     }
 
+    public Player getPreviousPlayer(){
+        return previousPlayer;
+    }
     /*
 
     //welcomes player to the game

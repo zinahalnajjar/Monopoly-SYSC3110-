@@ -19,11 +19,11 @@ public class MainFrame extends JFrame implements MonopolyView  {
     private static JPanel sidePanel; // For the buttons and player info
 
     //for the functionality buttons
-    private static JButton pass;
-    private static JButton quit;
-    private static JButton help;
-    private static JButton roll;
-    private static JButton playerInfo;
+    private static JButton pass = new JButton();
+    private static JButton quit = new JButton();
+    private static JButton help = new JButton();
+    private static JButton roll = new JButton();
+    private static JButton playerInfo = new JButton();
 
     //To communicate with the model
     private MonopolyController mc;
@@ -412,10 +412,12 @@ public class MainFrame extends JFrame implements MonopolyView  {
         addButton(help, "help", mc);
         addButton(quit, "quit", mc);
         addButton(playerInfo, "player info", mc);
+
+        pass.setEnabled(false);
     }
 
     public static void addButton(JButton button, String text, MonopolyController mc){
-        button = new JButton(text);
+        button.setText(text);
         button.setActionCommand(button.getText());
         button.addActionListener(mc);
         sidePanel.add(button);
@@ -441,10 +443,19 @@ public class MainFrame extends JFrame implements MonopolyView  {
             case "quit":
                 quitNotification();
                 break;
+            case "win":
+                winNotification();
+                break;
             default:
                 break;
         }
 
+    }
+
+    private void winNotification() {
+        String info = "Player " +model.getCurrentPlayer().getPlayerId()+ " has won the game!!!";
+        JOptionPane.showMessageDialog(this, info , "Winner", JOptionPane.INFORMATION_MESSAGE);
+        System.exit(0);
     }
 
     // methods for to handle each command case
@@ -453,7 +464,9 @@ public class MainFrame extends JFrame implements MonopolyView  {
      * when the user clicks on the quit command they will exit the program
      */
     private void quitNotification(){
-        System.exit(0);
+        String info = "Player "+model.getPreviousPlayer().getPlayerId()+" has quit\n" +
+                "It is now Player " +model.getCurrentPlayer().getPlayerId()+ "'s turn";
+        JOptionPane.showMessageDialog(this, info , "Quit", JOptionPane.INFORMATION_MESSAGE);
     }
 
     /**
@@ -478,6 +491,8 @@ public class MainFrame extends JFrame implements MonopolyView  {
         info += "Player " + currentPlayer.getPlayerId(); // i used the ID to represent the players- Kareem might need to change this
         JOptionPane.showMessageDialog(this, info, "Pass result", JOptionPane.INFORMATION_MESSAGE);
 
+        roll.setEnabled(true);
+        pass.setEnabled(false);
     }
 
     private void rollNotification(){
@@ -496,6 +511,13 @@ public class MainFrame extends JFrame implements MonopolyView  {
             if(bttn.getText().equals(location.getPropertyName())){
                 bttn.doClick();
             }
+        }
+
+        if(dice.sumOfDice() == 12){
+            JOptionPane.showMessageDialog(this, "You rolled doubles, you can roll again", "Roll result", JOptionPane.INFORMATION_MESSAGE);
+        }else{
+            roll.setEnabled(false);
+            pass.setEnabled(true);
         }
 
     }
