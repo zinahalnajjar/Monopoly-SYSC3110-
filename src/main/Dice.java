@@ -1,3 +1,5 @@
+package main;
+
 /**
  * Class Dice- a pair of Dice in monopoly game
  * this class is part of the "Monopoly Game" application
