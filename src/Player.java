@@ -196,16 +196,6 @@ public class Player {
     public String getInfo(){ return toString();}
 
     /**
-     *
-     * @return the playerID, money, isBankrupt, location
-     */
-    @Override
-    public String toString() {
-        return "Player [playerId=" + playerId + ", money=" + money + ", isBankrupt=" + isBankrupt + ", location="
-                + location.getPropertyName() + "]";
-    }
-
-    /**
      * the player will get money when they sell a property
      * @param propertySellCost
      */
@@ -215,8 +205,6 @@ public class Player {
         }
 
     }
-
-
 
     /**
      *
@@ -234,4 +222,35 @@ public class Player {
             }
         }
     }
+
+    public String getStringProperties() {
+        String p = "";
+
+        for(Property property : properties){
+            p += property.getPropertyName() + "\n";
+        }
+
+        return p;
+    }
+
+    public String getColourPropertyMap() {
+        String p = "";
+
+        for(Property property : properties){
+            p += property.getPropertyName() + ", ";
+        }
+
+        return p;
+    }
+
+    /**
+     *
+     * @return the playerID, money, isBankrupt, location
+     */
+    @Override
+    public String toString() {
+        return "Player: " + playerId + ",  money: " + money + ", isBankrupt: " + isBankrupt + ", location: "
+                + location.getPropertyName() + "\n - Properties owned: \n"+ getStringProperties();
+    }
+
 }

@@ -91,7 +91,11 @@ public class CardFrame extends JFrame implements MonopolyView, ActionListener {
     }
 
     private void updateInfo(Property location) {
-        propertyOwner.setText("Owner: Player " + location.getOwner().getPlayerId());
+        if(property.getOwner() != null){
+            propertyOwner.setText("Owner: Player " + location.getOwner().getPlayerId());
+        }else{
+            propertyOwner.setText("Owner: None");
+        }
     }
 
     @Override
@@ -110,6 +114,9 @@ public class CardFrame extends JFrame implements MonopolyView, ActionListener {
                 buy.setEnabled(false);
                 sell.setEnabled(true);
             }
+        } else if(property.getOwner() == model.getCurrentPlayer()){
+            buy.setEnabled(false);
+            sell.setEnabled(true);
         }
         else{
             buy.setEnabled(false);
@@ -130,6 +137,15 @@ public class CardFrame extends JFrame implements MonopolyView, ActionListener {
             } else{
                 JOptionPane.showMessageDialog(this,"You don't have enough money");
             }
+        }
+    }
+
+    @Override
+    public void handleMonopolySell(boolean success, Property location) {
+        if(success && property == location){
+            updateInfo(location);
+            sell.setEnabled(false);
+            this.setVisible(true);
         }
     }
 
