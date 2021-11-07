@@ -99,7 +99,8 @@ public class CardFrame extends JFrame implements MonopolyView, ActionListener {
         this.setVisible(true);
     }
 
-    @Override
+    public void handleMonopolyStatusUpdate(String command) { //updated with the paramter
+
     public void handleMonopolyBuy(boolean success) {
         if(success){
             updateInfo();
@@ -107,30 +108,6 @@ public class CardFrame extends JFrame implements MonopolyView, ActionListener {
             JOptionPane.showMessageDialog(this,"You don't have enough money");
         }
 
-    }
-
-    @Override
-    public void handleMonopolyRoll() {
-
-    }
-
-    @Override
-    public void handleMonopolyPass() {
-
-    }
-
-    @Override
-    public void handleMonopolyQuit() {
-
-    }
-
-    @Override
-    public void handleMonopolyHelp() {
-
-    }
-
-    @Override
-    public void handleMonopolyPlayerInfo() {
 
     }
 }
