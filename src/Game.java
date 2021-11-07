@@ -216,9 +216,15 @@ public class Game {
         if ("buy".equals(command)) {
             boolean success = buy(newLocation);
             for (MonopolyView view : views){
-                    view.handleMonopolyBuy(success, newLocation);
+                view.handleMonopolyBuy(success, newLocation);
             }
             //notifyView(command);
+        }
+        if ("sell".equals(command)) {
+            boolean success = sell(newLocation);
+            for (MonopolyView view : views){
+                view.handleMonopolySell(success, newLocation);
+            }
         }
 
         if ("pass".equals(command)) {
@@ -308,11 +314,13 @@ public class Game {
     /**
      * The player will be able to sell
      * @param property
+     * @return
      */
-    public void sell(Property property){
+    public boolean sell(Property property){
         currentPlayer.addMoney(property.getCost());
         currentPlayer.removeProperty(property);
         property.setOwner(null);
+        return true;
     }
 
     /**

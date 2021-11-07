@@ -3,6 +3,7 @@
 import java.awt.*;
 import java.util.ArrayList;
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 
 /**
  * Main playing screen
@@ -241,29 +242,6 @@ public class MainFrame extends JFrame implements MonopolyView  {
         Go = new JLabel("GO");
         c.gridx = 10;
         c.gridy = 10;
-        boardPanel.add(Go, c);
-
-        // sidepanel on col 11
-
-        /*
-        sidePanel = new JPanel();
-        sidePanel.setBorder(BorderFactory.createLineBorder(Color.black));
-        sidePanel.setSize(300, 500);
-        sidePanel.setAlignmentX(pane.RIGHT_ALIGNMENT);
-        pass = new JButton("Pass");
-        roll = new JButton("Roll");
-        playerInfo = new JButton("Player Info");
-        sidePanel.add(pass);
-        sidePanel.add(roll);
-        sidePanel.add(playerInfo);
-        c.gridx = 10;
-        pane.add(sidePanel, c);
-
-
-         */
-
-
-
 
         // fixed down row gridy = 10
 
@@ -425,6 +403,11 @@ public class MainFrame extends JFrame implements MonopolyView  {
 
     @Override
     public void handleMonopolyBuy(boolean success, Property location) {
+    }
+
+    @Override
+    public void handleMonopolySell(boolean success, Property location) {
+
     }
 
 

@@ -4,4 +4,6 @@ public interface MonopolyView {
 
     void handleMonopolyBuy(boolean success, Property location);
 
+    void handleMonopolySell(boolean success, Property location);
+
 }
