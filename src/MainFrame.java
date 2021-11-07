@@ -1,8 +1,15 @@
+
+
 import java.awt.*;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import javax.swing.*;
 
+/**
+ * Main playing screen
+ *
+ * @author Tooba
+ * @author Zinah
+ */
 public class MainFrame extends JFrame implements MonopolyView  {
     final static boolean shouldFill = true;
     final static boolean shouldWeightX = true;
@@ -414,8 +421,10 @@ public class MainFrame extends JFrame implements MonopolyView  {
         sidePanel.add(button);
     }
 
+    @Override
+    public void handleMonopolyBuy(boolean success) {
 
-
+    }
 
     @Override
     public void handleMonopolyStatusUpdate(String command) {

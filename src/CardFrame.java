@@ -4,6 +4,13 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * Initializes the board and the players.
+ * Starts going through a while loop, that goes till the game ends.
+ * Game ends with when all but one player have quit or gone bankrupt.
+ *
+ * @author Tooba
+ */
 public class CardFrame extends JFrame implements MonopolyView, ActionListener {
 
     private Board board;
@@ -73,7 +80,7 @@ public class CardFrame extends JFrame implements MonopolyView, ActionListener {
 
     private void initButtonPanel(String bttnLabel, JButton bttn, MonopolyController mc){
         bttn = new JButton(bttnLabel);
-        bttn.setEnabled(false);
+        bttn.setEnabled(true);
         bttn.setActionCommand(bttn.getText());
         bttn.addActionListener(mc);
         buttonPanel.setBorder(new EmptyBorder(15,20,10,20));
@@ -86,17 +93,21 @@ public class CardFrame extends JFrame implements MonopolyView, ActionListener {
         }
     }
 
-    public static void main(String[] args){
-    }
-
-    @Override
-    public void handleMonopolyStatusUpdate(String command) { //updated with the paramter
-
-    }
-
     @Override
     public void actionPerformed(ActionEvent e) {
         updateInfo();
         this.setVisible(true);
+    }
+
+    public void handleMonopolyStatusUpdate(String command) { //updated with the paramter
+
+    public void handleMonopolyBuy(boolean success) {
+        if(success){
+            updateInfo();
+        } else{
+            JOptionPane.showMessageDialog(this,"You don't have enough money");
+        }
+
+
     }
 }

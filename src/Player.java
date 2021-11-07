@@ -55,8 +55,7 @@ public class Player {
     /**
      * @return the current player ID number
      */
-    public int getPlayerId(){
-        return this.playerId;
+    public int getPlayerId(){return this.playerId;
     }
 
     /**
@@ -84,8 +83,7 @@ public class Player {
     /**
      * @return true if the player is bankrupt
      */
-    public boolean getBankruptcy(){
-        return this.isBankrupt;
+    public boolean getBankruptcy(){ return this.isBankrupt;
     }
 
     /**
