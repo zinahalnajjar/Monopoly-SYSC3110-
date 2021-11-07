@@ -197,43 +197,36 @@ public class Game {
             nextPlayer();
         }
 
-        //Displays and gets a valid command from the user
+        Property newLocation = null;
+
         if ("roll".equals(command)) {
             dice.Roll();
 
             System.out.println("I got here");
-            Property newLocation = board.move(dice.sumOfDice(), currentPlayer.getLocation());
+            newLocation = board.move(dice.sumOfDice(), currentPlayer.getLocation());
             if(board.getValidLocation(newLocation) == true){
                 currentPlayer.setLocation(newLocation);
             }
         }
 
         if ("buy".equals(command)) {
-            dice.Roll();
-            Property newLocation = board.move(dice.sumOfDice(), currentPlayer.getLocation());
-            if(board.getValidLocation(newLocation) == true){
-                currentPlayer.setLocation(newLocation);
+            boolean success = buy(newLocation);
+            for(MonopolyView v: views){
+                v.handleMonopolyBuy(success);
             }
         }
 
         if ("pass".equals(command)) {
-            dice.Roll();
-            Property newLocation = board.move(dice.sumOfDice(), currentPlayer.getLocation());
-            if(board.getValidLocation(newLocation) == true){
-                currentPlayer.setLocation(newLocation);
-            }
+
         }
 
         if("quit".equals(command)){
-            //helps user quit game
             quit();
         }
         if("help".equals(command)){
-            //displays the help info
             help();
         }
         if("player Info".equals(command)) {
-            //displays player info
             displayPlayerInfo();
         }
     }
@@ -274,12 +267,13 @@ public class Game {
      * The player will be able to buy once he lands on an unowned property
      * @param property
      */
-    public void buy(Property property){
+    public boolean buy(Property property){
         int cost = property.getCost();
         int money = currentPlayer.getMoney(); //return players total money
 
         if (cost > money){
             System.out.println("You don't have enough money.");
+            return false;
         } else{
             property.setOwner(currentPlayer);
             currentPlayer.addProperty(property);
@@ -287,6 +281,7 @@ public class Game {
 
             System.out.println("You have successfully bought the property.");
             System.out.println("You have " + currentPlayer.getMoney() +"$ left.");
+            return true;
         }
     }
 

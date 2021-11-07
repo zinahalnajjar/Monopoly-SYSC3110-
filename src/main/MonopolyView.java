@@ -1,5 +1,10 @@
 package main;
 
 public interface MonopolyView {
-    void handleMonopolyStatusUpdate();
+    void handleMonopolyBuy(boolean success);
+    void handleMonopolyRoll();
+    void handleMonopolyPass();
+    void handleMonopolyQuit();
+    void handleMonopolyHelp();
+    void handleMonopolyPlayerInfo();
 }

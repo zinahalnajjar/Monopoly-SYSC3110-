@@ -1,7 +1,6 @@
 package main;
 
 import java.awt.*;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import javax.swing.*;
 
@@ -416,7 +415,32 @@ public class MainFrame extends JFrame implements MonopolyView  {
     }
 
     @Override
-    public void handleMonopolyStatusUpdate() {
+    public void handleMonopolyBuy(boolean success) {
+
+    }
+
+    @Override
+    public void handleMonopolyRoll() {
+
+    }
+
+    @Override
+    public void handleMonopolyPass() {
+
+    }
+
+    @Override
+    public void handleMonopolyQuit() {
+
+    }
+
+    @Override
+    public void handleMonopolyHelp() {
+
+    }
+
+    @Override
+    public void handleMonopolyPlayerInfo() {
 
     }
 }
