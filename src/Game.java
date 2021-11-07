@@ -204,6 +204,7 @@ public class Game {
             if(board.getValidLocation(newLocation) == true){
                 currentPlayer.setLocation(newLocation);
             }
+            notifyView(command);
         }
 
         if ("buy".equals(command)) {
@@ -212,6 +213,7 @@ public class Game {
             if(board.getValidLocation(newLocation) == true){
                 currentPlayer.setLocation(newLocation);
             }
+            notifyView(command);
         }
 
         if ("pass".equals(command)) {
@@ -220,15 +222,18 @@ public class Game {
             if(board.getValidLocation(newLocation) == true){
                 currentPlayer.setLocation(newLocation);
             }
+            notifyView(command);
         }
 
         if("quit".equals(command)){
             //helps user quit game
             quit();
+            notifyView(command);
         }
         if("help".equals(command)){
             //displays the help info
             help();
+            notifyView(command);
         }
         if("player Info".equals(command)) {
             //displays player info
@@ -236,6 +241,15 @@ public class Game {
         }
     }
 
+    /**
+     * method to notify each view that chnages has happened
+     */
+
+    private void notifyView(String command){
+        for (MonopolyView view : views){
+            view.handleMonopolyStatusUpdate(command);
+        }
+    }
     /**
      *
      * Checks for invalid commands
@@ -428,6 +442,25 @@ public class Game {
     }
 
     public Board getBoard(){return board;}
+
+    /**
+     * Getter for currentPlayer.
+     *
+     * @return
+     */
+    public Player getCurrentPlayer(){
+        //Getter added for access by MainFrame class
+        //for Notification update.
+        return currentPlayer;
+    }
+    /**
+     * Getter for dice.
+     *
+     * @return
+     */
+    public Dice getDice(){
+        return dice;
+    }
 
     public void addMonopolyView(MonopolyView view){
         views.add(view);

@@ -90,7 +90,7 @@ public class CardFrame extends JFrame implements MonopolyView, ActionListener {
     }
 
     @Override
-    public void handleMonopolyStatusUpdate() {
+    public void handleMonopolyStatusUpdate(String command) { //updated with the paramter
 
     }
 

@@ -20,6 +20,8 @@ public class MainFrame extends JFrame implements MonopolyView  {
 
     //To communicate with the model
     private MonopolyController mc;
+    //the model
+    private Game model;
 
     //Each spot on the board
     private static ArrayList<JButton> properties;
@@ -38,7 +40,12 @@ public class MainFrame extends JFrame implements MonopolyView  {
     public MainFrame(int playerCount){
         super("Monopoly!!");
 
-        Game model = new Game(playerCount);
+       // Game model = new Game(playerCount);
+        // i needed to access the model to get the help() order to update the view when based on each command
+        //since my method is outide of the constructor then i can't access it with the way you have
+
+        // same thing but now i have a private field of type game
+        model = new Game(playerCount);
 
         model.addMonopolyView(this);
 
@@ -408,13 +415,85 @@ public class MainFrame extends JFrame implements MonopolyView  {
     }
 
 
-    public static void main(String[] args) {
-        new MainFrame(2);
-    }
+
 
     @Override
-    public void handleMonopolyStatusUpdate() {
+    public void handleMonopolyStatusUpdate(String command) {
+        switch (command){
+            case "roll":
+                rollNotification();
+                break;
+            case "buy":
+                buyNotification();
+                break;
+            case "pass":
+                passNotification();
+                break;
+            case "help":
+                helpNotification();
+                break;
+            case "quit":
+                quitNotification();
+                break;
 
+            default:
+                break;
+        }
+
+    }
+
+    // methods for to handle each command case
+
+    /**
+     * when the user clicks on the quit command they will exit the program
+     */
+    private void quitNotification(){
+        System.exit(0);
+    }
+
+    /**
+     * when the user clicks on the help command they will get the instructions of the game
+     */
+
+    private void helpNotification(){
+        String info = model.help();
+        // a dialog message that shows the instruction of the game
+        JOptionPane.showMessageDialog(this, info, "Help", JOptionPane.INFORMATION_MESSAGE);
+
+    }
+
+    /**
+     * when the user clicks on the pass command the turn will be changed from current player to next player
+     *
+     */
+
+    private void passNotification(){
+        Player currentPlayer = model.getCurrentPlayer();// there was no getter method in game that returns the current player so i implemented it
+        String info = "The turn has been passed on to:\n\n";
+        info += "   " + currentPlayer.getPlayerId(); // i used the ID to represent the players- Kareem might need to change this
+        JOptionPane.showMessageDialog(this, info, "Pass result", JOptionPane.INFORMATION_MESSAGE);
+
+    }
+
+    private void buyNotification() {
+        // tooba to implement this
+    }
+
+    private void rollNotification(){
+        Dice dice = model.getDice(); // get the dice from model- also need to add the getter in Game class to return the dice
+        Player currentPlayer = model.getCurrentPlayer(); // get the current player
+        Property location = currentPlayer.getLocation(); // get the location of the current player on the baord
+        String info = "Dice values:\n";
+        info += "   " + dice.getDie1() + "\n";
+        info += "   " + dice.getDie2() + "\n\n";
+        info += "Player location:\n";
+        info += "   " + location.getPropertyName() + "\n";
+        JOptionPane.showMessageDialog(this, info, "Roll result", JOptionPane.INFORMATION_MESSAGE);
+
+    }
+
+    public static void main(String[] args) {
+        new MainFrame(2);
     }
 }
 

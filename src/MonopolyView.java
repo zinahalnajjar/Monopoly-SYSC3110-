@@ -1,4 +1,4 @@
 
 public interface MonopolyView {
-    void handleMonopolyStatusUpdate();
+    void handleMonopolyStatusUpdate(String command);
 }
