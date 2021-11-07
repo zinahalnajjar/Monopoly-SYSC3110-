@@ -1,8 +1,15 @@
+package main;
+
 import javax.swing.*;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.FlowLayout;
 
+/**
+ * Welcome Screen
+ *
+ * @author Kareem
+ */
 public class WelcomeScreen {
     JFrame frame;
     int numPlayers;

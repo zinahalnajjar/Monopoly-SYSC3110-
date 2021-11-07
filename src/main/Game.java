@@ -1,3 +1,5 @@
+package main;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -437,13 +439,13 @@ public class Game {
         views.remove(view);
     }
 
-    /**
-     * welcomes player to the game
-     * checks how many players are playing
-     * @param args
-     */
-    public static void main(String[] args) {
+    /*
 
+    //welcomes player to the game
+    //checks how many players are playing
+    //@param args
+
+    public static void main(String[] args) {
         System.out.println("Welcome to Monopoly\n");
 
         scan = new Scanner(System.in);
@@ -451,5 +453,7 @@ public class Game {
         int playerCount = Integer.parseInt(scan.nextLine());
         Game game = new Game(playerCount);
         game.runTextBased();
+
     }
+    */
 }

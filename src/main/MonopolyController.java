@@ -1,6 +1,13 @@
+package main;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * Connects the model to the view
+ *
+ * @author Tooba
+ */
 public class MonopolyController implements ActionListener {
 
     Game model;

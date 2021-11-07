@@ -1,8 +1,16 @@
+package main;
+
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import javax.swing.*;
 
+/**
+ * Main playing screen
+ *
+ * @author Tooba
+ * @author Zinah
+ */
 public class MainFrame extends JFrame implements MonopolyView  {
     final static boolean shouldFill = true;
     final static boolean shouldWeightX = true;
@@ -405,11 +413,6 @@ public class MainFrame extends JFrame implements MonopolyView  {
         button.setActionCommand(button.getText());
         button.addActionListener(mc);
         sidePanel.add(button);
-    }
-
-
-    public static void main(String[] args) {
-        new MainFrame(2);
     }
 
     @Override

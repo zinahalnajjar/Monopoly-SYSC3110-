@@ -1,9 +1,18 @@
+package main;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * Initializes the board and the players.
+ * Starts going through a while loop, that goes till the game ends.
+ * Game ends with when all but one player have quit or gone bankrupt.
+ *
+ * @author Tooba
+ */
 public class CardFrame extends JFrame implements MonopolyView, ActionListener {
 
     private Board board;
@@ -84,9 +93,6 @@ public class CardFrame extends JFrame implements MonopolyView, ActionListener {
         if(property.getOwner()!=null){
             propertyOwner.setText("Owner: Player " + property.getOwner().getPlayerId());
         }
-    }
-
-    public static void main(String[] args){
     }
 
     @Override
