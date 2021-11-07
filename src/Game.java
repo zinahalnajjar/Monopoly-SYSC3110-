@@ -240,8 +240,8 @@ public class Game {
             help();
             notifyView(command);
         }
-        if("player Info".equals(command)) {
-            displayPlayerInfo();
+        if("player info".equals(command)) {
+            String info = displayPlayerInfo();
         }
         if(win){
             notifyView("win");
@@ -427,7 +427,15 @@ public class Game {
     /**
      * Displays all the player Information
      */
-    public void displayPlayerInfo() {
+    public String displayPlayerInfo() {
+        String p = "";
+        for (Player player : players) {
+            p += player +"\n";
+        }
+        return p;
+    }
+
+    public void displayAllPlayerInfo() {
         for (Player player : players) {
             System.out.println(player);
         }
@@ -495,6 +503,7 @@ public class Game {
     public Player getPreviousPlayer(){
         return previousPlayer;
     }
+
     /*
 
     //welcomes player to the game

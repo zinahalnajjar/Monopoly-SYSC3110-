@@ -401,6 +401,14 @@ public class MainFrame extends JFrame implements MonopolyView  {
         sidePanel.add(button);
     }
 
+    public JButton getRollButton(){
+        return roll;
+    }
+
+    public JButton getPassButton(){
+        return pass;
+    }
+
     @Override
     public void handleMonopolyBuy(boolean success, Property location) {
     }
@@ -409,7 +417,6 @@ public class MainFrame extends JFrame implements MonopolyView  {
     public void handleMonopolySell(boolean success, Property location) {
 
     }
-
 
     @Override
     public void handleMonopolyStatusUpdate(String command) {
