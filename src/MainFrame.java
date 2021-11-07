@@ -77,7 +77,7 @@ public class MainFrame extends JFrame implements MonopolyView  {
 
     private void addListeners(Game m, MonopolyController mc) {
         for(JButton bttn : properties){
-            CardFrame c = new CardFrame(bttn.getText(), m.getBoard(), mc);
+            CardFrame c = new CardFrame(bttn.getText(), m.getBoard(), mc, m);
             bttn.addActionListener(c);
         }
     }
@@ -422,18 +422,15 @@ public class MainFrame extends JFrame implements MonopolyView  {
     }
 
     @Override
-    public void handleMonopolyBuy(boolean success) {
-
+    public void handleMonopolyBuy(boolean success, Property location) {
     }
+
 
     @Override
     public void handleMonopolyStatusUpdate(String command) {
         switch (command){
             case "roll":
                 rollNotification();
-                break;
-            case "buy":
-                buyNotification();
                 break;
             case "pass":
                 passNotification();
@@ -444,7 +441,6 @@ public class MainFrame extends JFrame implements MonopolyView  {
             case "quit":
                 quitNotification();
                 break;
-
             default:
                 break;
         }
@@ -479,25 +475,28 @@ public class MainFrame extends JFrame implements MonopolyView  {
     private void passNotification(){
         Player currentPlayer = model.getCurrentPlayer();// there was no getter method in game that returns the current player so i implemented it
         String info = "The turn has been passed on to:\n\n";
-        info += "   " + currentPlayer.getPlayerId(); // i used the ID to represent the players- Kareem might need to change this
+        info += "Player " + currentPlayer.getPlayerId(); // i used the ID to represent the players- Kareem might need to change this
         JOptionPane.showMessageDialog(this, info, "Pass result", JOptionPane.INFORMATION_MESSAGE);
 
-    }
-
-    private void buyNotification() {
-        // tooba to implement this
     }
 
     private void rollNotification(){
         Dice dice = model.getDice(); // get the dice from model- also need to add the getter in Game class to return the dice
         Player currentPlayer = model.getCurrentPlayer(); // get the current player
-        Property location = currentPlayer.getLocation(); // get the location of the current player on the baord
+        Property location = currentPlayer.getLocation(); // get the location of the current player on the board
+
         String info = "Dice values:\n";
         info += "   " + dice.getDie1() + "\n";
         info += "   " + dice.getDie2() + "\n\n";
         info += "Player location:\n";
         info += "   " + location.getPropertyName() + "\n";
         JOptionPane.showMessageDialog(this, info, "Roll result", JOptionPane.INFORMATION_MESSAGE);
+
+        for(JButton bttn : properties){
+            if(bttn.getText().equals(location.getPropertyName())){
+                bttn.doClick();
+            }
+        }
 
     }
 

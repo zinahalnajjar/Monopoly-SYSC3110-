@@ -2,5 +2,6 @@ public interface MonopolyView {
 
     void handleMonopolyStatusUpdate(String command);
 
-    void handleMonopolyBuy(boolean success);
+    void handleMonopolyBuy(boolean success, Property location);
+
 }
