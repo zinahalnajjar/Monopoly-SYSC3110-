@@ -7,6 +7,9 @@ import java.awt.*;
 
 import static org.junit.Assert.*;
 
+/**
+ * @author Tooba
+ */
 public class PropertyTest {
 
     Property a = new Property("Carleton", Color.RED, 5000, 6000);
@@ -53,18 +56,23 @@ public class PropertyTest {
 
     @Test
     public void getRent() {
-        a.getRent();
+        assertEquals(a.getRent(),5000);
     }
 
     @Test
     public void setRent() {
+        a.setRent(1);
+        assertEquals(a.getRent(),1);
     }
 
     @Test
     public void getCost() {
+        assertEquals(a.getCost(),6000);
     }
 
     @Test
     public void setCost() {
+        a.setCost(3);
+        assertEquals(a.getCost(),3);
     }
 }
