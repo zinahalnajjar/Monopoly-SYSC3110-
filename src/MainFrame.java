@@ -395,6 +395,8 @@ public class MainFrame extends JFrame implements MonopolyView  {
     @Override
     public void handleMonopolySell(boolean success, Property location) {
 
+    }
+
     public static void main(String[] args) {
         new MainFrame(2);
     }
@@ -438,13 +440,6 @@ public class MainFrame extends JFrame implements MonopolyView  {
         String info = "Player "+model.getPreviousPlayer().getPlayerId()+" has quit\n" +
                 "It is now Player " +model.getCurrentPlayer().getPlayerId()+ "'s turn";
         JOptionPane.showMessageDialog(this, info , "Quit", JOptionPane.INFORMATION_MESSAGE);
-    }
-
-
-
-
-    private void quitNotification() {
-        System.exit(0);
     }
 
     private void helpNotification() {
@@ -493,7 +488,6 @@ public class MainFrame extends JFrame implements MonopolyView  {
             pass.setEnabled(true);
         }
     }
-
 }
 
 
