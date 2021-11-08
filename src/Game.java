@@ -213,18 +213,13 @@ public class Game {
         if ("buy".equals(command)) {
             boolean success = buy(newLocation);
             for(MonopolyView v: views){
-                v.handleMonopolyBuy(success);
+                v.handleMonopolyBuy(success, newLocation);
             }
             notifyView(command);
         }
 
         if ("pass".equals(command)) {
-
-            dice.Roll();
-            Property newLocation = board.move(dice.sumOfDice(), currentPlayer.getLocation());
-            if(board.getValidLocation(newLocation) == true){
-                currentPlayer.setLocation(newLocation);
-            }
+            nextPlayer();
             notifyView(command);
         }
 
@@ -350,19 +345,27 @@ public class Game {
      * If a player lands in a property owned by opposing player rent has to be payed
      * @param property the property for which the rent needs to be paid
      */
-    public void payRent(Property property){
+    public String payRent(Property property){
+        String info = "";
         int rent = property.getRent();// get rent amount
         System.out.println("Player "+currentPlayer.getPlayerId() + " has $" + currentPlayer.getMoney()); //dispay how much the player owns
         currentPlayer.removeMoney(rent);// remove money from player based on what they paid
-        boolean  bankrupt = checkBankruptcy();
+        boolean bankrupt = checkBankruptcy();
+
+        if(bankrupt){
+            info = "bankrupt";
+        }
 
         //if the player is bankrupt then don't add money
         if(!bankrupt){
-            System.out.println("Player " + currentPlayer.getPlayerId() + " PAID rent: " + rent);// display how much the player paid for rent
-            System.out.println("Player " + currentPlayer.getPlayerId() + " has $" + currentPlayer.getMoney());
+            info = "Player " + currentPlayer.getPlayerId() + " PAID rent: " + rent +
+                    "\nPlayer" + currentPlayer.getPlayerId() + " has $" + currentPlayer.getMoney();
+            System.out.println(info);
             property.getOwner().addMoney(rent);// the owner of the property will receive the rent money
         }
         checkWin();
+
+        return info;
     }
 
     /**

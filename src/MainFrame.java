@@ -81,7 +81,7 @@ public class MainFrame extends JFrame implements MonopolyView  {
 
     private void addListeners(Game m, MonopolyController mc) {
         for(JButton bttn : properties){
-            CardFrame c = new CardFrame(bttn.getText(), m.getBoard(), mc);
+            CardFrame c = new CardFrame(bttn.getText(), m.getBoard(), mc, m);
             bttn.addActionListener(c);
         }
     }
@@ -405,6 +405,19 @@ public class MainFrame extends JFrame implements MonopolyView  {
                 break;
         }
     }
+
+    @Override
+    public void handleMonopolyBuy(boolean success, Property location) {
+
+    }
+
+    @Override
+    public void handleMonopolySell(boolean success, Property location) {
+
+    }
+
+
+
 
     private void quitNotification() {
         System.exit(0);
