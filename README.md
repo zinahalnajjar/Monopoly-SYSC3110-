@@ -13,14 +13,18 @@ Zip Flie containing
  - readme - Tooba
 
 The program has 6 classes:
+Model:
  - Board: Creates all the properties (the board) and implaments moving the players position
  - Dice: Rolls the dice, can return sums of both die or individual values
  - Game: Initializes the whole game, incharge o the functionality of each command, and the loop that runs the game.  
  - Player: Holds all the properties of every "Player" created, add performs addition and subtraction to 
  - Property: Hold all the properties of every "Property" created
  - Command: Creates a valid command list 
-
-Known Issues:
- - While it prints the players all information, it doesn't print each players owned properties.
- - Color set functionality implemented, but doesn't impact gameplauy. 
+View:
+ - MonopolyView (interface)
+ - MainFrame - Implements the main game view implementing MonopolyView
+ - CardFrame - Implements the deed card, each CardFram considered its own view implementing MonopolyView
+ - StartView - Start screen that asks the user to start the game by entering number of players and help button that prints instructions
+Controller:
+ - MonopolyController - connects view to model
 
