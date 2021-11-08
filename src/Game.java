@@ -23,7 +23,9 @@ public class Game {
     private Player currentPlayer;
     private static Scanner scan;
     private int playerCount;
-    private int currentPlayerIndex = 0; //index of the current player
+    private Player previousPlayer;
+    Property newLocation;
+    boolean win = false;
 
     public enum Status {X_WON, O_WON, TIE, UNDECIDED};
 
@@ -42,6 +44,10 @@ public class Game {
         gameOver = false;
         this.playerCount = playerCount;
         this.dice = new Dice();
+
+        previousPlayer = null;
+
+        newLocation = null;
 
         scan = new Scanner(System.in);
 
@@ -98,7 +104,7 @@ public class Game {
             if ("roll".equals(command)) {
                 System.out.println("Rolling the dice...");
                 // calling the roll method from Dice class.
-                dice.Roll();
+                dice.roll();
                 System.out.println("Die 1: " + dice.getDie1());
                 System.out.println("Die 2: " + dice.getDie2());
 
@@ -197,12 +203,9 @@ public class Game {
             nextPlayer();
         }
 
-        Property newLocation = null;
-
         if ("roll".equals(command)) {
-            dice.Roll();
+            dice.roll();
 
-            System.out.println("I got here");
             newLocation = board.move(dice.sumOfDice(), currentPlayer.getLocation());
             if(board.getValidLocation(newLocation) == true){
                 currentPlayer.setLocation(newLocation);
@@ -212,10 +215,16 @@ public class Game {
 
         if ("buy".equals(command)) {
             boolean success = buy(newLocation);
-            for(MonopolyView v: views){
-                v.handleMonopolyBuy(success, newLocation);
+            for (MonopolyView view : views){
+                view.handleMonopolyBuy(success, newLocation);
             }
-            notifyView(command);
+            //notifyView(command);
+        }
+        if ("sell".equals(command)) {
+            boolean success = sell(newLocation);
+            for (MonopolyView view : views){
+                view.handleMonopolySell(success, newLocation);
+            }
         }
 
         if ("pass".equals(command)) {
@@ -231,8 +240,11 @@ public class Game {
             help();
             notifyView(command);
         }
-        if("player Info".equals(command)) {
-            displayPlayerInfo();
+        if("player info".equals(command)) {
+            String info = displayPlayerInfo();
+        }
+        if(win){
+            notifyView("win");
         }
     }
 
@@ -245,6 +257,7 @@ public class Game {
             view.handleMonopolyStatusUpdate(command);
         }
     }
+
     /**
      *
      * Checks for invalid commands
@@ -302,11 +315,13 @@ public class Game {
     /**
      * The player will be able to sell
      * @param property
+     * @return
      */
-    public void sell(Property property){
+    public boolean sell(Property property){
         currentPlayer.addMoney(property.getCost());
         currentPlayer.removeProperty(property);
         property.setOwner(null);
+        return true;
     }
 
     /**
@@ -331,8 +346,8 @@ public class Game {
      * decide the next player, in the order as found in the list starting from index 0
      */
     public void nextPlayer(){
+        previousPlayer = currentPlayer;
         if(players.size() == players.indexOf(currentPlayer) + 1){
-
             currentPlayer = players.get(0);
         }
         else {
@@ -373,9 +388,9 @@ public class Game {
      * @return true if player has gone bankrupt
      */
     public boolean checkBankruptcy(){
-        if(currentPlayer.getMoney() < 0){
+        if(currentPlayer.getMoney() <= 0){
             currentPlayer.setBankruptcy(true);
-            System.out.println("Player " + currentPlayer.getPlayerId() + "is bankrupt!");
+            System.out.println("Player " + currentPlayer.getPlayerId() + " is bankrupt!");
             return true;
         }
         return false;
@@ -398,19 +413,30 @@ public class Game {
             }
         }
 
+        String info = "";
+
         // if bankrupt count is one less than the total player count
         // declare winner
         if (bankruptCount == playerCount - 1) {
             gameOver = true;
-            System.out.println("Player " + winner.getPlayerId() + " is the winner!!");
-            System.exit(0);
+            win = true;
+            info = "Player " + winner.getPlayerId() + " is the winner!!" ;
+            System.out.println(info);
         }
     }
 
     /**
      * Displays all the player Information
      */
-    public void displayPlayerInfo() {
+    public String displayPlayerInfo() {
+        String p = "";
+        for (Player player : players) {
+            p += player +"\n";
+        }
+        return p;
+    }
+
+    public void displayAllPlayerInfo() {
         for (Player player : players) {
             System.out.println(player);
         }
@@ -473,6 +499,10 @@ public class Game {
 
     public void removeMonopolyView(MonopolyView view){
         views.remove(view);
+    }
+
+    public Player getPreviousPlayer(){
+        return previousPlayer;
     }
 
     /*

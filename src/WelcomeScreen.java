@@ -14,7 +14,7 @@ import java.awt.Dialog.ModalityType;
 public class WelcomeScreen {
     JFrame frame;
     int numPlayers;
-  
+
     public WelcomeScreen() {
 
         final FlowLayout layout = new FlowLayout();
@@ -97,6 +97,20 @@ public class WelcomeScreen {
         frame.setSize(300, 200);
         // makes the frame visible
         frame.setVisible(true);
+    }
+
+    /**
+     *
+     * for testing purposes
+     *
+     * @param a num of players
+     */
+    public WelcomeScreen(int a) {
+        numPlayers = 2;
+    }
+
+    public void setNumPlayers(int players) {
+        numPlayers = players;
     }
 
     public int getNumPlayers() {

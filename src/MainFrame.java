@@ -3,6 +3,7 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import javax.swing.*;
 import javax.swing.border.Border;
+import javax.swing.border.EmptyBorder;
 
 public class MainFrame extends JFrame implements MonopolyView  {
     final static boolean shouldFill = true;
@@ -14,11 +15,11 @@ public class MainFrame extends JFrame implements MonopolyView  {
     private static JPanel sidePanel; // For the buttons and player info
 
     //for the functionality buttons
-    private static JButton pass;
-    private static JButton quit;
-    private static JButton help;
-    private static JButton roll;
-    private static JButton playerInfo;
+    private static JButton pass = new JButton();
+    private static JButton quit = new JButton();
+    private static JButton help = new JButton();
+    private static JButton roll = new JButton();
+    private static JButton playerInfo = new JButton();
 
     //To communicate with the model
     private MonopolyController mc;
@@ -101,7 +102,9 @@ public class MainFrame extends JFrame implements MonopolyView  {
         addButton(help, "help", mc);
         addButton(quit, "quit", mc);
         addButton(playerInfo, "player info", mc);
-
+      
+        pass.setEnabled(false);
+      
         //Create Main Panel
         mainPanel = new JPanel(new BorderLayout());
         mainPanel.setBackground(BG_COLOR);
@@ -370,12 +373,27 @@ public class MainFrame extends JFrame implements MonopolyView  {
     }
 
     public static void addButton(JButton button, String text, MonopolyController mc){
-        button = new JButton(text);
+        button.setText(text);
         button.setActionCommand(button.getText());
         button.addActionListener(mc);
         sidePanel.add(button);
     }
 
+
+    public JButton getRollButton(){
+        return roll;
+    }
+
+    public JButton getPassButton(){
+        return pass;
+    }
+
+    @Override
+    public void handleMonopolyBuy(boolean success, Property location) {
+    }
+
+    @Override
+    public void handleMonopolySell(boolean success, Property location) {
 
     public static void main(String[] args) {
         new MainFrame(2);
@@ -388,9 +406,6 @@ public class MainFrame extends JFrame implements MonopolyView  {
             case "roll":
                 rollNotification();
                 break;
-            case "buy":
-                buyNotification();
-                break;
             case "pass":
                 passNotification();
                 break;
@@ -400,20 +415,29 @@ public class MainFrame extends JFrame implements MonopolyView  {
             case "quit":
                 quitNotification();
                 break;
-
+            case "win":
+                winNotification();
+                break;
             default:
                 break;
         }
     }
 
-    @Override
-    public void handleMonopolyBuy(boolean success, Property location) {
-
+    private void winNotification() {
+        String info = "Player " +model.getCurrentPlayer().getPlayerId()+ " has won the game!!!";
+        JOptionPane.showMessageDialog(this, info , "Winner", JOptionPane.INFORMATION_MESSAGE);
+        System.exit(0);
     }
 
-    @Override
-    public void handleMonopolySell(boolean success, Property location) {
+    // methods for to handle each command case
 
+    /**
+     * when the user clicks on the quit command they will exit the program
+     */
+    private void quitNotification(){
+        String info = "Player "+model.getPreviousPlayer().getPlayerId()+" has quit\n" +
+                "It is now Player " +model.getCurrentPlayer().getPlayerId()+ "'s turn";
+        JOptionPane.showMessageDialog(this, info , "Quit", JOptionPane.INFORMATION_MESSAGE);
     }
 
 
@@ -436,33 +460,38 @@ public class MainFrame extends JFrame implements MonopolyView  {
     private void passNotification() {
         Player currentPlayer = model.getCurrentPlayer();
         String info = "The turn has been passed on to:\n\n";
-        info += "   " + currentPlayer.getPlayerId();
+        info += "Player " + currentPlayer.getPlayerId(); // i used the ID to represent the players- Kareem might need to change this
         JOptionPane.showMessageDialog(this, info, "Pass result", JOptionPane.INFORMATION_MESSAGE);
+
+        roll.setEnabled(true);
+        pass.setEnabled(false);
     }
 
-    /**
-     * Display the information of 'buy' result.
-     * The property info with the current owner details.
-     */
+    private void rollNotification(){
+        Dice dice = model.getDice(); // get the dice from model- also need to add the getter in Game class to return the dice
+        Player currentPlayer = model.getCurrentPlayer(); // get the current player
+        Property location = currentPlayer.getLocation(); // get the location of the current player on the board
 
-    private void buyNotification() {
-
-    }
-
-    /**
-     * Display the information of 'roll' result.
-     * The dice values and current player location.
-     */
-    private void rollNotification() {
-        Dice dice = model.getDice();
-        Player currentPlayer = model.getCurrentPlayer();
-        Property location = currentPlayer.getLocation();
         String info = "Dice values:\n";
         info += "   " + dice.getDie1() + "\n";
         info += "   " + dice.getDie2() + "\n\n";
         info += "Player location:\n";
         info += "   " + location.getPropertyName() + "\n";
         JOptionPane.showMessageDialog(this, info, "Roll result", JOptionPane.INFORMATION_MESSAGE);
+
+
+        for(JButton bttn : properties){
+            if(bttn.getText().equals(location.getPropertyName())){
+                bttn.doClick();
+            }
+        }
+
+        if(dice.sumOfDice() == 12){
+            JOptionPane.showMessageDialog(this, "You rolled doubles, you can roll again", "Roll result", JOptionPane.INFORMATION_MESSAGE);
+        }else{
+            roll.setEnabled(false);
+            pass.setEnabled(true);
+        }
     }
 
 }

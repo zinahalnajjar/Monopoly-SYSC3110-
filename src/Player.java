@@ -116,7 +116,7 @@ public class Player {
      * adds a property to the list of properties for each player
      * @param property
      */
-    public void addProperty(Property property) {
+    public boolean addProperty(Property property) {
         this.properties.add(property);
 
         //checkSet(property);
@@ -133,7 +133,7 @@ public class Player {
         // add property to the list for (current colour).
         list.add(property);
 
-
+        return true;
     }
 
     //Tooba version color set - incomplete
@@ -166,9 +166,9 @@ public class Player {
      * @param property
      */
 
-    public void removeProperty(Property property) {
+    public boolean removeProperty(Property property) {
         this.properties.remove(property);
-
+        return true;
     }
 
     /**
@@ -196,16 +196,6 @@ public class Player {
     public String getInfo(){ return toString();}
 
     /**
-     *
-     * @return the playerID, money, isBankrupt, location
-     */
-    @Override
-    public String toString() {
-        return "Player [playerId=" + playerId + ", money=" + money + ", isBankrupt=" + isBankrupt + ", location="
-                + location.getPropertyName() + "]";
-    }
-
-    /**
      * the player will get money when they sell a property
      * @param propertySellCost
      */
@@ -215,8 +205,6 @@ public class Player {
         }
 
     }
-
-
 
     /**
      *
@@ -234,4 +222,35 @@ public class Player {
             }
         }
     }
+
+    public String getStringProperties() {
+        String p = "";
+
+        for(Property property : properties){
+            p += property.getPropertyName() + "\n";
+        }
+
+        return p;
+    }
+
+    public String getColourPropertyMap() {
+        String p = "";
+
+        for(Property property : properties){
+            p += property.getPropertyName() + ", ";
+        }
+
+        return p;
+    }
+
+    /**
+     *
+     * @return the playerID, money, isBankrupt, location
+     */
+    @Override
+    public String toString() {
+        return "Player: " + playerId + ",  money: " + money + ", isBankrupt: " + isBankrupt + ", location: "
+                + location.getPropertyName() + "\n - Properties owned: \n"+ getStringProperties();
+    }
+
 }
