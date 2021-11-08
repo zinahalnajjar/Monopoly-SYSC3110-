@@ -12,7 +12,8 @@ Zip Flie containing
  - Manual - Zinah
  - readme - Tooba
 
-The program has 6 classes:
+Classes:
+
 Model:
  - Board: Creates all the properties (the board) and implaments moving the players position
  - Dice: Rolls the dice, can return sums of both die or individual values
@@ -20,11 +21,13 @@ Model:
  - Player: Holds all the properties of every "Player" created, add performs addition and subtraction to 
  - Property: Hold all the properties of every "Property" created
  - Command: Creates a valid command list 
+
 View:
  - MonopolyView (interface)
  - MainFrame - Implements the main game view implementing MonopolyView
  - CardFrame - Implements the deed card, each CardFram considered its own view implementing MonopolyView
  - StartView - Start screen that asks the user to start the game by entering number of players and help button that prints instructions
+
 Controller:
  - MonopolyController - connects view to model
 
