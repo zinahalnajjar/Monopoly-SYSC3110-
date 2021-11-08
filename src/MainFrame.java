@@ -1,22 +1,17 @@
-
-
 import java.awt.*;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import javax.swing.*;
+import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 
-/**
- * Main playing screen
- *
- * @author Tooba
- * @author Zinah
- */
 public class MainFrame extends JFrame implements MonopolyView  {
     final static boolean shouldFill = true;
     final static boolean shouldWeightX = true;
     final static boolean RIGHT_TO_LEFT = false;
+    private static final Color BG_COLOR = new Color(69, 255, 156);
 
-    private static JPanel boardPanel; //For the grid of properties
+    //    private static JPanel boardPanel; //For the grid of properties
     private static JPanel sidePanel; // For the buttons and player info
 
     //for the functionality buttons
@@ -28,8 +23,6 @@ public class MainFrame extends JFrame implements MonopolyView  {
 
     //To communicate with the model
     private MonopolyController mc;
-    //the model
-    private Game model;
 
     //Each spot on the board
     private static ArrayList<JButton> properties;
@@ -44,15 +37,26 @@ public class MainFrame extends JFrame implements MonopolyView  {
     private static JLabel Jail;
     private static JLabel Go;
     private static JLabel empty;
+    private static JPanel mainPanel;
 
+    private static int NORTH_HEIGHT = 100;
+    private static int SOUTH_HEIGHT = 100;
+
+    //The model
+    private Game model;
+
+    /**
+     * Constructor
+     *
+     * @param playerCount
+     */
     public MainFrame(int playerCount){
         super("Monopoly!!");
 
-       // Game model = new Game(playerCount);
-        // i needed to access the model to get the help() order to update the view when based on each command
-        //since my method is outide of the constructor then i can't access it with the way you have
+//        Game model = new Game(playerCount); //OLD CODE
 
-        // same thing but now i have a private field of type game
+        //Make model as member field so that
+        //it can be accessed by other methods like *Notification
         model = new Game(playerCount);
 
         model.addMonopolyView(this);
@@ -84,314 +88,288 @@ public class MainFrame extends JFrame implements MonopolyView  {
     }
 
     public static void addComponentsToPane(Container pane, MonopolyController mc) {
-        if (RIGHT_TO_LEFT) {
-            pane.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
-        }
 
-        // top fixed row which is row 0 gridy = 0
-
-
-        pane.setLayout(new FlowLayout());
-
-        boardPanel = new JPanel();
-        boardPanel.setLayout(new GridBagLayout());
-
-        pane.add(boardPanel);
-
-        GridBagConstraints c = new GridBagConstraints();
-        if (shouldFill) {
-            //natural height, maximum width
-            c.fill = GridBagConstraints.HORIZONTAL;
-        }
-        FreeParking = new JLabel("FREE PARKING");
-        if (shouldWeightX) {
-            c.weightx = 0.5;
-        }
-        c.gridx = 0;
-        c.gridy = 0;
-        boardPanel.add(FreeParking, c);
-
-        Property = new JButton("Kentucky Avenue");
-        c.gridx = 1;
-        c.gridy = 0;
-        boardPanel.add(Property, c);
-        properties.add(Property);
-
-        Chance = new JLabel("Chance");
-        c.gridx = 2;
-        c.gridy = 0;
-        boardPanel.add(Chance, c);
-
-        Property = new JButton("Indiana Avenue");
-        c.gridx = 3;
-        c.gridy = 0;
-        boardPanel.add(Property, c);
-        properties.add(Property);
-
-        Property = new JButton("Illinois Avenue");
-        c.gridx = 4;
-        c.gridy = 0;
-        boardPanel.add(Property, c);
-        properties.add(Property);
-
-        RailRoad = new JLabel("B. & O. RAILROAD");
-        c.gridx = 5;
-        c.gridy = 0;
-        boardPanel.add(RailRoad, c);
-
-        Property = new JButton("Atlantic Avenue");
-        c.gridx = 6;
-        c.gridy = 0;
-        boardPanel.add(Property, c);
-        properties.add(Property);
-
-        Property = new JButton("Ventnor Avenue");
-        c.gridx = 7;
-        c.gridy = 0;
-        boardPanel.add(Property, c);
-        properties.add(Property);
-
-        WaterWorks = new JLabel("WATER WORKS");
-        c.gridx = 8;//col
-        c.gridy = 0;//row
-        boardPanel.add(WaterWorks, c);
-
-        Property = new JButton("Marvin Gardens");
-        c.gridx = 9;
-        c.gridy = 0;
-        boardPanel.add(Property, c);
-        properties.add(Property);
-
-        GoToJail = new JLabel("GO TO JAIL");
-        c.gridx = 10;
-        c.gridy = 0;
-        boardPanel.add(GoToJail, c);
-
-        Monopoly = new JLabel("MONOPOLY");
-        c.ipady = 40;      //make this component tall
-        c.weightx = 1;
-        c.gridwidth = 3;
-        c.gridx = 0;
-        c.gridy = 1;
-        c.anchor = GridBagConstraints.CENTER ;
-        boardPanel.add(Monopoly, c);
-
-
-
-// right fixed col which is 10 gridx = 10
-        FreeParking = new JLabel("");
-        if (shouldWeightX) {
-            c.weightx = 0.5;
-        }
-        c.gridx = 10;
-        c.gridy = 0;
-        boardPanel.add(FreeParking, c);
-
-
-        Property = new JButton("Pacific Avenue");
-        c.gridx = 10;
-        c.gridy = 1;
-        boardPanel.add(Property, c);
-        properties.add(Property);
-
-        Property = new JButton("North Carolina Avenue");
-        c.gridx = 10;
-        c.gridy = 2;
-        boardPanel.add(Property, c);
-        properties.add(Property);
-
-        empty = new JLabel(" ");
-        c.gridx = 10;
-        c.gridy = 3;
-        boardPanel.add(empty, c);
-
-
-        Property = new JButton("Pennsylvania Avenue");
-        c.gridx = 10;
-        c.gridy = 4;
-        boardPanel.add(Property, c);
-        properties.add(Property);
-
-        RailRoad = new JLabel("SHORT LINE");
-        c.gridx = 10;
-        c.gridy = 5;
-        boardPanel.add(RailRoad, c);
-
-        Chance = new JLabel("Chance");
-        c.gridx = 10;
-        c.gridy = 6;
-        boardPanel.add(Chance, c);
-
-        Property = new JButton("Park Place");
-        c.gridx = 10;
-        c.gridy = 7;
-        boardPanel.add(Property, c);
-        properties.add(Property);
-
-        empty = new JLabel(" ");
-        c.gridx = 10;//col
-        c.gridy = 8;//row
-        boardPanel.add(empty, c);
-
-        Property = new JButton("Boardwalk");
-        c.gridx = 10;
-        c.gridy = 9;
-        boardPanel.add(Property, c);
-        properties.add(Property);
-
-        Go = new JLabel("GO");
-        c.gridx = 10;
-        c.gridy = 10;
-
-        // fixed down row gridy = 10
-
-        empty = new JLabel(" ");
-        if (shouldWeightX) {
-            c.weightx = 0.5;
-        }
-        c.gridx = 0;//col
-        c.gridy = 10;//row
-        boardPanel.add(empty, c);
-
-
-        Property = new JButton("Connecticut Avenue");
-        c.gridx = 1;// col
-        c.gridy = 10; // row
-        boardPanel.add(Property, c);
-        properties.add(Property);
-
-        Property = new JButton("Vermont Avenue");
-        c.gridx = 2;//col
-        c.gridy = 10;//row
-        boardPanel.add(Property, c);
-        properties.add(Property);
-
-        Chance = new JLabel("Chance");
-        c.gridx = 3;
-        c.gridy = 10;
-        boardPanel.add(Chance, c);
-
-
-        Property = new JButton("Oriental Avenue");
-        c.gridx = 4;
-        c.gridy = 10;
-        boardPanel.add(Property, c);
-        properties.add(Property);
-
-        RailRoad = new JLabel("READING RAILROAD");
-        c.gridx = 5;
-        c.gridy = 10;
-        boardPanel.add(RailRoad, c);
-
-        empty = new JLabel(" ");
-        c.gridx = 6;
-        c.gridy = 10;
-        boardPanel.add(empty, c);
-
-        Property = new JButton("Baltic Avenue");
-        c.gridx = 7;
-        c.gridy = 10;
-        boardPanel.add(Property, c);
-        properties.add(Property);
-
-        empty = new JLabel(" ");
-        c.gridx = 8;//col
-        c.gridy = 10;//row
-        boardPanel.add(empty, c);
-
-        Property = new JButton("Mediterranean Avenue");
-        c.gridx = 9;
-        c.gridy = 10;
-        boardPanel.add(Property, c);
-        properties.add(Property);
-
-        empty = new JLabel(" ");
-        c.gridx = 10;//col
-        c.gridy = 10;//row
-        boardPanel.add(empty, c);
-
-
-
-        // fixed col left gridx = 0
-
-        FreeParking = new JLabel("FREE PARKING");
-        if (shouldWeightX) {
-            c.weightx = 0.5;
-        }
-        c.gridx = 0;
-        c.gridy = 0;
-        boardPanel.add(FreeParking, c);
-
-
-        Property = new JButton("New York Avenue");
-        c.gridx = 0;
-        c.gridy = 1;
-        boardPanel.add(Property, c);
-        properties.add(Property);
-
-        Property = new JButton("Tennessee Avenue");
-        c.gridx = 0;
-        c.gridy = 2;
-        boardPanel.add(Property, c);
-        properties.add(Property);
-
-        empty = new JLabel("Indiana Avenue");
-        c.gridx = 0;
-        c.gridy = 3;
-        boardPanel.add(empty, c);
-
-
-        Property = new JButton("St. James Place");
-        c.gridx = 0;
-        c.gridy = 4;
-        boardPanel.add(Property, c);
-        properties.add(Property);
-
-        RailRoad = new JLabel("PENNSYLVANIA RAILROAD");
-        c.gridx = 0;
-        c.gridy = 5;
-        boardPanel.add(RailRoad, c);
-
-        Property = new JButton("Virginia Avenue");
-        c.gridx = 0;
-        c.gridy = 6;
-        boardPanel.add(Property, c);
-        properties.add(Property);
-
-        Property = new JButton("States Avenue");
-        c.gridx = 0;
-        c.gridy = 7;
-        boardPanel.add(Property, c);
-        properties.add(Property);
-
-        ElectricCompany = new JLabel("ELECTRIC COMPANY");
-        c.gridx = 0;//col
-        c.gridy = 8;//row
-        boardPanel.add(ElectricCompany, c);
-
-        Property = new JButton("St. Charles Place");
-        c.gridx = 0;
-        c.gridy = 9;
-        boardPanel.add(Property, c);
-        properties.add(Property);
-
-        Jail = new JLabel("JAIL ");
-        c.gridx = 0;
-        c.gridy = 10;
-        boardPanel.add(Jail, c);
-
+        //Create Side Panel
         sidePanel = new JPanel();
-        sidePanel.setLayout(new GridLayout(6,2));
-        //sidePanel.setSize(111, 111);
+        sidePanel.setLayout(new GridLayout(7,2));
         pane.add(sidePanel);
+        sidePanel.setBackground(BG_COLOR);
+
+        addEmptyLabel(sidePanel, 1);
 
         addButton(roll, "roll", mc);
         addButton(pass, "pass", mc);
         addButton(help, "help", mc);
         addButton(quit, "quit", mc);
         addButton(playerInfo, "player info", mc);
-
+      
         pass.setEnabled(false);
+      
+        //Create Main Panel
+        mainPanel = new JPanel(new BorderLayout());
+        mainPanel.setBackground(BG_COLOR);
+        mainPanel.add(createCenterPanel(), BorderLayout.CENTER);
+        mainPanel.add(createNorthPanel(), BorderLayout.NORTH);
+        mainPanel.add(createSouthPanel(), BorderLayout.SOUTH);
+        mainPanel.add(createEastPanel(), BorderLayout.EAST);
+        mainPanel.add(createWestPanel(), BorderLayout.WEST);
+
+        // Add Side Panel to the Command Buttons Panel
+        JPanel commandButtonsPanel = new JPanel(new BorderLayout());
+        commandButtonsPanel.setBackground(BG_COLOR);
+
+        JLabel northSpaceLabel = new JLabel(" ");
+        setHeightNorth(northSpaceLabel);
+        JLabel southSpaceLabel = new JLabel(" ");
+        setHeightSouth(southSpaceLabel);
+        JPanel centerSpacePanel = new JPanel();
+        centerSpacePanel.setBackground(BG_COLOR);
+        addEmptyLabel(centerSpacePanel, 5);
+
+        commandButtonsPanel.add(northSpaceLabel, BorderLayout.NORTH);
+        commandButtonsPanel.add(centerSpacePanel, BorderLayout.CENTER);
+        commandButtonsPanel.add(southSpaceLabel, BorderLayout.SOUTH);
+        commandButtonsPanel.add(sidePanel, BorderLayout.EAST);
+
+        // Add Panel to the Content Pane
+        pane.add(mainPanel, BorderLayout.CENTER);
+        pane.add(commandButtonsPanel, BorderLayout.EAST);
+    }
+
+    private static JPanel createCenterPanel() {
+        JPanel centerPanel = new JPanel(new BorderLayout());
+        centerPanel.setBackground(BG_COLOR);
+
+        JPanel imagePanel = createImagePanel();
+
+        centerPanel.add(imagePanel);
+
+        return centerPanel;
+    }
+
+    private static JPanel createImagePanel() {
+        JPanel imagePanel = new JPanel();
+        imagePanel.setBackground(BG_COLOR);
+
+        Monopoly = new JLabel();
+        Icon icon = new ImageIcon(MainFrame.class.getResource("images/monopoly.jpg"));
+        Monopoly.setIcon(icon);
+
+        imagePanel.add(Monopoly);
+        return imagePanel;
+    }
+
+    private static JPanel createEastPanel() {
+        JPanel eastPanel = new JPanel(new GridLayout(10, 1));
+        eastPanel.setBackground(BG_COLOR);
+
+        Property = new JButton("Pacific Avenue");
+        eastPanel.add(Property);
+        properties.add(Property);
+
+        Property = new JButton("North Carolina Avenue");
+        eastPanel.add(Property);
+        properties.add(Property);
+
+        empty = new JLabel(" ");
+        eastPanel.add(empty);
+
+        Property = new JButton("Pennsylvania Avenue");
+        eastPanel.add(Property);
+        properties.add(Property);
+
+        RailRoad = new JLabel("SHORT LINE");
+        eastPanel.add(RailRoad);
+
+        Chance = new JLabel("Chance");
+        eastPanel.add(Chance);
+
+        Property = new JButton("Park Place");
+        eastPanel.add(Property);
+        properties.add(Property);
+
+        empty = new JLabel(" ");
+        eastPanel.add(empty);
+
+        Property = new JButton("Boardwalk");
+        eastPanel.add(Property);
+        properties.add(Property);
+
+        return eastPanel;
+    }
+
+    private static JPanel createWestPanel() {
+        JPanel westPanel = new JPanel(new GridLayout(11, 1));
+        westPanel.setBackground(BG_COLOR);
+
+        Property = new JButton("New York Avenue");
+        westPanel.add(Property);
+        properties.add(Property);
+
+        Property = new JButton("Tennessee Avenue");
+        westPanel.add(Property);
+        properties.add(Property);
+
+        empty = new JLabel("Indiana Avenue");
+        westPanel.add(empty);
+
+
+        Property = new JButton("St. James Place");
+        westPanel.add(Property);
+        properties.add(Property);
+
+        RailRoad = new JLabel("PENNSYLVANIA RAILROAD");
+        westPanel.add(RailRoad);
+
+        Property = new JButton("Virginia Avenue");
+        westPanel.add(Property);
+        properties.add(Property);
+
+        Property = new JButton("States Avenue");
+        westPanel.add(Property);
+        properties.add(Property);
+
+        ElectricCompany = new JLabel("ELECTRIC COMPANY");
+        westPanel.add(ElectricCompany);
+
+        Property = new JButton("St. Charles Place");
+        westPanel.add(Property);
+        properties.add(Property);
+
+        return westPanel;
+    }
+
+    private static JPanel createSouthPanel() {
+        JPanel southPanel = new JPanel();
+        southPanel.setBackground(BG_COLOR);
+
+        addEmptyLabel(southPanel, 3);
+
+        Jail = new JLabel("JAIL");
+        setHeightSouth(Jail);
+        southPanel.add(Jail);
+
+        addEmptyLabel(southPanel, 3);
+
+        addEmptyLabel(southPanel, 6);
+
+        empty = new JLabel(" ");
+        southPanel.add(empty);
+
+        Property = new JButton("Connecticut Avenue");
+        southPanel.add(Property);
+        properties.add(Property);
+
+        Property = new JButton("Vermont Avenue");
+        southPanel.add(Property);
+        properties.add(Property);
+
+        Chance = new JLabel("Chance");
+        southPanel.add(Chance);
+
+        Property = new JButton("Oriental Avenue");
+        southPanel.add(Property);
+        properties.add(Property);
+
+        RailRoad = new JLabel("READING RAILROAD");
+        southPanel.add(RailRoad);
+
+        empty = new JLabel(" ");
+        southPanel.add(empty);
+
+        Property = new JButton("Baltic Avenue");
+        southPanel.add(Property);
+        properties.add(Property);
+
+        empty = new JLabel(" ");
+        southPanel.add(empty);
+
+        Property = new JButton("Mediterranean Avenue");
+        southPanel.add(Property);
+        properties.add(Property);
+
+        addEmptyLabel(southPanel, 6);
+
+        Go = new JLabel("GO");
+        setHeightSouth(Go);
+        southPanel.add(Go);
+
+        addEmptyLabel(southPanel, 6);
+
+        return southPanel;
+    }
+
+    private static void addEmptyLabel(JPanel panel, int count) {
+//        for (int i = 0; i < count; i++) {
+//            panel.add(new JLabel(" "));
+//        }
+    }
+
+    private static JPanel createNorthPanel() {
+        JPanel northPanel = new JPanel();
+        northPanel.setBackground(BG_COLOR);
+
+        addEmptyLabel(northPanel, 3);
+
+        FreeParking = new JLabel("FREE PARKING");
+        setHeightNorth(FreeParking);
+        northPanel.add(FreeParking);
+
+        addEmptyLabel(northPanel, 3);
+
+        Property = new JButton("Kentucky Avenue");
+        northPanel.add(Property);
+        properties.add(Property);
+
+        Chance = new JLabel("Chance");
+        northPanel.add(Chance);
+
+
+        Property = new JButton("Indiana Avenue");
+        northPanel.add(Property);
+        properties.add(Property);
+
+        Property = new JButton("Illinois Avenue");
+        northPanel.add(Property);
+        properties.add(Property);
+
+        RailRoad = new JLabel("B. & O. RAILROAD");
+        northPanel.add(RailRoad);
+
+        Property = new JButton("Atlantic Avenue");
+        northPanel.add(Property);
+        properties.add(Property);
+
+        Property = new JButton("Ventnor Avenue");
+        northPanel.add(Property);
+        properties.add(Property);
+
+        WaterWorks = new JLabel("WATER WORKS");
+        northPanel.add(WaterWorks);
+
+        Property = new JButton("Marvin Gardens");
+        northPanel.add(Property);
+        properties.add(Property);
+
+        addEmptyLabel(northPanel, 3);
+
+        GoToJail = new JLabel("GO TO JAIL");
+        setHeightNorth(GoToJail);
+        northPanel.add(GoToJail);
+
+        addEmptyLabel(northPanel, 3);
+
+        return northPanel;
+    }
+
+    private static void setHeightNorth(JLabel label) {
+//        Dimension size = label.getPreferredSize();
+//        label.setPreferredSize(new Dimension((int) size.getWidth(), NORTH_HEIGHT));
+    }
+
+    private static void setHeightSouth(JLabel label) {
+//        Dimension size = label.getPreferredSize();
+//        label.setPreferredSize(new Dimension((int) size.getWidth(), SOUTH_HEIGHT));
     }
 
     public static void addButton(JButton button, String text, MonopolyController mc){
@@ -400,6 +378,7 @@ public class MainFrame extends JFrame implements MonopolyView  {
         button.addActionListener(mc);
         sidePanel.add(button);
     }
+
 
     public JButton getRollButton(){
         return roll;
@@ -416,11 +395,14 @@ public class MainFrame extends JFrame implements MonopolyView  {
     @Override
     public void handleMonopolySell(boolean success, Property location) {
 
+    public static void main(String[] args) {
+        new MainFrame(2);
     }
 
     @Override
     public void handleMonopolyStatusUpdate(String command) {
-        switch (command){
+        System.out.println("...Notified of command: " + command);
+        switch (command) {
             case "roll":
                 rollNotification();
                 break;
@@ -439,7 +421,6 @@ public class MainFrame extends JFrame implements MonopolyView  {
             default:
                 break;
         }
-
     }
 
     private void winNotification() {
@@ -459,24 +440,25 @@ public class MainFrame extends JFrame implements MonopolyView  {
         JOptionPane.showMessageDialog(this, info , "Quit", JOptionPane.INFORMATION_MESSAGE);
     }
 
-    /**
-     * when the user clicks on the help command they will get the instructions of the game
-     */
 
-    private void helpNotification(){
+
+
+    private void quitNotification() {
+        System.exit(0);
+    }
+
+    private void helpNotification() {
         String info = model.help();
-        // a dialog message that shows the instruction of the game
         JOptionPane.showMessageDialog(this, info, "Help", JOptionPane.INFORMATION_MESSAGE);
 
     }
 
     /**
-     * when the user clicks on the pass command the turn will be changed from current player to next player
-     *
+     * Display the information of 'pass' result.
+     * The current player and the next player details.
      */
-
-    private void passNotification(){
-        Player currentPlayer = model.getCurrentPlayer();// there was no getter method in game that returns the current player so i implemented it
+    private void passNotification() {
+        Player currentPlayer = model.getCurrentPlayer();
         String info = "The turn has been passed on to:\n\n";
         info += "Player " + currentPlayer.getPlayerId(); // i used the ID to represent the players- Kareem might need to change this
         JOptionPane.showMessageDialog(this, info, "Pass result", JOptionPane.INFORMATION_MESSAGE);
@@ -497,6 +479,7 @@ public class MainFrame extends JFrame implements MonopolyView  {
         info += "   " + location.getPropertyName() + "\n";
         JOptionPane.showMessageDialog(this, info, "Roll result", JOptionPane.INFORMATION_MESSAGE);
 
+
         for(JButton bttn : properties){
             if(bttn.getText().equals(location.getPropertyName())){
                 bttn.doClick();
@@ -509,12 +492,11 @@ public class MainFrame extends JFrame implements MonopolyView  {
             roll.setEnabled(false);
             pass.setEnabled(true);
         }
-
     }
 
-    public static void main(String[] args) {
-        new MainFrame(2);
-    }
 }
+
+
+
 
 
