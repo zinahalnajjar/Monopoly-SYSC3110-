@@ -257,6 +257,7 @@ public class Game {
             view.handleMonopolyStatusUpdate(command);
         }
     }
+
     /**
      *
      * Checks for invalid commands
@@ -387,9 +388,9 @@ public class Game {
      * @return true if player has gone bankrupt
      */
     public boolean checkBankruptcy(){
-        if(currentPlayer.getMoney() < 0){
+        if(currentPlayer.getMoney() <= 0){
             currentPlayer.setBankruptcy(true);
-            System.out.println("Player " + currentPlayer.getPlayerId() + "is bankrupt!");
+            System.out.println("Player " + currentPlayer.getPlayerId() + " is bankrupt!");
             return true;
         }
         return false;
