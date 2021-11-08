@@ -3,6 +3,12 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
+/**
+ *
+ * TEsts all the commands, and getters/setters
+ *
+ * @Tooba
+ */
 public class GameTest {
 
     Game g = new Game(3);
