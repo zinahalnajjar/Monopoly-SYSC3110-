@@ -5,6 +5,14 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
 
+/**
+ *
+ * Generates the main game screen, with panels for the board,
+ * and a side panel for player input
+ *
+ * @author Tooba
+ * @author Zinah
+ */
 public class MainFrame extends JFrame implements MonopolyView  {
     final static boolean shouldFill = true;
     final static boolean shouldWeightX = true;
@@ -47,8 +55,6 @@ public class MainFrame extends JFrame implements MonopolyView  {
     //The model
     private Game model;
 
-
-
     /**
      * Constructor
      *
@@ -89,6 +95,13 @@ public class MainFrame extends JFrame implements MonopolyView  {
         this.setVisible(true);
     }
 
+    /**
+     *
+     * Initializes the pieces on the board
+     *
+     * @param playerCount
+     * @throws IOException
+     */
     private void initPlayerPieces(int playerCount) throws IOException {
         for(int i = 0; i < playerCount; i++){
             BufferedImage img = ImageIO.read(MainFrame.class.getResource("images/blue.jpg"));
@@ -101,13 +114,27 @@ public class MainFrame extends JFrame implements MonopolyView  {
         }
     }
 
+    /**
+     *
+     * Adds action listeners to all the properties
+     *
+     * @param m Model
+     * @param mc Controller
+     */
     private void addListeners(Game m, MonopolyController mc) {
         for(JButton bttn : properties){
-            CardFrame c = new CardFrame(bttn.getText(), m.getBoard(), mc, m);
+            CardFrame c = new CardFrame(bttn.getText(), m.getBoard(), mc, m, this);
             bttn.addActionListener(c);
         }
     }
 
+    /**
+     *
+     * Adds all the panels to main ontainer
+     *
+     * @param pane the content pane
+     * @param mc the controller
+     */
     public static void addComponentsToPane(Container pane, MonopolyController mc) {
 
         //Create Side Panel
@@ -157,6 +184,12 @@ public class MainFrame extends JFrame implements MonopolyView  {
         pane.add(commandButtonsPanel, BorderLayout.EAST);
     }
 
+    /**
+     *
+     * Initializes the panel that will monopoly logo in the middle
+     *
+     * @return a Jpanel that will holding the center image
+     */
     private static JPanel createCenterPanel() {
         JPanel centerPanel = new JPanel(new BorderLayout());
         centerPanel.setBackground(BG_COLOR);
@@ -168,6 +201,12 @@ public class MainFrame extends JFrame implements MonopolyView  {
         return centerPanel;
     }
 
+    /**
+     *
+     * Adds the monopoly logo to the center panel
+     *
+     * @return JPanel holding the center Image
+     */
     private static JPanel createImagePanel() {
         JPanel imagePanel = new JPanel();
         imagePanel.setBackground(BG_COLOR);
@@ -180,6 +219,9 @@ public class MainFrame extends JFrame implements MonopolyView  {
         return imagePanel;
     }
 
+    /**
+     * @return the east panel holding all the properties to the right
+     */
     private static JPanel createEastPanel() {
         JPanel eastPanel = new JPanel(new GridLayout(10, 1));
         eastPanel.setBackground(BG_COLOR);
@@ -219,6 +261,10 @@ public class MainFrame extends JFrame implements MonopolyView  {
         return eastPanel;
     }
 
+
+    /**
+     * @return the west panel holding all the properties to the left of the board
+     */
     private static JPanel createWestPanel() {
         JPanel westPanel = new JPanel(new GridLayout(11, 1));
         westPanel.setBackground(BG_COLOR);
@@ -260,6 +306,9 @@ public class MainFrame extends JFrame implements MonopolyView  {
         return westPanel;
     }
 
+    /**
+     * @return the east panel holding all the properties to the bottom of the board
+     */
     private static JPanel createSouthPanel() {
         JPanel southPanel = new JPanel();
         southPanel.setBackground(BG_COLOR);
@@ -326,6 +375,9 @@ public class MainFrame extends JFrame implements MonopolyView  {
 //        }
     }
 
+    /**
+     * @return the North panel holding all the properties to the top of the board
+     */
     private static JPanel createNorthPanel() {
         JPanel northPanel = new JPanel();
         northPanel.setBackground(BG_COLOR);
@@ -383,30 +435,35 @@ public class MainFrame extends JFrame implements MonopolyView  {
         return northPanel;
     }
 
+    /**
+     * @param label Assigns the height for the north panel
+     */
     private static void setHeightNorth(JLabel label) {
 //        Dimension size = label.getPreferredSize();
 //        label.setPreferredSize(new Dimension((int) size.getWidth(), NORTH_HEIGHT));
     }
 
+    /**
+     * @param label Assigns the height for the South panel
+     */
     private static void setHeightSouth(JLabel label) {
 //        Dimension size = label.getPreferredSize();
 //        label.setPreferredSize(new Dimension((int) size.getWidth(), SOUTH_HEIGHT));
     }
 
+    /**
+     *
+     * It sets the text on the button, as well as add action listeners
+     *
+     * @param button refernce to the button
+     * @param text the text on the button
+     * @param mc the controller
+     */
     public static void addButton(JButton button, String text, MonopolyController mc){
         button.setText(text);
         button.setActionCommand(button.getText());
         button.addActionListener(mc);
         sidePanel.add(button);
-    }
-
-
-    public JButton getRollButton(){
-        return roll;
-    }
-
-    public JButton getPassButton(){
-        return pass;
     }
 
     @Override
@@ -416,10 +473,6 @@ public class MainFrame extends JFrame implements MonopolyView  {
     @Override
     public void handleMonopolySell(boolean success, Property location) {
 
-    }
-
-    public static void main(String[] args) throws IOException {
-        new MainFrame(2);
     }
 
     @Override
@@ -449,11 +502,17 @@ public class MainFrame extends JFrame implements MonopolyView  {
         }
     }
 
+    /**
+     * displays player info
+     */
     private void infoNotification() {
         String info = model.displayPlayerInfo();
         JOptionPane.showMessageDialog(this, info, "Player Info", JOptionPane.INFORMATION_MESSAGE);
     }
 
+    /**
+     * displays win notification
+     */
     private void winNotification() {
         String info = "Player " +model.getCurrentPlayer().getPlayerId()+ " has won the game!!!";
         JOptionPane.showMessageDialog(this, info , "Winner", JOptionPane.INFORMATION_MESSAGE);
@@ -471,6 +530,9 @@ public class MainFrame extends JFrame implements MonopolyView  {
         JOptionPane.showMessageDialog(this, info , "Quit", JOptionPane.INFORMATION_MESSAGE);
     }
 
+    /**
+     * displays help info
+     */
     private void helpNotification() {
         String info = model.help();
         JOptionPane.showMessageDialog(this, info, "Help", JOptionPane.INFORMATION_MESSAGE);
@@ -491,6 +553,9 @@ public class MainFrame extends JFrame implements MonopolyView  {
         pass.setEnabled(false);
     }
 
+    /**
+     * Updates the user on what happens after rolling the dice, plus checks for double rolls
+     */
     private void rollNotification(){
         Dice dice = model.getDice(); // get the dice from model- also need to add the getter in Game class to return the dice
         Player currentPlayer = model.getCurrentPlayer(); // get the current player
@@ -503,12 +568,14 @@ public class MainFrame extends JFrame implements MonopolyView  {
         info += "   " + location.getPropertyName() + "\n";
         JOptionPane.showMessageDialog(this, info, "Roll result", JOptionPane.INFORMATION_MESSAGE);
 
+        //pops open the property landed on
         for(JButton bttn : properties){
             if(bttn.getText().equals(location.getPropertyName())){
                 bttn.doClick();
             }
         }
 
+        //double rolls
         if(dice.sumOfDice() == 12){
             JOptionPane.showMessageDialog(this, "You rolled doubles, you can roll again", "Roll result", JOptionPane.INFORMATION_MESSAGE);
         }else{

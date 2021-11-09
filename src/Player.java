@@ -223,21 +223,14 @@ public class Player {
         }
     }
 
+    /**
+     * @return the list of properties in string version
+     */
     public String getStringProperties() {
         String p = "";
 
         for(Property property : properties){
             p += property.getPropertyName() + "\n";
-        }
-
-        return p;
-    }
-
-    public String getColourPropertyMap() {
-        String p = "";
-
-        for(Property property : properties){
-            p += property.getPropertyName() + ", ";
         }
 
         return p;
