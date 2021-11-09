@@ -16,6 +16,9 @@ public class WelcomeScreen {
     JFrame frame;
     int numPlayers;
 
+    /**
+     * Initializes the start screen
+     */
     public WelcomeScreen() {
 
         final FlowLayout layout = new FlowLayout();
