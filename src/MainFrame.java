@@ -22,6 +22,9 @@ public class MainFrame extends JFrame implements MonopolyView  {
     //private static JPanel boardPanel; //For the grid of properties
     private static JPanel sidePanel; // For the buttons and player info
 
+    //Card frame
+    private CardFrame cf;
+
     private ArrayList<JLabel> players;
 
     //for the functionality buttons
@@ -63,6 +66,7 @@ public class MainFrame extends JFrame implements MonopolyView  {
     public MainFrame(int playerCount) throws IOException {
         super("Monopoly!!");
 
+        cf = null;
 //        Game model = new Game(playerCount); //OLD CODE
 
         //Make model as member field so that
@@ -123,8 +127,8 @@ public class MainFrame extends JFrame implements MonopolyView  {
      */
     private void addListeners(Game m, MonopolyController mc) {
         for(JButton bttn : properties){
-            CardFrame c = new CardFrame(bttn.getText(), m.getBoard(), mc, m, this);
-            bttn.addActionListener(c);
+            cf = new CardFrame(bttn.getText(), m.getBoard(), mc, m, this);
+            bttn.addActionListener(cf);
         }
     }
 
