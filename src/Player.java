@@ -249,8 +249,11 @@ public class Player {
      */
     @Override
     public String toString() {
-        return "Player: " + playerId + ",  money: " + money + ", isBankrupt: " + isBankrupt + ", location: "
-                + location.getPropertyName() + "\n - Properties owned: \n"+ getStringProperties();
+        if(isBankrupt){
+            return "Player " + playerId + " is bankrupt.\n";
+        }
+        return "Player " + playerId + "\nMoney: " + money + ", Location: "
+                + location.getPropertyName() + "\nProperties owned: \n"+ getStringProperties();
     }
 
 }

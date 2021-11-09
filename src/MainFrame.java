@@ -1,9 +1,9 @@
-import java.awt.*;
-import java.awt.event.ActionListener;
-import java.util.ArrayList;
+import javax.imageio.ImageIO;
 import javax.swing.*;
-import javax.swing.border.Border;
-import javax.swing.border.EmptyBorder;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.util.ArrayList;
 
 public class MainFrame extends JFrame implements MonopolyView  {
     final static boolean shouldFill = true;
@@ -11,8 +11,10 @@ public class MainFrame extends JFrame implements MonopolyView  {
     final static boolean RIGHT_TO_LEFT = false;
     private static final Color BG_COLOR = new Color(69, 255, 156);
 
-    //    private static JPanel boardPanel; //For the grid of properties
+    //private static JPanel boardPanel; //For the grid of properties
     private static JPanel sidePanel; // For the buttons and player info
+
+    private ArrayList<JLabel> players;
 
     //for the functionality buttons
     private static JButton pass = new JButton();
@@ -45,12 +47,14 @@ public class MainFrame extends JFrame implements MonopolyView  {
     //The model
     private Game model;
 
+
+
     /**
      * Constructor
      *
      * @param playerCount
      */
-    public MainFrame(int playerCount){
+    public MainFrame(int playerCount) throws IOException {
         super("Monopoly!!");
 
 //        Game model = new Game(playerCount); //OLD CODE
@@ -65,6 +69,8 @@ public class MainFrame extends JFrame implements MonopolyView  {
 
         properties = new ArrayList<>();
 
+        players = new ArrayList<>();
+
         //Make sure we have nice window decorations.
         this.setDefaultLookAndFeelDecorated(true);
 
@@ -75,9 +81,24 @@ public class MainFrame extends JFrame implements MonopolyView  {
 
         addListeners(model, mc);
 
+        //To display player pieces on the board
+        //initPlayerPieces(playerCount);
+
         //Display the window.
         this.pack();
         this.setVisible(true);
+    }
+
+    private void initPlayerPieces(int playerCount) throws IOException {
+        for(int i = 0; i < playerCount; i++){
+            BufferedImage img = ImageIO.read(MainFrame.class.getResource("images/blue.jpg"));
+            JLabel l = new JLabel(new ImageIcon(img));
+            l.setLayout(new FlowLayout(FlowLayout.CENTER));
+            JLabel text = new JLabel("Player: " + i+1);
+            l.add(text);
+            players.add(l);
+            Go.add(l);
+        }
     }
 
     private void addListeners(Game m, MonopolyController mc) {
@@ -397,7 +418,7 @@ public class MainFrame extends JFrame implements MonopolyView  {
 
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         new MainFrame(2);
     }
 
@@ -414,6 +435,9 @@ public class MainFrame extends JFrame implements MonopolyView  {
             case "help":
                 helpNotification();
                 break;
+            case "player info":
+                infoNotification();
+                break;
             case "quit":
                 quitNotification();
                 break;
@@ -423,6 +447,11 @@ public class MainFrame extends JFrame implements MonopolyView  {
             default:
                 break;
         }
+    }
+
+    private void infoNotification() {
+        String info = model.displayPlayerInfo();
+        JOptionPane.showMessageDialog(this, info, "Player Info", JOptionPane.INFORMATION_MESSAGE);
     }
 
     private void winNotification() {
@@ -473,7 +502,6 @@ public class MainFrame extends JFrame implements MonopolyView  {
         info += "Player location:\n";
         info += "   " + location.getPropertyName() + "\n";
         JOptionPane.showMessageDialog(this, info, "Roll result", JOptionPane.INFORMATION_MESSAGE);
-
 
         for(JButton bttn : properties){
             if(bttn.getText().equals(location.getPropertyName())){

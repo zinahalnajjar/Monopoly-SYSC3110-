@@ -5,6 +5,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.FlowLayout;
 import java.awt.Dialog.ModalityType;
+import java.io.IOException;
 
 /**
  * Welcome Screen
@@ -45,7 +46,7 @@ public class WelcomeScreen {
                                                  } else {
                                                      err.setVisible(true);
                                                  }
-                                             } catch (NumberFormatException ex) {
+                                             } catch (NumberFormatException | IOException ex) {
                                                  err.setVisible(true);
                                              }
                                          }

@@ -242,6 +242,7 @@ public class Game {
         }
         if("player info".equals(command)) {
             String info = displayPlayerInfo();
+            notifyView(command);
         }
         if(win){
             notifyView("win");
