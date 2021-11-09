@@ -141,6 +141,29 @@ public class CardFrame extends JFrame implements MonopolyView, ActionListener {
     }
 
     /**
+     * @return the buy button
+     */
+    public JButton getBuy(){
+        return buy;
+    }
+
+    /**
+     * @return the sell button
+     */
+    public JButton getSell(){
+        return sell;
+    }
+
+    /**
+     * @return this frame
+     */
+    public CardFrame currentFrame(Property p){
+        if(property == p ){
+            return this;
+        }return null;
+    }
+
+    /**
      * @param e performs action based on who clicked the property card
      */
     @Override
@@ -185,14 +208,19 @@ public class CardFrame extends JFrame implements MonopolyView, ActionListener {
      */
     @Override
     public void handleMonopolyBuy(boolean success, Property location) {
-        if(property == location){
-            if(success){
+        if(property == location && success == false){
+            if(model.getCurrentPlayer().getLocation() != property){
+                JOptionPane.showMessageDialog(this,"You are not eligible to buy this property");
+                buy.setEnabled(false);
+                this.setVisible(true);
+            }else{
+                JOptionPane.showMessageDialog(this,"You don't have enough money");
+            }
+        }
+        else if(property == location && success){
                 updateInfo(location);
                 buy.setEnabled(false);
                 this.setVisible(true);
-            } else{
-                JOptionPane.showMessageDialog(this,"You don't have enough money");
-            }
         }
     }
 
@@ -205,7 +233,14 @@ public class CardFrame extends JFrame implements MonopolyView, ActionListener {
      */
     @Override
     public void handleMonopolySell(boolean success, Property location) {
-        if(success && property == location){
+        if(property == location && success == false){
+            if(model.getCurrentPlayer() != property.getOwner()){
+                JOptionPane.showMessageDialog(this,"You are not the owner");
+                sell.setEnabled(false);
+                this.setVisible(true);
+            }
+        }
+        else if(success && property == location){
             updateInfo(location);
             sell.setEnabled(false);
             this.setVisible(true);

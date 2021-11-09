@@ -296,21 +296,25 @@ public class Game {
      * @param property
      */
     public boolean buy(Property property){
-        int cost = property.getCost();
-        int money = currentPlayer.getMoney(); //return players total money
+        if (currentPlayer.getLocation() == property){
 
-        if (cost > money){
-            System.out.println("You don't have enough money.");
-            return false;
-        } else{
-            property.setOwner(currentPlayer);
-            currentPlayer.addProperty(property);
-            currentPlayer.removeMoney(cost);
+            int cost = property.getCost();
+            int money = currentPlayer.getMoney(); //return players total money
 
-            System.out.println("You have successfully bought the property.");
-            System.out.println("You have " + currentPlayer.getMoney() +"$ left.");
-            return true;
+            if (cost > money){
+                System.out.println("You don't have enough money.");
+                return false;
+            } else{
+                property.setOwner(currentPlayer);
+                currentPlayer.addProperty(property);
+                currentPlayer.removeMoney(cost);
+
+                System.out.println("You have successfully bought the property.");
+                System.out.println("You have " + currentPlayer.getMoney() +"$ left.");
+                return true;
+            }
         }
+        return false;
     }
 
     /**
@@ -319,10 +323,13 @@ public class Game {
      * @return
      */
     public boolean sell(Property property){
-        currentPlayer.addMoney(property.getCost());
-        currentPlayer.removeProperty(property);
-        property.setOwner(null);
-        return true;
+        if (currentPlayer == property.getOwner()){
+            currentPlayer.addMoney(property.getCost());
+            currentPlayer.removeProperty(property);
+            property.setOwner(null);
+            return true;
+        }
+        return false;
     }
 
     /**
