@@ -12,6 +12,7 @@ import java.util.List;
  *
  * @author Zinah
  * @author Kareem
+ * @author Walid
  */
 
 public class Player {
@@ -22,6 +23,7 @@ public class Player {
     private String propertyLocation;
     private boolean isBankrupt;
     private Property location;
+    private boolean isAI;
 
     private Map<Color, List<Property>> colourPropertyMap = new HashMap<>();
 
