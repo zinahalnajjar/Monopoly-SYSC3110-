@@ -23,6 +23,25 @@ public class Board {
         this.properties = new ArrayList<>();
         this.newLocation = null;
         createProperties();
+        createRailRoads();
+        createFreeParking();
+
+    }
+
+    private void createFreeParking() {
+        properties.add(new Property("FREE PARKING", Color.WHITE));
+    }
+
+    private void createRailRoads(){
+        Property railroad1 = new Property("SHORT LINE", Color.WHITE, 25, 50, 100, 200, 200);
+        properties.add(railroad1);
+        Property railroad2 = new Property("READING RAILROAD", Color.WHITE, 25, 50, 100, 200, 200);
+        properties.add(railroad2);
+        Property railroad3 = new Property("PENNSYLVANIA RAILROAD", Color.WHITE, 25, 50, 100, 200, 200);
+        properties.add(railroad3);
+        Property railroad4 = new Property("B. & O. RAILROAD", Color.WHITE, 25, 50, 100, 200, 200);
+        properties.add(railroad4);
+
     }
 
     /**

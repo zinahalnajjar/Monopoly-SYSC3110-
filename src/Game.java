@@ -1,9 +1,5 @@
 
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 /**
  * Initializes the board and the players.
@@ -16,6 +12,10 @@ import java.util.Scanner;
  */
 public class Game {
 
+    private static final int JAIL_FEE = 50;
+
+    //player id is key and roll count is value
+    private Map<Integer, Integer> rollCount = new HashMap<>() ;
     private Board board;
     private ArrayList<Player> players;
     private boolean gameOver;
@@ -26,6 +26,36 @@ public class Game {
     private Player previousPlayer;
     Property newLocation;
     boolean win = false;
+
+    /**
+     *
+     * @return
+     */
+    public void payJailFee() {
+        String info = "";
+        System.out.println("Player "+currentPlayer.getPlayerId() + " has $" + currentPlayer.getMoney()); //dispay how much the player owns
+        currentPlayer.removeMoney(JAIL_FEE);// remove money from player based on what they paid
+        boolean bankrupt = checkBankruptcy();
+
+        boolean paymentSuccess;
+        if (bankrupt) {
+            paymentSuccess = false;
+        } else {
+            info = "Player " + currentPlayer.getPlayerId() + " PAID JAIL FEE: " + JAIL_FEE +
+                    "\nPlayer" + currentPlayer.getPlayerId() + " has $" + currentPlayer.getMoney();
+            System.out.println(info);
+            paymentSuccess = true;
+
+        }
+
+        for (MonopolyView view : views){
+            view.handleMonopolyJailResult(paymentSuccess);
+        }
+
+
+    }
+
+
 
     public enum Status {X_WON, O_WON, TIE, UNDECIDED};
 
@@ -102,11 +132,47 @@ public class Game {
             //Displays and gets avalid command from the user
             command = getUserCommand(Arrays.asList("roll","quit", "help", "status"));//original
             if ("roll".equals(command)) {
+                //check if player is in Jail
+                boolean jailPlayer = currentPlayer.getLocation().getPropertyName().equals("JAIL");
+                if(jailPlayer) {
+                    Integer value = rollCount.get(currentPlayer.getPlayerId());
+                    if(value == null){
+                        //first roll
+                        rollCount.put(currentPlayer.getPlayerId(), 1);
+                    }
+                    else if(value == 3){
+                        //if roll count is 3 do not proceed to roll
+                        System.out.println("Rolling dice PROHIBITED for JAIL Player: " + currentPlayer.getPlayerId()
+                        + ". And must pay Jail Fee.");
+                        //check
+                        //                        //notify that can't proceed
+                        //                        //pending
+                    }
+                    else{
+                        rollCount.put(currentPlayer.getPlayerId(), value + 1);
+                    }
+                }
+
                 System.out.println("Rolling the dice...");
                 // calling the roll method from Dice class.
                 dice.roll();
                 System.out.println("Die 1: " + dice.getDie1());
                 System.out.println("Die 2: " + dice.getDie2());
+
+                //if in Jail check if roll result is doubles
+                if(jailPlayer) {
+                    if(dice.getDie1() == dice.getDie2()){
+                        //doubles
+                        //let him proceed
+
+                    }
+                    else{
+                        //return
+                        //notify that can't proceed
+                        //pending
+                    }
+                }
+
 
                 Property newLocation = board.move(dice.sumOfDice(), currentPlayer.getLocation());
 
@@ -227,6 +293,13 @@ public class Game {
             }
         }
 
+        if("rent".equals(command)){
+            String result = payRent(newLocation);
+            for (MonopolyView view : views){
+                view.handleMonopolyRentResult(result, newLocation);
+            }
+        }
+
         if ("pass".equals(command)) {
             nextPlayer();
             notifyView(command);
@@ -242,10 +315,13 @@ public class Game {
         }
         if("player info".equals(command)) {
             String info = displayPlayerInfo();
+            notifyView(command);
         }
         if(win){
             notifyView("win");
         }
+
+
     }
 
     /**
@@ -295,21 +371,25 @@ public class Game {
      * @param property
      */
     public boolean buy(Property property){
-        int cost = property.getCost();
-        int money = currentPlayer.getMoney(); //return players total money
+        if (currentPlayer.getLocation() == property){
 
-        if (cost > money){
-            System.out.println("You don't have enough money.");
-            return false;
-        } else{
-            property.setOwner(currentPlayer);
-            currentPlayer.addProperty(property);
-            currentPlayer.removeMoney(cost);
+            int cost = property.getCost();
+            int money = currentPlayer.getMoney(); //return players total money
 
-            System.out.println("You have successfully bought the property.");
-            System.out.println("You have " + currentPlayer.getMoney() +"$ left.");
-            return true;
+            if (cost > money){
+                System.out.println("You don't have enough money.");
+                return false;
+            } else{
+                property.setOwner(currentPlayer);
+                currentPlayer.addProperty(property);
+                currentPlayer.removeMoney(cost);
+
+                System.out.println("You have successfully bought the property.");
+                System.out.println("You have " + currentPlayer.getMoney() +"$ left.");
+                return true;
+            }
         }
+        return false;
     }
 
     /**
@@ -318,10 +398,13 @@ public class Game {
      * @return
      */
     public boolean sell(Property property){
-        currentPlayer.addMoney(property.getCost());
-        currentPlayer.removeProperty(property);
-        property.setOwner(null);
-        return true;
+        if (currentPlayer == property.getOwner()){
+            currentPlayer.addMoney(property.getCost());
+            currentPlayer.removeProperty(property);
+            property.setOwner(null);
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -523,3 +606,4 @@ public class Game {
     }
     */
 }
+

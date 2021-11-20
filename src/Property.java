@@ -13,6 +13,9 @@ public class Property {
     private Color color;
     private Player owner;
     private int rent;
+    private int rent2;
+    private int rent3;
+    private int rent4;
     private int cost;
 
     /**
@@ -34,14 +37,28 @@ public class Property {
      * @param rent the rent of the property
      * @param cost the cost of the property
      */
+    public Property(String propertyName, Color color, int rent, int rent2, int rent3, int rent4, int cost) {
+        this.propertyName = propertyName;
+        this.color = color;
+        this.rent = rent;
+        this.rent2 = rent2;
+        this.rent3 = rent3;
+        this.rent4 = rent4;
+        this.cost = cost;
+        this.owner = null;
+    }
+
     public Property(String propertyName, Color color, int rent, int cost) {
+//        this(propertyName, color, rent, 0, 0,0, cost);
         this.propertyName = propertyName;
         this.color = color;
         this.rent = rent;
         this.cost = cost;
         this.owner = null;
     }
-
+    public Property(String propertyName, Color color) {
+        this(propertyName, color, 0, 0);
+    }
     /**
      * @return the property name
      */
@@ -90,6 +107,15 @@ public class Property {
     public int getRent() {
         return rent;
     }
+    public int getRent2() {
+        return rent2;
+    }
+    public int getRent3() {
+        return rent3;
+    }
+    public int getRent4() {
+        return rent4;
+    }
 
     /**
      * @param rent holds the rent
@@ -122,4 +148,5 @@ public class Property {
         return "Property [property name=" + propertyName + ", cost=" + cost +", rent="+ rent +", color=" + color + ", owner id=" + ownerInfo + "]";
     }
 }
+
 

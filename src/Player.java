@@ -158,7 +158,7 @@ public class Player {
         //for the purpose of testing fast we will make the list size 2 instead of 3
         //return (list != null) && (list.size() == 2);
 
-       // return colourPropertyMap.get(property.getColor());
+        // return colourPropertyMap.get(property.getColor());
     }
 
     /**
@@ -223,21 +223,14 @@ public class Player {
         }
     }
 
+    /**
+     * @return the list of properties in string version
+     */
     public String getStringProperties() {
         String p = "";
 
         for(Property property : properties){
             p += property.getPropertyName() + "\n";
-        }
-
-        return p;
-    }
-
-    public String getColourPropertyMap() {
-        String p = "";
-
-        for(Property property : properties){
-            p += property.getPropertyName() + ", ";
         }
 
         return p;
@@ -249,8 +242,11 @@ public class Player {
      */
     @Override
     public String toString() {
-        return "Player: " + playerId + ",  money: " + money + ", isBankrupt: " + isBankrupt + ", location: "
-                + location.getPropertyName() + "\n - Properties owned: \n"+ getStringProperties();
+        if(isBankrupt){
+            return "Player " + playerId + " is bankrupt.\n";
+        }
+        return "Player " + playerId + "\nMoney: " + money + ", Location: "
+                + location.getPropertyName() + "\nProperties owned: \n"+ getStringProperties();
     }
 
 }
