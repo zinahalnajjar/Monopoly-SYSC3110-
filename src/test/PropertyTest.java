@@ -1,6 +1,4 @@
 
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 
 import java.awt.*;
@@ -56,13 +54,13 @@ public class PropertyTest {
 
     @Test
     public void getRent() {
-        assertEquals(a.getRent(),5000);
+        assertEquals(a.getInitialRent(),5000);
     }
 
     @Test
     public void setRent() {
-        a.setRent(1);
-        assertEquals(a.getRent(),1);
+        a.setInitialRent(1);
+        assertEquals(a.getInitialRent(),1);
     }
 
     @Test

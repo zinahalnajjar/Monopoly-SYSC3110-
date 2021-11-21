@@ -296,22 +296,28 @@ public class Game {
      * @param property
      */
     public boolean buy(Property property){
-        if (currentPlayer.getLocation() == property){
+        if(property.getBuyCounter() == 6){
+            if (currentPlayer.getLocation() == property && property.getOwner() == null){
 
-            int cost = property.getCost();
-            int money = currentPlayer.getMoney(); //return players total money
+                int cost = property.getCost();
+                int money = currentPlayer.getMoney(); //return players total money
 
-            if (cost > money){
-                System.out.println("You don't have enough money.");
-                return false;
-            } else{
-                property.setOwner(currentPlayer);
-                currentPlayer.addProperty(property);
-                currentPlayer.removeMoney(cost);
+                if (cost > money){
+                    System.out.println("You don't have enough money.");
+                    return false;
+                } else{
+                    property.setOwner(currentPlayer);
+                    currentPlayer.addProperty(property);
+                    currentPlayer.removeMoney(cost);
 
-                System.out.println("You have successfully bought the property.");
-                System.out.println("You have " + currentPlayer.getMoney() +"$ left.");
-                return true;
+                    property.incrementBuyCounter();
+
+                    System.out.println("You have successfully bought the property.");
+                    System.out.println("You have " + currentPlayer.getMoney() +"$ left.");
+                    return true;
+                }
+            } else if (currentPlayer == property.getOwner()){
+                property.incrementBuyCounter();
             }
         }
         return false;
@@ -370,7 +376,7 @@ public class Game {
      */
     public String payRent(Property property){
         String info = "";
-        int rent = property.getRent();// get rent amount
+        int rent = property.getInitialRent();// get rent amount
         System.out.println("Player "+currentPlayer.getPlayerId() + " has $" + currentPlayer.getMoney()); //dispay how much the player owns
         currentPlayer.removeMoney(rent);// remove money from player based on what they paid
         boolean bankrupt = checkBankruptcy();

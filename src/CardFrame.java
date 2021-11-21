@@ -82,7 +82,7 @@ public class CardFrame extends JFrame implements MonopolyView, ActionListener {
 
         //initialize the information on the card
         initInfoPanel("Property Information", propertyInfo);
-        initInfoPanel("Rent: "+ property.getRent(), propertyRent);
+        initInfoPanel("Rent: "+ property.getInitialRent(), propertyRent);
         initInfoPanel("Cost: "+ property.getCost(), propertyCost);
         initInfoPanel("Owner: None", propertyOwner);
 
