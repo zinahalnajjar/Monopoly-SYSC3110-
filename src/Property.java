@@ -59,6 +59,15 @@ public class Property {
     public Property(String propertyName, Color color) {
         this(propertyName, color, 0, 0);
     }
+
+    public Property(String propertyName, Color color, int rent, int rent2, int cost) {
+        this.propertyName = propertyName;
+        this.color = color;
+        this.rent = rent;
+        this.rent2 = rent2;
+        this.cost = cost;
+        this.owner = null;
+    }
     /**
      * @return the property name
      */

@@ -30,6 +30,7 @@ public class Dice {
 
         die1 = (int)(Math.random()*6) + 1;
         die2 = (int)(Math.random()*6) + 1;
+
     }
 
     /**
@@ -69,4 +70,7 @@ public class Dice {
         die2 = a;
     }
 
+    public boolean isDouble() {
+        return die1 == die2;
+    }
 }

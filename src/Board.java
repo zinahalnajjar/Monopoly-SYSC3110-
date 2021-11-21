@@ -14,6 +14,7 @@ public class Board {
 
     private ArrayList<Property> properties;
     private Property newLocation;
+    private Property jailProperty;
 
     /**
      * Initializes the array that will hold the properties.
@@ -22,13 +23,34 @@ public class Board {
     public Board() {
         this.properties = new ArrayList<>();
         this.newLocation = null;
+        this.jailProperty = new Property("JAIL", Color.WHITE);
         createProperties();
         createRailRoads();
         createFreeParking();
+        createJAIL();
+        createGO();
+        createUtility();
+
+    }
+    private void createUtility(){
+        Property utility1 = new Property("ELECTRIC COMPANY", Color.WHITE, 25, 50, 150);
+        properties.add(utility1);
+        Property utility2 = new Property("WATER WORKS", Color.WHITE, 4, 10, 150);
+        properties.add(utility2);
+
+    }
+    private void createGO(){
+        properties.add(new Property("GO", Color.WHITE));
+
+    }
+
+    private void createJAIL(){
+        properties.add(jailProperty);
 
     }
 
     private void createFreeParking() {
+
         properties.add(new Property("FREE PARKING", Color.WHITE));
     }
 
@@ -124,6 +146,9 @@ public class Board {
         return properties;
     }
 
+    public Property getJailProperty(){
+        return  this.jailProperty;
+    }
     /**
      * @return property identified by name
      */
@@ -158,4 +183,8 @@ public class Board {
         return "Board [properties Count=" + properties.size() + "]";
     }
 
+    public Property moveToJail() {
+        newLocation = this.jailProperty;
+        return newLocation;
+    }
 }

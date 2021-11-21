@@ -4,21 +4,13 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-/**
- * Initializes the board and the players.
- * Starts going through a while loop, that goes till the game ends.
- * Game ends with when all but one player have quit or gone bankrupt.
- *
- * @author Tooba
- */
-public class CardFrame extends JFrame implements MonopolyView, ActionListener {
+public class RailroadCard extends JFrame implements MonopolyView, ActionListener {
 
+    //private String name;
     //reference to the main view in case it is needed
     MainFrame mf;
 
     //reference to board and property
-    private Board board;
-    private Property property;
 
     //the panels for different sections of the deed card
     private JPanel titlePanel;
@@ -26,32 +18,33 @@ public class CardFrame extends JFrame implements MonopolyView, ActionListener {
     private JPanel buttonPanel;
 
     //deed card values
-    private JLabel propertyName;
-    private JLabel propertyInfo = new JLabel();
-    private JLabel propertyRent = new JLabel();
-    private JLabel propertyCost = new JLabel();
-    private JLabel propertyOwner = new JLabel();
+    private JLabel railroadName;
+    private JLabel railroadInfo = new JLabel();
+    private JLabel railroadRent1 = new JLabel();
+    private JLabel railroadRent2 = new JLabel();
+    private JLabel railroadRent3 = new JLabel();
+    private JLabel railroadRent4 = new JLabel();
+    private JLabel railroadCost = new JLabel();
+    private JLabel railroadOwner = new JLabel();
 
     //buttons on the deed card
     private JButton buy = new JButton();
-    private JButton sell = new JButton();
-//    private JButton pass = new JButton();
+    private JButton rent1 = new JButton();
+    private JButton rent2 = new JButton();
+    private JButton rent3 = new JButton();
+    private JButton rent4 = new JButton();
+    private JButton pass = new JButton();
+
 
     //reference to the model and controller
     private MonopolyController mc;
     private Game model;
+    private Board board;
+    private Property property;
 
-    /**
-     *
-     * initializes the card view depending on which property it is attached to
-     *
-     * @param pName property name
-     * @param board current board
-     * @param mc controller
-     * @param model model
-     * @param mf main frame
-     */
-    public CardFrame(String pName, Board board, MonopolyController mc, Game model, MainFrame mf){
+
+    public RailroadCard(String pName, Board board, MonopolyController mc, Game model, MainFrame mf){
+
         super("Monopoly!!");
 
         this.board = board;
@@ -66,39 +59,49 @@ public class CardFrame extends JFrame implements MonopolyView, ActionListener {
 
         this.setLayout(new FlowLayout(FlowLayout.CENTER));
 
-        this.setSize(250, 290);
+        this.setSize(400, 400);
+
 
         //set layout for the each panel
         titlePanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        infoPanel = new JPanel(new GridLayout(4,1));
+        infoPanel = new JPanel(new GridLayout(7,1));
         buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
 
         //initialize the title section of the panel
-
-
-        propertyName = new JLabel(property.getPropertyName());
-        propertyName.setFont(new Font("SANS_SERIF", Font.BOLD, 20));
-        titlePanel.add(propertyName);
+        railroadName = new JLabel(property.getPropertyName());
+        railroadName.setFont(new Font("SANS_SERIF", Font.BOLD, 20));
+        titlePanel.add(railroadName);
         titlePanel.setBackground(property.getColor());
         titlePanel.setBorder(new EmptyBorder(10,20,10,20));
 
+        //--start
+
         //initialize the information on the card
-        initInfoPanel("Property Information", propertyInfo);
-        initInfoPanel("Rent: "+ property.getRent(), propertyRent);
-        initInfoPanel("Cost: "+ property.getCost(), propertyCost);
-        initInfoPanel("Owner: None", propertyOwner);
+        initInfoPanel("Property Information", railroadInfo);
+        initInfoPanel("Rent: "+ property.getRent(), railroadRent1);
+        initInfoPanel("Rent2: "+ property.getRent2(), railroadRent2);
+        initInfoPanel("Rent3: "+ property.getRent3(), railroadRent3);
+        initInfoPanel("Rent4: "+ property.getRent4(), railroadRent4);
+        initInfoPanel("Cost: "+ property.getCost(), railroadCost);
+        initInfoPanel("Owner: None",railroadOwner);
 
         //initialize the buy and sell button the card
         initButtonPanel("buy", buy, mc);
-        initButtonPanel("sell", sell, mc);
-//        initButtonPanel("pass", pass, mc);
-
+        initButtonPanel("rent1", rent1, mc);
+        initButtonPanel("rent2", rent2, mc);
+        initButtonPanel("rent3", rent3, mc);
+        initButtonPanel("rent4", rent4, mc);
+        initButtonPanel("pass", pass, mc);
         //add all the panels to the deed card view
         this.add(titlePanel);
         this.add(infoPanel);
         this.add(buttonPanel);
-    }
 
+
+        this.setVisible(true);
+
+
+    }
     /**
      *
      * initializes the info panel
@@ -136,80 +139,90 @@ public class CardFrame extends JFrame implements MonopolyView, ActionListener {
      */
     private void updateInfo(Property location) {
         if(property.getOwner() != null){
-            propertyOwner.setText("Owner: Player " + location.getOwner().getPlayerId());
+            railroadOwner.setText("Owner: Player " + location.getOwner().getPlayerId());
         }else{
-            propertyOwner.setText("Owner: None");
+            railroadOwner.setText("Owner: None");
         }
     }
 
-    /**
-     * @return the buy button
-     */
-    public JButton getBuy(){
-        return buy;
-    }
 
-    /**
-     * @return the sell button
-     */
-    public JButton getSell(){
-        return sell;
-    }
 
-    /**
-     * @return this frame
-     */
-    public CardFrame currentFrame(Property p){
-        if(property == p ){
-            return this;
-        }return null;
+/*
+    public static void main(String [] args){
+        RailroadCard railroadCard = new RailroadCard();
     }
+*/
+
 
     /**
      * @param e performs action based on who clicked the property card
      */
-    @Override
+
     public void actionPerformed(ActionEvent e) {
         //current player is on the property that was clicked
+
         if(model.getCurrentPlayer().getLocation().equals(property)){
+            /*
             if("FREE PARKING".equals(e.getActionCommand())){
                 FreeParkingNotification();
                 return;
             }
+            */
 
             if(property.getOwner() == null){ //if property owner is null
                 buy.setEnabled(true);
-                sell.setEnabled(false);
+                rent1.setEnabled(false);
+                rent2.setEnabled(false);
+                rent3.setEnabled(false);
+                rent4.setEnabled(false);
+                //sell.setEnabled(false);
             } //if property owner is some other player
             else if(property.getOwner() != model.getCurrentPlayer()){
                 buy.setEnabled(false);
-                sell.setEnabled(false);
+                rent1.setEnabled(false);
+                rent2.setEnabled(false);
+                rent3.setEnabled(false);
+                rent4.setEnabled(false);
+                //sell.setEnabled(false);
                 String info = model.payRent(property);
                 JOptionPane.showMessageDialog(this, info, "Pay rent", JOptionPane.INFORMATION_MESSAGE);
             } //if property is owned by current player himself
             else if(property.getOwner() == model.getCurrentPlayer()){
                 buy.setEnabled(false);
-                sell.setEnabled(true);
+                rent1.setEnabled(true);
+                rent2.setEnabled(true);
+                rent3.setEnabled(true);
+                rent4.setEnabled(true);
+                //sell.setEnabled(true);
             }
         } //if player not on property but owns the property
         else if(property.getOwner() == model.getCurrentPlayer()){
             buy.setEnabled(false);
-            sell.setEnabled(true);
+            rent1.setEnabled(true);
+            rent2.setEnabled(true);
+            rent3.setEnabled(true);
+            rent4.setEnabled(true);
+            //sell.setEnabled(true);
         }
         else{ //if not on property and does not own the property
             buy.setEnabled(false);
-            sell.setEnabled(false);
+            rent1.setEnabled(false);
+            rent2.setEnabled(false);
+            rent3.setEnabled(false);
+            rent4.setEnabled(false);
+            //sell.setEnabled(false);
         }
 
         this.setVisible(true);
     }
 
+    /*
     private void FreeParkingNotification(){
         String info = "Press Pass to move to the next turn";
         JOptionPane.showMessageDialog(this, info, "Help", JOptionPane.INFORMATION_MESSAGE);
     }
 
-
+*/
     @Override
     public void handleMonopolyStatusUpdate(String command) { }//updated with the paramter
 
@@ -246,6 +259,7 @@ public class CardFrame extends JFrame implements MonopolyView, ActionListener {
      */
     @Override
     public void handleMonopolySell(boolean success, Property location) {
+        /*
         if(property == location && success == false){
             if(model.getCurrentPlayer() != property.getOwner()){
                 JOptionPane.showMessageDialog(this,"You are not the owner");
@@ -259,9 +273,32 @@ public class CardFrame extends JFrame implements MonopolyView, ActionListener {
             this.setVisible(true);
         }
     }
+*/
+    }
 
     @Override
     public void handleMonopolyRentResult(String result, Property location) {
+        if(property == location) {
+            // update the view with the owner of the railroad
+
+            updateInfo(location);
+
+            //enable buy button if the property is not owned by anyone.
+            if(property.getOwner() == null){
+                buy.setEnabled(false);
+            }
+            else if(property.getOwner() != model.getCurrentPlayer()) {
+                //enable rent buttons if the property is owned by someone else
+                rent1.setEnabled(true);
+                rent2.setEnabled(true);
+                rent3.setEnabled(true);
+                rent4.setEnabled(true);
+            }
+
+            pass.setEnabled(true);
+
+            this.setVisible(true);
+        }
 
     }
 
@@ -280,5 +317,5 @@ public class CardFrame extends JFrame implements MonopolyView, ActionListener {
     public void handleMonopolyGOResult() {
 
     }
-
 }
+

@@ -42,6 +42,7 @@ public class MainFrame extends JFrame implements MonopolyView  {
     //Each spot on the board
     private static ArrayList<JButton> properties;
     private static ArrayList<JButton> railroads;
+    private static ArrayList<JButton> utilities;
     //private static ArrayList<JButton> railroads;
     private static JButton Property;
     private static JLabel Chance;
@@ -83,6 +84,7 @@ public class MainFrame extends JFrame implements MonopolyView  {
 
         properties = new ArrayList<>();
         railroads = new ArrayList<>();
+        utilities = new ArrayList<>();
         players = new ArrayList<>();
 
         //Make sure we have nice window decorations.
@@ -134,6 +136,9 @@ public class MainFrame extends JFrame implements MonopolyView  {
             if(bttn.getText().equals("JAIL")){
                 JailCard jf = new JailCard(bttn.getText(), m.getBoard(), mc, m, this);
                 bttn.addActionListener(jf);
+            }if(bttn.getText().equals("GO")){
+                GoCard gf = new GoCard(bttn.getText(), m.getBoard(), mc, m, this);
+                bttn.addActionListener(gf);
             }
             else {
                 cf = new CardFrame(bttn.getText(), m.getBoard(), mc, m, this);
@@ -155,6 +160,11 @@ public class MainFrame extends JFrame implements MonopolyView  {
 //                }
 //            });
         }// add another for loop
+
+        for(JButton bttn : utilities){
+            UtilityCard uf = new UtilityCard(bttn.getText(), m.getBoard(), mc, m, this);
+            bttn.addActionListener(uf);
+        }
 
 
     }
@@ -331,6 +341,7 @@ public class MainFrame extends JFrame implements MonopolyView  {
 
         ElectricCompany = new JButton("ELECTRIC COMPANY");
         westPanel.add(ElectricCompany);
+        utilities.add(ElectricCompany);
 
         Property = new JButton("St. Charles Place");
         westPanel.add(Property);
@@ -398,6 +409,7 @@ public class MainFrame extends JFrame implements MonopolyView  {
         Go = new JButton("GO");
         //setHeightSouth(Go);
         southPanel.add(Go);
+        properties.add(Go);
 
         addEmptyLabel(southPanel, 6);
 
@@ -455,6 +467,7 @@ public class MainFrame extends JFrame implements MonopolyView  {
 
         WaterWorks = new JButton("WATER WORKS");
         northPanel.add(WaterWorks);
+        utilities.add(WaterWorks);
 
         Property = new JButton("Marvin Gardens");
         northPanel.add(Property);
@@ -517,9 +530,9 @@ public class MainFrame extends JFrame implements MonopolyView  {
     }
 
     @Override
-    public void handleMonopolyJailResult(boolean paymentSuccess) {
+    public void handleMonopolyJailFeePaymentResult(boolean paymentSuccess) {
         if(paymentSuccess){
-            String info = "You're free to move out of Jail.\n\nYou need to Roll dice.";
+            String info = "You're free to move out of Jail.\n\nYou can Roll dice, to move out of Jail.";
             JOptionPane.showMessageDialog(this, info, "Help", JOptionPane.INFORMATION_MESSAGE);
             roll.setEnabled(true);
         }
@@ -527,6 +540,17 @@ public class MainFrame extends JFrame implements MonopolyView  {
             String info = "Your payment failed. You're bankrupt!";
             JOptionPane.showMessageDialog(this, info, "Help", JOptionPane.INFORMATION_MESSAGE);
         }
+    }
+
+    @Override
+    public void handleMonopolyJailPlayerRollResult(String result) {
+        JOptionPane.showMessageDialog(this, result, "Jail Player roll result.", JOptionPane.INFORMATION_MESSAGE);
+
+    }
+
+    @Override
+    public void handleMonopolyGOResult() {
+
     }
 
     @Override
@@ -631,9 +655,14 @@ public class MainFrame extends JFrame implements MonopolyView  {
             }
         }
 
-        //double rolls
-        if(dice.sumOfDice() == 12){
-            JOptionPane.showMessageDialog(this, "You rolled doubles, you can roll again", "Roll result", JOptionPane.INFORMATION_MESSAGE);
+//double rolls
+        if(dice.getDie1() == dice.getDie2()){
+            if (model.isPlayerInJail()) {
+                roll.setEnabled(false);
+                pass.setEnabled(false);
+            } else {
+                JOptionPane.showMessageDialog(this, "You rolled doubles, you can roll again", "Roll result", JOptionPane.INFORMATION_MESSAGE);
+            }
         }else{
             roll.setEnabled(false);
             pass.setEnabled(true);
