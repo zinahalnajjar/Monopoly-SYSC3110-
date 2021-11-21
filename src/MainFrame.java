@@ -1,7 +1,5 @@
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -97,25 +95,6 @@ public class MainFrame extends JFrame implements MonopolyView  {
         //Display the window.
         this.pack();
         this.setVisible(true);
-    }
-
-    /**
-     *
-     * Initializes the pieces on the board
-     *
-     * @param playerCount
-     * @throws IOException
-     */
-    private void initPlayerPieces(int playerCount) throws IOException {
-        for(int i = 0; i < playerCount; i++){
-            BufferedImage img = ImageIO.read(MainFrame.class.getResource("images/blue.jpg"));
-            JLabel l = new JLabel(new ImageIcon(img));
-            l.setLayout(new FlowLayout(FlowLayout.CENTER));
-            JLabel text = new JLabel("Player: " + i+1);
-            l.add(text);
-            players.add(l);
-            Go.add(l);
-        }
     }
 
     /**
@@ -580,7 +559,7 @@ public class MainFrame extends JFrame implements MonopolyView  {
         }
 
         //double rolls
-        if(dice.sumOfDice() == 12){
+        if(dice.getDie1() == dice.getDie2()){
             JOptionPane.showMessageDialog(this, "You rolled doubles, you can roll again", "Roll result", JOptionPane.INFORMATION_MESSAGE);
         }else{
             roll.setEnabled(false);
