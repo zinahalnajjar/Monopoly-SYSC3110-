@@ -65,7 +65,6 @@ public class Game {
             view.handleMonopolyJailFeePaymentResult(paymentSuccess);
         }
 
-
     }
 
     public void collect(){
@@ -85,7 +84,6 @@ public class Game {
     private final List<MonopolyView> views;
 
     /**
-     *
      * Initializes the game, sets up the scanner
      * Calls a function to initialize player
      *
@@ -101,24 +99,59 @@ public class Game {
 
         newLocation = null;
 
-        @SuppressWarnings("unused") Scanner scan = new Scanner(System.in);
-
-        views = new ArrayList<>();
+        views = new ArrayList<MonopolyView>();
 
         initPlayers();
     }
 
     /**
-     *
      * Initializes the number of players and fills out the list of players
-     *
      */
     private void initPlayers() {
-        for(int i = 1; i <= playerCount; i++){
+        for (int i = 1; i <= playerCount; i++) {
             players.add(new Player(1500, i)); //player id and rent
         }
         currentPlayer = players.get(0);
     }
+
+    /**
+     * if current property is owned by opponent
+     * then player pays rent but if it is unowned
+     * then player buys it
+     *
+     * @return current location of the player
+     */
+    private Property AILand() {
+
+        Property property = currentPlayer.getLocation();
+        if (currentPlayer.getLocation().getOwner().isSetOwned(property)) {
+            payRent(property);
+        } else {
+            buy(property);
+        }
+        return property;
+    }//AI-Land
+
+    /**
+     * Firstly this method rolls dice and gets results
+     * then gets the sum of the two dice rolling results
+     * Moves the player according to the sum of the dice
+     * location of the player is updated
+     * next  is the turn of next player
+     */
+    private void AITurn() {
+
+        dice.Roll();
+        int sum = dice.sumOfDice();
+        Property newLocationOfThePlayer = board.move(sum, AILand());
+        currentPlayer = players.get(currentPlayerIndex);
+        currentPlayerIndex += 1;
+        currentPlayer.setLocation(newLocationOfThePlayer);
+        if (currentPlayerIndex > playerCount) {
+            currentPlayerIndex = 0;
+        }
+
+    }//AI-Turn
 
 
     private void notifyViewJailPlayerRoll(String result, boolean forceJailFee) {
@@ -134,7 +167,6 @@ public class Game {
         }
 
         if ("roll".equals(command)) {
-
             //check if player is in Jail
             boolean jailPlayer = !passByJail && currentPlayer.getLocation().getPropertyName().equals("JAIL");
             if(jailPlayer) {
@@ -197,7 +229,7 @@ public class Game {
                                     + "You've attempted " + doubleAttemptCount + " times.";
                             forceJailFee = false;
                         }
-
+                      
                         notifyViewJailPlayerRoll(result, forceJailFee);
                         return;
                     }
@@ -417,17 +449,13 @@ public class Game {
 
     /**
      * The player will be able to sell
+     *
      * @param property
-     * @return
      */
-    public boolean sell(Property property){
-        if (currentPlayer == property.getOwner()){
-            currentPlayer.addMoney(property.getCost());
-            currentPlayer.removeProperty(property);
-            property.setOwner(null);
-            return true;
-        }
-        return false;
+    public void sell(Property property) {
+        currentPlayer.addMoney(property.getCost());
+        currentPlayer.removeProperty(property);
+        property.setOwner(null);
     }
 
     /**
@@ -455,12 +483,11 @@ public class Game {
     /**
      * decide the next player, in the order as found in the list starting from index 0
      */
-    public void nextPlayer(){
-        previousPlayer = currentPlayer;
-        if(players.size() == players.indexOf(currentPlayer) + 1){
+    public void nextPlayer() {
+        if (players.size() == players.indexOf(currentPlayer) + 1) {
+
             currentPlayer = players.get(0);
-        }
-        else {
+        } else {
             currentPlayer = players.get(players.indexOf(currentPlayer) + 1);
         }
     }
@@ -507,28 +534,26 @@ public class Game {
         }
 
         //if the player is bankrupt then don't add money
-        if(!bankrupt){
-            info = "Player " + currentPlayer.getPlayerId() + " PAID rent: " + rent +
-                    "\nPlayer" + currentPlayer.getPlayerId() + " has $" + currentPlayer.getMoney();
-            System.out.println(info);
+        if (!bankrupt) {
+            System.out.println("Player " + currentPlayer.getPlayerId() + " PAID rent: " + rent);// display how much the player paid for rent
+            System.out.println("Player " + currentPlayer.getPlayerId() + " has $" + currentPlayer.getMoney());
             property.getOwner().addMoney(rent);// the owner of the property will receive the rent money
         }
 
         checkWin();
-
-        return info;
     }
 
 
 
     /**
      * checks if a player still has enough money to play the game before losing
+     *
      * @return true if player has gone bankrupt
      */
-    public boolean checkBankruptcy(){
-        if(currentPlayer.getMoney() <= 0){
+    public boolean checkBankruptcy() {
+        if (currentPlayer.getMoney() < 0) {
             currentPlayer.setBankruptcy(true);
-            System.out.println("Player " + currentPlayer.getPlayerId() + " is bankrupt!");
+            System.out.println("Player " + currentPlayer.getPlayerId() + "is bankrupt!");
             return true;
         }
         return false;
@@ -545,13 +570,10 @@ public class Game {
         for(Player p : players){
             if(p.getBankruptcy()){
                 bankruptCount++;
-            }
-            else{
+            } else {
                 winner = p;
             }
         }
-
-        String info = "";
 
         // if bankrupt count is one less than the total player count
         // declare winner
@@ -600,32 +622,15 @@ public class Game {
                 "- help: can be used to view the instructions again\n";
     }
 
-    public int getPlayerCount(){
+    public int getPlayerCount() {
         return playerCount;
     }
 
-    public Board getBoard(){return board;}
-
-    /**
-     * Getter for currentPlayer.
-     *
-     * @return
-     */
-    public Player getCurrentPlayer(){
-        //Getter added for access by MainFrame class
-        //for Notification update.
-        return currentPlayer;
-    }
-    /**
-     * Getter for dice.
-     *
-     * @return
-     */
-    public Dice getDice(){
-        return dice;
+    public Board getBoard() {
+        return board;
     }
 
-    public void addMonopolyView(MonopolyView view){
+    public void addMonopolyView(MonopolyView view) {
         views.add(view);
     }
 
