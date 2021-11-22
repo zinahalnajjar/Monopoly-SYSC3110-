@@ -334,10 +334,14 @@ public class Game {
 
                 property.incrementState();
 
-                info = "You have successfully bought " + property.getState().getHouseNum() + " number of houses\n";
+                info = "You have successfully bought " + property.getState().getHouseNum() + " houses\n";
 
                 if(property.getState().getHouseNum() == 5){
                     info = "You have successfully bought a Hotel\n";
+                }
+
+                if(property.getState().getHouseNum() == 1){
+                    info = "You have successfully bought " + property.getState().getHouseNum() + " house\n";;
                 }
 
                 info += "You have " + currentPlayer.getMoney() +"$ left.";

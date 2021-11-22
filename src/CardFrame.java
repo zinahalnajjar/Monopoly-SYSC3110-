@@ -143,6 +143,7 @@ public class CardFrame extends JFrame implements MonopolyView, ActionListener {
         propertyHouses.setText("Houses Owned: " + property.getState().getHouseNum());
         if(property.getState() == Property.HouseState.HOTEL){
             propertyHouses.setText("Hotel Owned");
+            buy.setEnabled(false);
         }
     }
 
