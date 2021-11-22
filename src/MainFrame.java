@@ -12,9 +12,6 @@ import java.util.Objects;
  * @author Zinah
  */
 public class MainFrame extends JFrame implements MonopolyView  {
-    final static boolean shouldFill = true;
-    final static boolean shouldWeightX = true;
-    final static boolean RIGHT_TO_LEFT = false;
     private static final Color BG_COLOR = new Color(69, 255, 156);
 
     //private static JPanel boardPanel; //For the grid of properties
@@ -36,9 +33,6 @@ public class MainFrame extends JFrame implements MonopolyView  {
     private static JLabel Chance;
     private static JLabel RailRoad;
     private static JLabel empty;
-
-    private static final int NORTH_HEIGHT = 100;
-    private static final int SOUTH_HEIGHT = 100;
 
     //The model
     private final Game model;
@@ -68,7 +62,7 @@ public class MainFrame extends JFrame implements MonopolyView  {
         ArrayList<JLabel> players = new ArrayList<>();
 
         //Make sure we have nice window decorations.
-        this.setDefaultLookAndFeelDecorated(true);
+        setDefaultLookAndFeelDecorated(true);
 
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -76,9 +70,6 @@ public class MainFrame extends JFrame implements MonopolyView  {
         addComponentsToPane(this.getContentPane(), mc);
 
         addListeners(model, mc);
-
-        //To display player pieces on the board
-        //initPlayerPieces(playerCount);
 
         //Display the window.
         this.pack();

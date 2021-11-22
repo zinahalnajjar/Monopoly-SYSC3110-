@@ -51,12 +51,6 @@ public class PlayerTest {
     }
 
     @Test
-    public void addProperty() {
-        p.addProperty(a);
-        assertTrue(p.addProperty(a));
-    }
-
-    @Test
     public void removeProperty() {
         p.addProperty(a);
         assertTrue(p.removeProperty(a));

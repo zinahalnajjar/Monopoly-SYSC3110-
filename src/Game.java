@@ -45,7 +45,7 @@ public class Game {
 
         newLocation = null;
 
-        Scanner scan = new Scanner(System.in);
+        @SuppressWarnings("unused") Scanner scan = new Scanner(System.in);
 
         views = new ArrayList<>();
 

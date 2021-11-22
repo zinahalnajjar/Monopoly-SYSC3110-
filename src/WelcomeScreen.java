@@ -12,7 +12,7 @@ import java.awt.Dialog.ModalityType;
  * @author Kareem
  */
 public class WelcomeScreen {
-    JFrame frame;
+    final JFrame frame;
     int numPlayers;
 
     /**

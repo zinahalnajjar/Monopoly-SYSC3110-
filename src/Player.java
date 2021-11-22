@@ -77,7 +77,7 @@ public class Player {
      * adds a property to the list of properties for each player
      * @param property
      */
-    public boolean addProperty(Property property) {
+    public void addProperty(Property property) {
         this.properties.add(property);
 
         //checkSet(property);
@@ -93,14 +93,12 @@ public class Player {
         }
         // add property to the list for (current colour).
         list.add(property);
-
-        return true;
     }
 
 
     /**
      * check if the property is part of a "set" of 3 properties of the same colour
-     * one list  contains 3 properies of the same colour, and it must be owned by the same owner
+     * one list  contains 3 properties of the same colour, and it must be owned by the same owner
      *
      * @param property
      * @return true if the set is owned
@@ -120,8 +118,7 @@ public class Player {
      */
 
     public boolean removeProperty(Property property) {
-        this.properties.remove(property);
-        return true;
+        return this.properties.remove(property);
     }
 
     /**
