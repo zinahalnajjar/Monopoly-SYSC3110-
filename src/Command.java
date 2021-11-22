@@ -6,7 +6,7 @@ import java.util.List;
  * Class Command- Commands for monopoly game
  * this class is part of the "Monopoly Game" application
  *
- * this class holds inforamtion abouts commands that were issued by the user
+ * this class holds information abouts commands that were issued by the user
  * the command consists of one word. It is checked for being valid or not
  *If the user entered an invalid command (a word that is not
  * known) then the command word is <null>.
@@ -20,7 +20,7 @@ import java.util.List;
 
 public class Command {
 
-    private String userCommand; // the command that is issued by the user
+    private final String userCommand; // the command that is issued by the user
     private static final List <String> gameCommandsList  = Arrays.asList("buy", "pass", "help", "roll", "quit", "status", "sell");
 
     /**
@@ -51,13 +51,6 @@ public class Command {
 
     }
 
-    /**
-     * returns true if the command provided was invalid or not understood
-     * @return
-     */
-    public boolean commandUnknown(){
-        return (userCommand == null);
-    }
     public static List<String> getCommands(){
         return gameCommandsList;
     }

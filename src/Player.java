@@ -16,14 +16,13 @@ import java.util.List;
 
 public class Player {
 
-    public int playerId;
-    private List<Property> properties;
+    public final int playerId;
+    private final List<Property> properties;
     private int money;
-    private String propertyLocation;
     private boolean isBankrupt;
     private Property location;
 
-    private Map<Color, List<Property>> colourPropertyMap = new HashMap<>();
+    private final Map<Color, List<Property>> colourPropertyMap = new HashMap<>();
 
     //private Map<String, Boolean> colourPropertyMap = new HashMap<>();
 
@@ -38,39 +37,15 @@ public class Player {
 
         this.playerId = aPlayerID;
         this.money = money;
-        this.propertyLocation = "";
         this.properties = new ArrayList<>();
         this.isBankrupt = false;
 
-        /*colourPropertyMap.put("Brown", false);
-        colourPropertyMap.put("Light Blue", false);
-        colourPropertyMap.put("Pink", false);
-        colourPropertyMap.put("Orange", false);
-        colourPropertyMap.put("Red", false);
-        colourPropertyMap.put("Yellow", false);
-        colourPropertyMap.put("Green", false);
-        colourPropertyMap.put("Dark Blue", false);*/
     }
 
     /**
      * @return the current player ID number
      */
     public int getPlayerId(){return this.playerId;
-    }
-
-    /**
-     * @return the property location where the player is currently on
-     */
-    public String getPropertyLocation(){
-        return this.propertyLocation;
-    }
-
-    /**
-     * @param propertyLocation
-     */
-    // setter for property location
-    public void setPropertyLocation(String propertyLocation){
-        this.propertyLocation = propertyLocation;
     }
 
     /**
@@ -99,24 +74,10 @@ public class Player {
     }
 
     /**
-     * Print the list of property for each player
-     */
-
-    public void getProperty(){
-        if(properties.isEmpty()){
-            System.out.println("You do not own any properties yet");
-        }else{
-            for(Property property: properties){
-                System.out.println(property);
-            }
-        }
-    }
-
-    /**
      * adds a property to the list of properties for each player
      * @param property
      */
-    public boolean addProperty(Property property) {
+    public void addProperty(Property property) {
         this.properties.add(property);
 
         //checkSet(property);
@@ -132,20 +93,12 @@ public class Player {
         }
         // add property to the list for (current colour).
         list.add(property);
-
-        return true;
-    }
-
-    //Tooba version color set - incomplete
-    public void checkSet(Property property){
-        // going to check if the property is in a colored set
-        // if it is set to true the player owns all the properties of that color.
     }
 
 
     /**
      * check if the property is part of a "set" of 3 properties of the same colour
-     * one list  contains 3 properies of the same colour and it must be owned by the same owner
+     * one list  contains 3 properties of the same colour, and it must be owned by the same owner
      *
      * @param property
      * @return true if the set is owned
@@ -156,9 +109,7 @@ public class Player {
         List<Property> list = colourPropertyMap.get(colour);
         return (list != null) && (list.size() == 3);
         //for the purpose of testing fast we will make the list size 2 instead of 3
-        //return (list != null) && (list.size() == 2);
 
-       // return colourPropertyMap.get(property.getColor());
     }
 
     /**
@@ -167,8 +118,7 @@ public class Player {
      */
 
     public boolean removeProperty(Property property) {
-        this.properties.remove(property);
-        return true;
+        return this.properties.remove(property);
     }
 
     /**
@@ -188,12 +138,6 @@ public class Player {
     public Property getLocation(){
         return location;
     }
-
-    /**
-     *
-     * @return toString
-     */
-    public String getInfo(){ return toString();}
 
     /**
      * the player will get money when they sell a property

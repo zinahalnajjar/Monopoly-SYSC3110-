@@ -1,6 +1,4 @@
 
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 
 import java.awt.*;
@@ -12,8 +10,8 @@ import static org.junit.Assert.*;
  */
 public class PropertyTest {
 
-    Property a = new Property("Carleton", Color.RED, 5000, 6000);
-    Player T = new Player(1500,1);
+    final Property a = new Property("Carleton", Color.RED, 5000, 6000,400);
+    final Player T = new Player(1500,1);
     @Test
     public void getPropertyName() {
         assertEquals(a.getPropertyName(),"Carleton");
@@ -51,18 +49,18 @@ public class PropertyTest {
     @Test
     public void testSetOwnerNull() {
         a.setOwner(null);
-        assertEquals(a.getOwner(),null);
+        assertNull(a.getOwner());
     }
 
     @Test
     public void getRent() {
-        assertEquals(a.getRent(),5000);
+        assertEquals(a.getInitialRent(),5000);
     }
 
     @Test
     public void setRent() {
-        a.setRent(1);
-        assertEquals(a.getRent(),1);
+        a.setInitialRent(1);
+        assertEquals(a.getInitialRent(),1);
     }
 
     @Test

@@ -4,9 +4,9 @@
  * Class Dice- a pair of Dice in monopoly game
  * this class is part of the "Monopoly Game" application
  *
- * A Dice is a pair consisting of die1 and die2
+ * A Die is a pair consisting of die1 and die2
  *
- * Player roll the dice and advance a piece clockwise around the board corresponding to
+ * Player rolls the dice and advance a piece clockwise around the board corresponding to
  * the sum of both die1 and die2
  *
  * @author Zinah
