@@ -1,9 +1,12 @@
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Objects;
+
 
 /**
  *
@@ -50,14 +53,15 @@ public class MainFrame extends JFrame implements MonopolyView  {
     private static JButton ElectricCompany;
     private static JButton Jail;
     private static JButton Go;
+
     private static JLabel empty;
     private static JPanel mainPanel;
 
     private static int NORTH_HEIGHT = 100;
     private static int SOUTH_HEIGHT = 100;
-
+  
     //The model
-    private Game model;
+    private final Game model;
 
     /**
      * Constructor
@@ -68,12 +72,13 @@ public class MainFrame extends JFrame implements MonopolyView  {
         super("Monopoly!!");
 
         cf = null;
-
+  
         model = new Game(playerCount);
 
         model.addMonopolyView(this);
 
-        mc = new MonopolyController(model);
+        //To communicate with the model
+        MonopolyController mc = new MonopolyController(model);
 
 
         properties = new ArrayList<>();
@@ -81,8 +86,10 @@ public class MainFrame extends JFrame implements MonopolyView  {
         utilities = new ArrayList<>();
         players = new ArrayList<>();
 
+        ArrayList<JLabel> players = new ArrayList<>();
+
         //Make sure we have nice window decorations.
-        this.setDefaultLookAndFeelDecorated(true);
+        setDefaultLookAndFeelDecorated(true);
 
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -96,25 +103,6 @@ public class MainFrame extends JFrame implements MonopolyView  {
         //Display the window.
         this.pack();
         this.setVisible(true);
-    }
-
-    /**
-     *
-     * Initializes the pieces on the board
-     *
-     * @param playerCount
-     * @throws IOException
-     */
-    private void initPlayerPieces(int playerCount) throws IOException {
-        for(int i = 0; i < playerCount; i++){
-            BufferedImage img = ImageIO.read(MainFrame.class.getResource("images/blue.jpg"));
-            JLabel l = new JLabel(new ImageIcon(img));
-            l.setLayout(new FlowLayout(FlowLayout.CENTER));
-            JLabel text = new JLabel("Player: " + i+1);
-            l.add(text);
-            players.add(l);
-            Go.add(l);
-        }
     }
 
     /**
@@ -220,6 +208,7 @@ public class MainFrame extends JFrame implements MonopolyView  {
 
         JPanel imagePanel = createImagePanel();
 
+
         centerPanel.add(imagePanel);
 
         return centerPanel;
@@ -234,12 +223,11 @@ public class MainFrame extends JFrame implements MonopolyView  {
     private static JPanel createImagePanel() {
         JPanel imagePanel = new JPanel();
         imagePanel.setBackground(BG_COLOR);
+        JLabel monopoly = new JLabel();
+        Icon icon = new ImageIcon(Objects.requireNonNull(MainFrame.class.getResource("images/monopoly.jpg")));
+        monopoly.setIcon(icon);
 
-        Monopoly = new JLabel();
-        Icon icon = new ImageIcon(MainFrame.class.getResource("images/monopoly.jpg"));
-        Monopoly.setIcon(icon);
-
-        imagePanel.add(Monopoly);
+        imagePanel.add(monopoly);
         return imagePanel;
     }
 
@@ -351,6 +339,7 @@ public class MainFrame extends JFrame implements MonopolyView  {
 
         addEmptyLabel(southPanel, 6);
 
+
         empty = new JLabel(" ");
         southPanel.add(empty);
 
@@ -405,6 +394,7 @@ public class MainFrame extends JFrame implements MonopolyView  {
 //        }
     }
 
+
     /**
      * @return the North panel holding all the properties to the top of the board
      */
@@ -427,6 +417,9 @@ public class MainFrame extends JFrame implements MonopolyView  {
         Chance = new JLabel("Chance");
         northPanel.add(Chance);
 
+        Property = new JButton("Indiana Avenue");
+        northPanel.add(Property);
+        properties.add(Property);
 
         Property = new JButton("Indiana Avenue");
         northPanel.add(Property);
@@ -467,21 +460,6 @@ public class MainFrame extends JFrame implements MonopolyView  {
         return northPanel;
     }
 
-    /**
-     * @param label Assigns the height for the north panel
-     */
-    private static void setHeightNorth(JLabel label) {
-//        Dimension size = label.getPreferredSize();
-//        label.setPreferredSize(new Dimension((int) size.getWidth(), NORTH_HEIGHT));
-    }
-
-    /**
-     * @param label Assigns the height for the South panel
-     */
-    private static void setHeightSouth(JLabel label) {
-//        Dimension size = label.getPreferredSize();
-//        label.setPreferredSize(new Dimension((int) size.getWidth(), SOUTH_HEIGHT));
-    }
 
     /**
      *
@@ -498,9 +476,6 @@ public class MainFrame extends JFrame implements MonopolyView  {
         sidePanel.add(button);
     }
 
-    @Override
-    public void handleMonopolyBuy(boolean success, Property location) {
-    }
 
     @Override
     public void handleMonopolySell(boolean success, Property location) {
@@ -515,6 +490,8 @@ public class MainFrame extends JFrame implements MonopolyView  {
     @Override
     public void handleMonopolyRentUtility(String result, Property location) {
 
+    @Override
+    public void handleMonopolyBuy(String success, Property location) {
     }
 
     @Override
@@ -555,26 +532,29 @@ public class MainFrame extends JFrame implements MonopolyView  {
     }
 
     @Override
-    public void handleMonopolyStatusUpdate(String command) {
+    public void handleMonopolyStatusUpdate(String command, String info) {
         System.out.println("...Notified of command: " + command);
         switch (command) {
             case "roll":
-                rollNotification();
+                rollNotification(info);
                 break;
             case "pass":
-                passNotification();
+                passNotification(info);
                 break;
             case "help":
-                helpNotification();
+                helpNotification(info);
+                break;
+            case "player info":
+                infoNotification(info);
                 break;
             case "player info":
                 infoNotification();
                 break;
             case "quit":
-                quitNotification();
+                quitNotification(info);
                 break;
             case "win":
-                winNotification();
+                winNotification(info);
                 break;
             default:
                 break;
@@ -584,16 +564,14 @@ public class MainFrame extends JFrame implements MonopolyView  {
     /**
      * displays player info
      */
-    private void infoNotification() {
-        String info = model.displayPlayerInfo();
+    private void infoNotification(String info) {
         JOptionPane.showMessageDialog(this, info, "Player Info", JOptionPane.INFORMATION_MESSAGE);
     }
 
     /**
      * displays win notification
      */
-    private void winNotification() {
-        String info = "Player " +model.getCurrentPlayer().getPlayerId()+ " has won the game!!!";
+    private void winNotification(String info) {
         JOptionPane.showMessageDialog(this, info , "Winner", JOptionPane.INFORMATION_MESSAGE);
         System.exit(0);
     }
@@ -603,9 +581,7 @@ public class MainFrame extends JFrame implements MonopolyView  {
     /**
      * when the user clicks on the quit command they will exit the program
      */
-    private void quitNotification(){
-        String info = "Player "+model.getPreviousPlayer().getPlayerId()+" has quit\n" +
-                "It is now Player " +model.getCurrentPlayer().getPlayerId()+ "'s turn";
+    private void quitNotification(String info){
         JOptionPane.showMessageDialog(this, info , "Quit", JOptionPane.INFORMATION_MESSAGE);
     }
 
@@ -614,8 +590,7 @@ public class MainFrame extends JFrame implements MonopolyView  {
     /**
      * displays help info
      */
-    private void helpNotification() {
-        String info = model.help();
+    private void helpNotification(String info) {
         JOptionPane.showMessageDialog(this, info, "Help", JOptionPane.INFORMATION_MESSAGE);
 
     }
@@ -624,10 +599,7 @@ public class MainFrame extends JFrame implements MonopolyView  {
      * Display the information of 'pass' result.
      * The current player and the next player details.
      */
-    private void passNotification() {
-        Player currentPlayer = model.getCurrentPlayer();
-        String info = "The turn has been passed on to:\n\n";
-        info += "Player " + currentPlayer.getPlayerId(); // i used the ID to represent the players- Kareem might need to change this
+    private void passNotification(String info) {
         JOptionPane.showMessageDialog(this, info, "Pass result", JOptionPane.INFORMATION_MESSAGE);
 
         roll.setEnabled(true);
@@ -637,7 +609,7 @@ public class MainFrame extends JFrame implements MonopolyView  {
     /**
      * Updates the user on what happens after rolling the dice, plus checks for double rolls
      */
-    private void rollNotification(){
+    private void rollNotification(String payRentInfo){
         Dice dice = model.getDice(); // get the dice from model- also need to add the getter in Game class to return the dice
         Player currentPlayer = model.getCurrentPlayer(); // get the current player
         Property location = currentPlayer.getLocation(); // get the location of the current player on the board
@@ -670,14 +642,13 @@ public class MainFrame extends JFrame implements MonopolyView  {
             }
         }
 
-//double rolls
+        if(!payRentInfo.equals("")){
+            JOptionPane.showMessageDialog(this, payRentInfo, "Payed Rent", JOptionPane.INFORMATION_MESSAGE);
+        }
+
+        //double rolls
         if(dice.getDie1() == dice.getDie2()){
-            if (model.isPlayerInJail()) {
-                roll.setEnabled(false);
-                pass.setEnabled(false);
-            } else {
-                JOptionPane.showMessageDialog(this, "You rolled doubles, you can roll again", "Roll result", JOptionPane.INFORMATION_MESSAGE);
-            }
+            JOptionPane.showMessageDialog(this, "You rolled doubles, you can roll again", "Roll result", JOptionPane.INFORMATION_MESSAGE);
         }else{
             roll.setEnabled(false);
             pass.setEnabled(true);
@@ -691,6 +662,7 @@ public class MainFrame extends JFrame implements MonopolyView  {
 
     public void enableRollButton() {
         roll.setEnabled(true);
+
     }
 }
 

@@ -11,11 +11,10 @@ import static org.junit.Assert.*;
  */
 public class PlayerTest {
 
-    Property a = new Property("Carleton", Color.RED, 2,3);
-    Property b = new Property("Carleton2", Color.RED, 2,3);
-    Property c = new Property("Carleton3", Color.RED, 2,3);
+    final Property a = new Property("Carleton", Color.RED, 2,3,5);
+    final Property b = new Property("Carleton2", Color.RED, 2,3,5);
 
-    Player p = new Player(1500,1);
+    final Player p = new Player(1500,1);
 
     @Test
     public void getPlayerId() {
@@ -49,12 +48,6 @@ public class PlayerTest {
     public void setBankruptcy() {
         p.setBankruptcy(true);
         assertTrue(p.getBankruptcy());
-    }
-
-    @Test
-    public void addProperty() {
-        p.addProperty(a);
-        assertTrue(p.addProperty(a));
     }
 
     @Test

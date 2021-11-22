@@ -13,7 +13,7 @@ import java.io.IOException;
  * @author Kareem
  */
 public class WelcomeScreen {
-    JFrame frame;
+    final JFrame frame;
     int numPlayers;
 
     /**
@@ -49,7 +49,7 @@ public class WelcomeScreen {
                         } else {
                             err.setVisible(true);
                         }
-                    } catch (NumberFormatException | IOException ex) {
+                    } catch (NumberFormatException ex) {
                         err.setVisible(true);
                     }
                 }
@@ -101,16 +101,8 @@ public class WelcomeScreen {
         frame.setSize(300, 200);
         // makes the frame visible
         frame.setVisible(true);
-    }
 
-    /**
-     *
-     * for testing purposes
-     *
-     * @param a num of players
-     */
-    public WelcomeScreen(int a) {
-        numPlayers = 2;
+
     }
 
     public void setNumPlayers(int players) {
