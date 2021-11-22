@@ -1,7 +1,6 @@
-
-
 import java.awt.*;
 import java.util.ArrayList;
+
 /**
  * Creates and initializes the board
  * implements the move and check validity to assign new location
@@ -11,8 +10,9 @@ import java.util.ArrayList;
  */
 public class Board {
 
-    private ArrayList<Property> properties;
+    private final ArrayList<Property> properties;
     private Property newLocation;
+
 
     /**
      * Initializes the array that will hold the properties.
@@ -92,13 +92,6 @@ public class Board {
     }
 
     /**
-     * @return the list of properties
-     */
-    public ArrayList<Property> propertiesList(){
-        return properties;
-    }
-
-    /**
      * @return property identified by name
      */
     public Property getProperty(String name){
@@ -117,11 +110,7 @@ public class Board {
      * @return true if the location is valid
      */
     public boolean getValidLocation(Property newLocation) {
-        if (newLocation == null) {
-            return false;
-        } else {
-            return true;
-        }
+        return newLocation != null;
     }
 
     /**

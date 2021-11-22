@@ -9,7 +9,7 @@ import java.awt.event.ActionListener;
  */
 public class MonopolyController implements ActionListener {
 
-    Game model;
+    final Game model;
     public MonopolyController(Game model){
         this.model = model;
     }

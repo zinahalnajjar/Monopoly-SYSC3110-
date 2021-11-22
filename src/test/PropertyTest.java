@@ -10,8 +10,8 @@ import static org.junit.Assert.*;
  */
 public class PropertyTest {
 
-    Property a = new Property("Carleton", Color.RED, 5000, 6000,400);
-    Player T = new Player(1500,1);
+    final Property a = new Property("Carleton", Color.RED, 5000, 6000,400);
+    final Player T = new Player(1500,1);
     @Test
     public void getPropertyName() {
         assertEquals(a.getPropertyName(),"Carleton");
@@ -49,7 +49,7 @@ public class PropertyTest {
     @Test
     public void testSetOwnerNull() {
         a.setOwner(null);
-        assertEquals(a.getOwner(),null);
+        assertNull(a.getOwner());
     }
 
     @Test

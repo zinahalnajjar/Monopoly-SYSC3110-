@@ -11,7 +11,7 @@ import static org.junit.Assert.*;
  */
 public class GameTest {
 
-    Game g = new Game(3);
+    final Game g = new Game(3);
 
     @Test
     public void buyIfHasEnoughMoney() {

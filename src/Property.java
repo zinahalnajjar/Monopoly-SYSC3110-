@@ -7,6 +7,7 @@ import java.awt.*;
  *
  * @author Tooba
  */
+@SuppressWarnings("unused")
 public class Property {
 
     public enum HouseState{
@@ -18,8 +19,8 @@ public class Property {
         H4(80, 4),
         HOTEL(100, 5);
 
-        private int rentMultiplier;
-        private int houseNum;
+        private final int rentMultiplier;
+        private final int houseNum;
 
         HouseState(int rentMultiplier, int house) {
             this.rentMultiplier = rentMultiplier;
@@ -40,8 +41,6 @@ public class Property {
     }
 
     private HouseState state;
-
-    private int buyCounter;
 
     private String propertyName;
     private Color color;
@@ -76,7 +75,7 @@ public class Property {
         this.initialRent = initialRent;
         this.initialCost = initCost;
         this.owner = null;
-        buyCounter = 0;
+        int buyCounter = 0;
         state = HouseState.UNOWNED;
         this.costPerHouse = costHouse;
     }
@@ -176,16 +175,9 @@ public class Property {
         return state;
     }
 
-    public void setState(HouseState state) {
-        this.state = state;
-    }
-
     public int getCostPerHouse() {
         return costPerHouse;
     }
 
-    public void setCostPerHouse(int costPerHouse) {
-        this.costPerHouse = costPerHouse;
-    }
 }
 
