@@ -23,16 +23,15 @@ public class Game {
     private Player currentPlayer;
     private static Scanner scan;
     private int playerCount;
-    private Player previousPlayer;
-    Property newLocation;
-    boolean win = false;
+    private int currentPlayerIndex = 0; //index of the current player
 
-    public enum Status {X_WON, O_WON, TIE, UNDECIDED};
+    public enum Status {X_WON, O_WON, TIE, UNDECIDED}
+
+    ;
 
     private List<MonopolyView> views;
 
     /**
-     *
      * Initializes the game, sets up the scanner
      * Calls a function to initialize player
      *
@@ -45,42 +44,73 @@ public class Game {
         this.playerCount = playerCount;
         this.dice = new Dice();
 
-        previousPlayer = null;
-
-        newLocation = null;
-
         scan = new Scanner(System.in);
 
-        views = new ArrayList<>();
+        views = new ArrayList<MonopolyView>();
 
         initPlayers();
     }
 
     /**
-     *
      * Initializes the number of players and fills out the list of players
-     *
      */
     private void initPlayers() {
-        for(int i = 1; i <= playerCount; i++){
+        for (int i = 1; i <= playerCount; i++) {
             players.add(new Player(1500, i)); //player id and rent
         }
         currentPlayer = players.get(0);
     }
 
+    /**
+     * if current property is owned by opponent
+     * then player pays rent but if it is unowned
+     * then player buys it
+     *
+     * @return current location of the player
+     */
+    private Property AILand() {
+
+        Property property = currentPlayer.getLocation();
+        if (currentPlayer.getLocation().getOwner().isSetOwned(property)) {
+            payRent(property);
+        } else {
+            buy(property);
+        }
+        return property;
+    }//AI-Land
 
     /**
-     *
+     * Firstly this method rolls dice and gets results
+     * then gets the sum of the two dice rolling results
+     * Moves the player according to the sum of the dice
+     * location of the player is updated
+     * next  is the turn of next player
+     */
+    private void AITurn() {
+
+        dice.Roll();
+        int sum = dice.sumOfDice();
+        Property newLocationOfThePlayer = board.move(sum, AILand());
+        currentPlayer = players.get(currentPlayerIndex);
+        currentPlayerIndex += 1;
+        currentPlayer.setLocation(newLocationOfThePlayer);
+        if (currentPlayerIndex > playerCount) {
+            currentPlayerIndex = 0;
+        }
+
+    }//AI-Turn
+
+    /**
      * Implements the run loop that goes till the game is ended by finding a winner
      * Implements all the commands
-     *  -roll: rolls the dice
-     *  -buy: helps player buy the property
-     *  -pass: ends the turn
-     *  -status: print the status
-     *  -help: calls help
-     *  -quit: sets the current player to bankrupt and goes to the next player
-     *
-     *  Checks
+     * -roll: rolls the dice
+     * -buy: helps player buy the property
+     * -pass: ends the turn
+     * -status: print the status
+     * -help: calls help
+     * -quit: sets the current player to bankrupt and goes to the next player
+     * <p>
+     * Checks
      */
     private void runTextBased() {
         String command;
@@ -91,7 +121,7 @@ public class Game {
         while (gameOver != true) {
             // if game isn't over
             //check if the player is bankrupt
-            if(currentPlayer.getBankruptcy() == true){
+            if (currentPlayer.getBankruptcy() == true) {
                 System.out.println("Player " + currentPlayer.getPlayerId() + " is bankrupt.");
                 nextPlayer();
             }
@@ -100,17 +130,17 @@ public class Game {
             System.out.format("It is now Player %s's turn!\n", currentPlayer.getPlayerId());
 
             //Displays and gets avalid command from the user
-            command = getUserCommand(Arrays.asList("roll","quit", "help", "status"));//original
+            command = getUserCommand(Arrays.asList("roll", "quit", "help", "status"));//original
             if ("roll".equals(command)) {
                 System.out.println("Rolling the dice...");
                 // calling the roll method from Dice class.
-                dice.roll();
+                dice.Roll();
                 System.out.println("Die 1: " + dice.getDie1());
                 System.out.println("Die 2: " + dice.getDie2());
 
                 Property newLocation = board.move(dice.sumOfDice(), currentPlayer.getLocation());
 
-                if(board.getValidLocation(newLocation) == true){
+                if (board.getValidLocation(newLocation) == true) {
                     currentPlayer.setLocation(newLocation);
                 }
 
@@ -131,7 +161,8 @@ public class Game {
                             buy(newLocation);
 
                             System.out.format("You, have no moves available. Type pass to end turn\n");
-                            command = getUserCommand(Arrays.asList("pass", "quit", "help", "status", "sell"));;
+                            command = getUserCommand(Arrays.asList("pass", "quit", "help", "status", "sell"));
+                            ;
                             if (command.equals("pass")) {
                                 System.out.println("Turn passed.");
                                 pass();
@@ -149,33 +180,32 @@ public class Game {
 
                             pass();
                         }
-                    } else if (owner != currentPlayer){
+                    } else if (owner != currentPlayer) {
                         //if owner is not current player
                         if (owner.isSetOwned(newLocation)) {
                             System.out.println("***** Set owned property: " + newLocation.getPropertyName());
                         }
                         payRent(newLocation);
-                    }
-                    else {
+                    } else {
                         //if landed on own property, will just pass
                         System.out.println("***** MY own property: " + newLocation.getPropertyName());
                         pass();
                     }
 
                     // printing out current board state along with the players.
-                    System.out.println("\n"+board);
+                    System.out.println("\n" + board);
                     displayPlayerInfo();
                 }
             }
-            if("quit".equals(command)){
+            if ("quit".equals(command)) {
                 //helps user quit game
                 quit();
             }
-            if("help".equals(command)){
+            if ("help".equals(command)) {
                 //displays the help info
                 System.out.println(help());
             }
-            if("status".equals(command)) {
+            if ("status".equals(command)) {
                 //displays player info
                 displayPlayerInfo();
             }
@@ -186,81 +216,64 @@ public class Game {
     }
 
     /**
-     *
      * Implements the run loop that goes till the game is ended by finding a winner
      * Implements all the commands
-     *  -roll: rolls the dice
-     *  -buy: helps player buy the property
-     *  -pass: ends the turn
-     *  -status: print the status
-     *  -help: calls help
-     *  -quit: sets the current player to bankrupt and goes to the next player
-     *
-     *  Checks
+     * -roll: rolls the dice
+     * -buy: helps player buy the property
+     * -pass: ends the turn
+     * -status: print the status
+     * -help: calls help
+     * -quit: sets the current player to bankrupt and goes to the next player
+     * <p>
+     * Checks
      */
     public void run(String command) {
-        if(currentPlayer.getBankruptcy()){
+        if (currentPlayer.getBankruptcy()) {
             nextPlayer();
         }
 
+        //Displays and gets a valid command from the user
         if ("roll".equals(command)) {
-            dice.roll();
+            dice.Roll();
 
-            newLocation = board.move(dice.sumOfDice(), currentPlayer.getLocation());
-            if(board.getValidLocation(newLocation) == true){
+            System.out.println("I got here");
+            Property newLocation = board.move(dice.sumOfDice(), currentPlayer.getLocation());
+            if (board.getValidLocation(newLocation) == true) {
                 currentPlayer.setLocation(newLocation);
             }
-            notifyView(command);
         }
 
         if ("buy".equals(command)) {
-            boolean success = buy(newLocation);
-            for (MonopolyView view : views){
-                view.handleMonopolyBuy(success, newLocation);
-            }
-            //notifyView(command);
-        }
-        if ("sell".equals(command)) {
-            boolean success = sell(newLocation);
-            for (MonopolyView view : views){
-                view.handleMonopolySell(success, newLocation);
+            dice.Roll();
+            Property newLocation = board.move(dice.sumOfDice(), currentPlayer.getLocation());
+            if (board.getValidLocation(newLocation) == true) {
+                currentPlayer.setLocation(newLocation);
             }
         }
 
         if ("pass".equals(command)) {
-            nextPlayer();
-            notifyView(command);
+            dice.Roll();
+            Property newLocation = board.move(dice.sumOfDice(), currentPlayer.getLocation());
+            if (board.getValidLocation(newLocation) == true) {
+                currentPlayer.setLocation(newLocation);
+            }
         }
 
-        if("quit".equals(command)){
+        if ("quit".equals(command)) {
+            //helps user quit game
             quit();
-            notifyView(command);
         }
-        if("help".equals(command)){
+        if ("help".equals(command)) {
+            //displays the help info
             help();
-            notifyView(command);
         }
-        if("player info".equals(command)) {
-            String info = displayPlayerInfo();
-            notifyView(command);
-        }
-        if(win){
-            notifyView("win");
+        if ("player Info".equals(command)) {
+            //displays player info
+            displayPlayerInfo();
         }
     }
 
     /**
-     * method to notify each view that chnages has happened
-     */
-
-    private void notifyView(String command){
-        for (MonopolyView view : views){
-            view.handleMonopolyStatusUpdate(command);
-        }
-    }
-
-    /**
-     *
      * Checks for invalid commands
      * loops till user enter a valid
      *
@@ -293,57 +306,48 @@ public class Game {
 
     /**
      * The player will be able to buy once he lands on an unowned property
+     *
      * @param property
      */
-    public boolean buy(Property property){
-        if (currentPlayer.getLocation() == property){
+    public void buy(Property property) {
+        int cost = property.getCost();
+        int money = currentPlayer.getMoney(); //return players total money
 
-            int cost = property.getCost();
-            int money = currentPlayer.getMoney(); //return players total money
+        if (cost > money) {
+            System.out.println("You don't have enough money.");
+        } else {
+            property.setOwner(currentPlayer);
+            currentPlayer.addProperty(property);
+            currentPlayer.removeMoney(cost);
 
-            if (cost > money){
-                System.out.println("You don't have enough money.");
-                return false;
-            } else{
-                property.setOwner(currentPlayer);
-                currentPlayer.addProperty(property);
-                currentPlayer.removeMoney(cost);
-
-                System.out.println("You have successfully bought the property.");
-                System.out.println("You have " + currentPlayer.getMoney() +"$ left.");
-                return true;
-            }
+            System.out.println("You have successfully bought the property.");
+            System.out.println("You have " + currentPlayer.getMoney() + "$ left.");
         }
-        return false;
     }
 
     /**
      * The player will be able to sell
+     *
      * @param property
-     * @return
      */
-    public boolean sell(Property property){
-        if (currentPlayer == property.getOwner()){
-            currentPlayer.addMoney(property.getCost());
-            currentPlayer.removeProperty(property);
-            property.setOwner(null);
-            return true;
-        }
-        return false;
+    public void sell(Property property) {
+        currentPlayer.addMoney(property.getCost());
+        currentPlayer.removeProperty(property);
+        property.setOwner(null);
     }
 
     /**
      * turn is passed to next player
      */
-    public void pass(){
-        System.out.println("Player " + currentPlayer.getPlayerId() +" has finished his turn");
+    public void pass() {
+        System.out.println("Player " + currentPlayer.getPlayerId() + " has finished his turn");
         nextPlayer();
     }
 
     /**
      * player has quit the game/bankrupt
      */
-    public void quit(){
+    public void quit() {
         System.out.println("Player " + currentPlayer.getPlayerId() + " has quit the game");
         currentPlayer.setBankruptcy(true);
         nextPlayer();
@@ -353,52 +357,44 @@ public class Game {
     /**
      * decide the next player, in the order as found in the list starting from index 0
      */
-    public void nextPlayer(){
-        previousPlayer = currentPlayer;
-        if(players.size() == players.indexOf(currentPlayer) + 1){
+    public void nextPlayer() {
+        if (players.size() == players.indexOf(currentPlayer) + 1) {
+
             currentPlayer = players.get(0);
-        }
-        else {
+        } else {
             currentPlayer = players.get(players.indexOf(currentPlayer) + 1);
         }
     }
 
     /**
-     *
      * If a player lands in a property owned by opposing player rent has to be payed
+     *
      * @param property the property for which the rent needs to be paid
      */
-    public String payRent(Property property){
-        String info = "";
+    public void payRent(Property property) {
         int rent = property.getRent();// get rent amount
-        System.out.println("Player "+currentPlayer.getPlayerId() + " has $" + currentPlayer.getMoney()); //dispay how much the player owns
+        System.out.println("Player " + currentPlayer.getPlayerId() + " has $" + currentPlayer.getMoney()); //dispay how much the player owns
         currentPlayer.removeMoney(rent);// remove money from player based on what they paid
         boolean bankrupt = checkBankruptcy();
 
-        if(bankrupt){
-            info = "bankrupt";
-        }
-
         //if the player is bankrupt then don't add money
-        if(!bankrupt){
-            info = "Player " + currentPlayer.getPlayerId() + " PAID rent: " + rent +
-                    "\nPlayer" + currentPlayer.getPlayerId() + " has $" + currentPlayer.getMoney();
-            System.out.println(info);
+        if (!bankrupt) {
+            System.out.println("Player " + currentPlayer.getPlayerId() + " PAID rent: " + rent);// display how much the player paid for rent
+            System.out.println("Player " + currentPlayer.getPlayerId() + " has $" + currentPlayer.getMoney());
             property.getOwner().addMoney(rent);// the owner of the property will receive the rent money
         }
         checkWin();
-
-        return info;
     }
 
     /**
      * checks if a player still has enough money to play the game before losing
+     *
      * @return true if player has gone bankrupt
      */
-    public boolean checkBankruptcy(){
-        if(currentPlayer.getMoney() <= 0){
+    public boolean checkBankruptcy() {
+        if (currentPlayer.getMoney() < 0) {
             currentPlayer.setBankruptcy(true);
-            System.out.println("Player " + currentPlayer.getPlayerId() + " is bankrupt!");
+            System.out.println("Player " + currentPlayer.getPlayerId() + "is bankrupt!");
             return true;
         }
         return false;
@@ -407,44 +403,32 @@ public class Game {
     /**
      * Winner is whoever is not bankrupt
      */
-    public void checkWin(){
+    public void checkWin() {
         int bankruptCount = 0;
         Player winner = null;
 
         //loop to tally the number of the bankrupts
-        for(Player p : players){
-            if(p.getBankruptcy() == true){
+        for (Player p : players) {
+            if (p.getBankruptcy() == true) {
                 bankruptCount++;
-            }
-            else{
+            } else {
                 winner = p;
             }
         }
-
-        String info = "";
 
         // if bankrupt count is one less than the total player count
         // declare winner
         if (bankruptCount == playerCount - 1) {
             gameOver = true;
-            win = true;
-            info = "Player " + winner.getPlayerId() + " is the winner!!" ;
-            System.out.println(info);
+            System.out.println("Player " + winner.getPlayerId() + " is the winner!!");
+            System.exit(0);
         }
     }
 
     /**
      * Displays all the player Information
      */
-    public String displayPlayerInfo() {
-        String p = "";
-        for (Player player : players) {
-            p += player +"\n";
-        }
-        return p;
-    }
-
-    public void displayAllPlayerInfo() {
+    public void displayPlayerInfo() {
         for (Player player : players) {
             System.out.println(player);
         }
@@ -454,7 +438,7 @@ public class Game {
     /**
      * Prints out all the goals, and rules of the game.
      */
-    public String help(){
+    public String help() {
         String help = "Game Goal: \n" +
                 "- To be the player who isn't bankrupt.\n\n" +
                 "Game Settings: \n" +
@@ -476,41 +460,20 @@ public class Game {
         return help;
     }
 
-    public int getPlayerCount(){
+    public int getPlayerCount() {
         return playerCount;
     }
 
-    public Board getBoard(){return board;}
-
-    /**
-     * Getter for currentPlayer.
-     *
-     * @return
-     */
-    public Player getCurrentPlayer(){
-        //Getter added for access by MainFrame class
-        //for Notification update.
-        return currentPlayer;
-    }
-    /**
-     * Getter for dice.
-     *
-     * @return
-     */
-    public Dice getDice(){
-        return dice;
+    public Board getBoard() {
+        return board;
     }
 
-    public void addMonopolyView(MonopolyView view){
+    public void addMonopolyView(MonopolyView view) {
         views.add(view);
     }
 
-    public void removeMonopolyView(MonopolyView view){
+    public void removeMonopolyView(MonopolyView view) {
         views.remove(view);
-    }
-
-    public Player getPreviousPlayer(){
-        return previousPlayer;
     }
 
     /*
