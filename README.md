@@ -5,8 +5,8 @@ Authors:
  - Zinah Al-Najjar - 101108056
 
 Deliverables: 
-Zip Flie containing
- - execuatable jar file
+Zip File containing
+ - executable jar file
  - Sequence diagram - Kareem
  - UML diagram - Zinah
  - Manual - Zinah

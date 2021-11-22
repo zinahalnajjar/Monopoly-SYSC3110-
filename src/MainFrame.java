@@ -1,9 +1,12 @@
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Objects;
+
 
 /**
  *
@@ -39,24 +42,26 @@ public class MainFrame extends JFrame implements MonopolyView  {
 
     //Each spot on the board
     private static ArrayList<JButton> properties;
+    private static ArrayList<JButton> railroads;
+    private static ArrayList<JButton> utilities;
     private static JButton Property;
-    private static JLabel FreeParking;
     private static JLabel Chance;
-    private static JLabel RailRoad;
+    private static JButton RailRoad;
     private static JLabel Monopoly;
-    private static JLabel WaterWorks;
+    private static JButton WaterWorks;
     private static JLabel GoToJail;
-    private static JLabel ElectricCompany;
-    private static JLabel Jail;
-    private static JLabel Go;
+    private static JButton ElectricCompany;
+    private static JButton Jail;
+    private static JButton Go;
+
     private static JLabel empty;
     private static JPanel mainPanel;
 
     private static int NORTH_HEIGHT = 100;
     private static int SOUTH_HEIGHT = 100;
-
+  
     //The model
-    private Game model;
+    private final Game model;
 
     /**
      * Constructor
@@ -67,22 +72,24 @@ public class MainFrame extends JFrame implements MonopolyView  {
         super("Monopoly!!");
 
         cf = null;
-//        Game model = new Game(playerCount); //OLD CODE
-
-        //Make model as member field so that
-        //it can be accessed by other methods like *Notification
+  
         model = new Game(playerCount);
 
         model.addMonopolyView(this);
 
-        mc = new MonopolyController(model);
+        //To communicate with the model
+        MonopolyController mc = new MonopolyController(model);
+
 
         properties = new ArrayList<>();
-
+        railroads = new ArrayList<>();
+        utilities = new ArrayList<>();
         players = new ArrayList<>();
 
+        ArrayList<JLabel> players = new ArrayList<>();
+
         //Make sure we have nice window decorations.
-        this.setDefaultLookAndFeelDecorated(true);
+        setDefaultLookAndFeelDecorated(true);
 
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -91,31 +98,11 @@ public class MainFrame extends JFrame implements MonopolyView  {
 
         addListeners(model, mc);
 
-        //To display player pieces on the board
-        //initPlayerPieces(playerCount);
+
 
         //Display the window.
         this.pack();
         this.setVisible(true);
-    }
-
-    /**
-     *
-     * Initializes the pieces on the board
-     *
-     * @param playerCount
-     * @throws IOException
-     */
-    private void initPlayerPieces(int playerCount) throws IOException {
-        for(int i = 0; i < playerCount; i++){
-            BufferedImage img = ImageIO.read(MainFrame.class.getResource("images/blue.jpg"));
-            JLabel l = new JLabel(new ImageIcon(img));
-            l.setLayout(new FlowLayout(FlowLayout.CENTER));
-            JLabel text = new JLabel("Player: " + i+1);
-            l.add(text);
-            players.add(l);
-            Go.add(l);
-        }
     }
 
     /**
@@ -126,10 +113,31 @@ public class MainFrame extends JFrame implements MonopolyView  {
      * @param mc Controller
      */
     private void addListeners(Game m, MonopolyController mc) {
-        for(JButton bttn : properties){
-            cf = new CardFrame(bttn.getText(), m.getBoard(), mc, m, this);
-            bttn.addActionListener(cf);
+        for(JButton bttn : properties) {
+            if(bttn.getText().equals("JAIL")){
+                JailCard jf = new JailCard(bttn.getText(), m.getBoard(), mc, m, this);
+                bttn.addActionListener(jf);
+            }if(bttn.getText().equals("GO")){
+                GoCard gf = new GoCard(bttn.getText(), m.getBoard(), mc, m, this);
+                bttn.addActionListener(gf);
+            }
+            else {
+                cf = new CardFrame(bttn.getText(), m.getBoard(), mc, m, this);
+                bttn.addActionListener(cf);
+            }
         }
+        for(JButton bttn : railroads){
+            RailroadCard rf = new RailroadCard(bttn.getText(), m.getBoard(), mc, m, this);
+            bttn.addActionListener(rf);
+
+        }// add another for loop
+
+        for(JButton bttn : utilities){
+            UtilityCard uf = new UtilityCard(bttn.getText(), m.getBoard(), mc, m, this);
+            bttn.addActionListener(uf);
+        }
+
+
     }
 
     /**
@@ -154,9 +162,9 @@ public class MainFrame extends JFrame implements MonopolyView  {
         addButton(help, "help", mc);
         addButton(quit, "quit", mc);
         addButton(playerInfo, "player info", mc);
-      
+
         pass.setEnabled(false);
-      
+
         //Create Main Panel
         mainPanel = new JPanel(new BorderLayout());
         mainPanel.setBackground(BG_COLOR);
@@ -200,6 +208,7 @@ public class MainFrame extends JFrame implements MonopolyView  {
 
         JPanel imagePanel = createImagePanel();
 
+
         centerPanel.add(imagePanel);
 
         return centerPanel;
@@ -214,12 +223,11 @@ public class MainFrame extends JFrame implements MonopolyView  {
     private static JPanel createImagePanel() {
         JPanel imagePanel = new JPanel();
         imagePanel.setBackground(BG_COLOR);
+        JLabel monopoly = new JLabel();
+        Icon icon = new ImageIcon(Objects.requireNonNull(MainFrame.class.getResource("images/monopoly.jpg")));
+        monopoly.setIcon(icon);
 
-        Monopoly = new JLabel();
-        Icon icon = new ImageIcon(MainFrame.class.getResource("images/monopoly.jpg"));
-        Monopoly.setIcon(icon);
-
-        imagePanel.add(Monopoly);
+        imagePanel.add(monopoly);
         return imagePanel;
     }
 
@@ -245,8 +253,9 @@ public class MainFrame extends JFrame implements MonopolyView  {
         eastPanel.add(Property);
         properties.add(Property);
 
-        RailRoad = new JLabel("SHORT LINE");
+        RailRoad = new JButton("SHORT LINE");
         eastPanel.add(RailRoad);
+        railroads.add(RailRoad);
 
         Chance = new JLabel("Chance");
         eastPanel.add(Chance);
@@ -289,8 +298,9 @@ public class MainFrame extends JFrame implements MonopolyView  {
         westPanel.add(Property);
         properties.add(Property);
 
-        RailRoad = new JLabel("PENNSYLVANIA RAILROAD");
+        RailRoad = new JButton("PENNSYLVANIA RAILROAD");
         westPanel.add(RailRoad);
+        railroads.add(RailRoad);
 
         Property = new JButton("Virginia Avenue");
         westPanel.add(Property);
@@ -300,8 +310,9 @@ public class MainFrame extends JFrame implements MonopolyView  {
         westPanel.add(Property);
         properties.add(Property);
 
-        ElectricCompany = new JLabel("ELECTRIC COMPANY");
+        ElectricCompany = new JButton("ELECTRIC COMPANY");
         westPanel.add(ElectricCompany);
+        utilities.add(ElectricCompany);
 
         Property = new JButton("St. Charles Place");
         westPanel.add(Property);
@@ -319,13 +330,15 @@ public class MainFrame extends JFrame implements MonopolyView  {
 
         addEmptyLabel(southPanel, 3);
 
-        Jail = new JLabel("JAIL");
-        setHeightSouth(Jail);
+        Jail = new JButton("JAIL");
+        //setHeightSouth(Jail);
         southPanel.add(Jail);
+        properties.add(Jail);
 
         addEmptyLabel(southPanel, 3);
 
         addEmptyLabel(southPanel, 6);
+
 
         empty = new JLabel(" ");
         southPanel.add(empty);
@@ -345,8 +358,9 @@ public class MainFrame extends JFrame implements MonopolyView  {
         southPanel.add(Property);
         properties.add(Property);
 
-        RailRoad = new JLabel("READING RAILROAD");
+        RailRoad = new JButton("READING RAILROAD");
         southPanel.add(RailRoad);
+        railroads.add(RailRoad);
 
         empty = new JLabel(" ");
         southPanel.add(empty);
@@ -364,9 +378,10 @@ public class MainFrame extends JFrame implements MonopolyView  {
 
         addEmptyLabel(southPanel, 6);
 
-        Go = new JLabel("GO");
-        setHeightSouth(Go);
+        Go = new JButton("GO");
+        //setHeightSouth(Go);
         southPanel.add(Go);
+        properties.add(Go);
 
         addEmptyLabel(southPanel, 6);
 
@@ -379,6 +394,7 @@ public class MainFrame extends JFrame implements MonopolyView  {
 //        }
     }
 
+
     /**
      * @return the North panel holding all the properties to the top of the board
      */
@@ -388,9 +404,9 @@ public class MainFrame extends JFrame implements MonopolyView  {
 
         addEmptyLabel(northPanel, 3);
 
-        FreeParking = new JLabel("FREE PARKING");
-        setHeightNorth(FreeParking);
-        northPanel.add(FreeParking);
+        Property = new JButton("FREE PARKING");
+        northPanel.add(Property);
+        properties.add(Property);
 
         addEmptyLabel(northPanel, 3);
 
@@ -401,6 +417,9 @@ public class MainFrame extends JFrame implements MonopolyView  {
         Chance = new JLabel("Chance");
         northPanel.add(Chance);
 
+        Property = new JButton("Indiana Avenue");
+        northPanel.add(Property);
+        properties.add(Property);
 
         Property = new JButton("Indiana Avenue");
         northPanel.add(Property);
@@ -410,8 +429,9 @@ public class MainFrame extends JFrame implements MonopolyView  {
         northPanel.add(Property);
         properties.add(Property);
 
-        RailRoad = new JLabel("B. & O. RAILROAD");
+        RailRoad = new JButton("B. & O. RAILROAD");
         northPanel.add(RailRoad);
+        railroads.add(RailRoad);
 
         Property = new JButton("Atlantic Avenue");
         northPanel.add(Property);
@@ -421,8 +441,9 @@ public class MainFrame extends JFrame implements MonopolyView  {
         northPanel.add(Property);
         properties.add(Property);
 
-        WaterWorks = new JLabel("WATER WORKS");
+        WaterWorks = new JButton("WATER WORKS");
         northPanel.add(WaterWorks);
+        utilities.add(WaterWorks);
 
         Property = new JButton("Marvin Gardens");
         northPanel.add(Property);
@@ -439,21 +460,6 @@ public class MainFrame extends JFrame implements MonopolyView  {
         return northPanel;
     }
 
-    /**
-     * @param label Assigns the height for the north panel
-     */
-    private static void setHeightNorth(JLabel label) {
-//        Dimension size = label.getPreferredSize();
-//        label.setPreferredSize(new Dimension((int) size.getWidth(), NORTH_HEIGHT));
-    }
-
-    /**
-     * @param label Assigns the height for the South panel
-     */
-    private static void setHeightSouth(JLabel label) {
-//        Dimension size = label.getPreferredSize();
-//        label.setPreferredSize(new Dimension((int) size.getWidth(), SOUTH_HEIGHT));
-    }
 
     /**
      *
@@ -470,9 +476,6 @@ public class MainFrame extends JFrame implements MonopolyView  {
         sidePanel.add(button);
     }
 
-    @Override
-    public void handleMonopolyBuy(boolean success, Property location) {
-    }
 
     @Override
     public void handleMonopolySell(boolean success, Property location) {
@@ -480,26 +483,78 @@ public class MainFrame extends JFrame implements MonopolyView  {
     }
 
     @Override
-    public void handleMonopolyStatusUpdate(String command) {
+    public void handleMonopolyRentResult(String result, Property location) {
+
+    }
+
+    @Override
+    public void handleMonopolyRentUtility(String result, Property location) {
+
+    @Override
+    public void handleMonopolyBuy(String success, Property location) {
+    }
+
+    @Override
+    public void handleMonopolyJailFeePaymentResult(boolean paymentSuccess) {
+        if(paymentSuccess){
+            String info = "You're free to move out of Jail.\n\nYou can Roll dice, to move out of Jail.";
+            JOptionPane.showMessageDialog(this, info, "Help", JOptionPane.INFORMATION_MESSAGE);
+            roll.setEnabled(true);
+            pass.setEnabled(false);
+        }
+        else{
+            String info = "Your payment failed. You're bankrupt!\nYOU'RE OUT OF THE GAME!\n\n" +
+                    "You must pass turn to the next player!";
+            JOptionPane.showMessageDialog(this, info, "Help", JOptionPane.INFORMATION_MESSAGE);
+            roll.setEnabled(false);
+            pass.setEnabled(true);
+        }
+    }
+
+    @Override
+    public void handleMonopolyJailPlayerRollResult(String result, boolean forceJailFee) {
+        JOptionPane.showMessageDialog(this, result, "Jail Player roll result.", JOptionPane.INFORMATION_MESSAGE);
+        if (forceJailFee) {
+            roll.setEnabled(false);
+            pass.setEnabled(false);
+        }
+        else{
+            String info =  "You must pass turn to the next player!";
+            JOptionPane.showMessageDialog(this, info, "Help", JOptionPane.INFORMATION_MESSAGE);
+            roll.setEnabled(false);
+            pass.setEnabled(true);
+        }
+    }
+
+    @Override
+    public void handleMonopolyGOResult() {
+
+    }
+
+    @Override
+    public void handleMonopolyStatusUpdate(String command, String info) {
         System.out.println("...Notified of command: " + command);
         switch (command) {
             case "roll":
-                rollNotification();
+                rollNotification(info);
                 break;
             case "pass":
-                passNotification();
+                passNotification(info);
                 break;
             case "help":
-                helpNotification();
+                helpNotification(info);
+                break;
+            case "player info":
+                infoNotification(info);
                 break;
             case "player info":
                 infoNotification();
                 break;
             case "quit":
-                quitNotification();
+                quitNotification(info);
                 break;
             case "win":
-                winNotification();
+                winNotification(info);
                 break;
             default:
                 break;
@@ -509,16 +564,14 @@ public class MainFrame extends JFrame implements MonopolyView  {
     /**
      * displays player info
      */
-    private void infoNotification() {
-        String info = model.displayPlayerInfo();
+    private void infoNotification(String info) {
         JOptionPane.showMessageDialog(this, info, "Player Info", JOptionPane.INFORMATION_MESSAGE);
     }
 
     /**
      * displays win notification
      */
-    private void winNotification() {
-        String info = "Player " +model.getCurrentPlayer().getPlayerId()+ " has won the game!!!";
+    private void winNotification(String info) {
         JOptionPane.showMessageDialog(this, info , "Winner", JOptionPane.INFORMATION_MESSAGE);
         System.exit(0);
     }
@@ -528,17 +581,16 @@ public class MainFrame extends JFrame implements MonopolyView  {
     /**
      * when the user clicks on the quit command they will exit the program
      */
-    private void quitNotification(){
-        String info = "Player "+model.getPreviousPlayer().getPlayerId()+" has quit\n" +
-                "It is now Player " +model.getCurrentPlayer().getPlayerId()+ "'s turn";
+    private void quitNotification(String info){
         JOptionPane.showMessageDialog(this, info , "Quit", JOptionPane.INFORMATION_MESSAGE);
     }
+
+
 
     /**
      * displays help info
      */
-    private void helpNotification() {
-        String info = model.help();
+    private void helpNotification(String info) {
         JOptionPane.showMessageDialog(this, info, "Help", JOptionPane.INFORMATION_MESSAGE);
 
     }
@@ -547,10 +599,7 @@ public class MainFrame extends JFrame implements MonopolyView  {
      * Display the information of 'pass' result.
      * The current player and the next player details.
      */
-    private void passNotification() {
-        Player currentPlayer = model.getCurrentPlayer();
-        String info = "The turn has been passed on to:\n\n";
-        info += "Player " + currentPlayer.getPlayerId(); // i used the ID to represent the players- Kareem might need to change this
+    private void passNotification(String info) {
         JOptionPane.showMessageDialog(this, info, "Pass result", JOptionPane.INFORMATION_MESSAGE);
 
         roll.setEnabled(true);
@@ -560,7 +609,7 @@ public class MainFrame extends JFrame implements MonopolyView  {
     /**
      * Updates the user on what happens after rolling the dice, plus checks for double rolls
      */
-    private void rollNotification(){
+    private void rollNotification(String payRentInfo){
         Dice dice = model.getDice(); // get the dice from model- also need to add the getter in Game class to return the dice
         Player currentPlayer = model.getCurrentPlayer(); // get the current player
         Property location = currentPlayer.getLocation(); // get the location of the current player on the board
@@ -579,13 +628,41 @@ public class MainFrame extends JFrame implements MonopolyView  {
             }
         }
 
+        for(JButton bttn : railroads){
+            if(bttn.getText().equals(location.getPropertyName())){
+                bttn.doClick();
+                break;
+            }
+        }
+
+        for(JButton bttn : utilities){
+            if(bttn.getText().equals(location.getPropertyName())){
+                bttn.doClick();
+                break;
+            }
+        }
+
+        if(!payRentInfo.equals("")){
+            JOptionPane.showMessageDialog(this, payRentInfo, "Payed Rent", JOptionPane.INFORMATION_MESSAGE);
+        }
+
         //double rolls
-        if(dice.sumOfDice() == 12){
+        if(dice.getDie1() == dice.getDie2()){
             JOptionPane.showMessageDialog(this, "You rolled doubles, you can roll again", "Roll result", JOptionPane.INFORMATION_MESSAGE);
         }else{
             roll.setEnabled(false);
             pass.setEnabled(true);
         }
+
+        if(model.isPassByJail()){
+            pass.setEnabled(true);
+        }
+
+    }
+
+    public void enableRollButton() {
+        roll.setEnabled(true);
+
     }
 }
 

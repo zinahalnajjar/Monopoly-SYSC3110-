@@ -13,7 +13,7 @@ import java.io.IOException;
  * @author Kareem
  */
 public class WelcomeScreen {
-    JFrame frame;
+    final JFrame frame;
     int numPlayers;
 
     /**
@@ -35,63 +35,63 @@ public class WelcomeScreen {
         // creates instance of JButton
         JButton button = new JButton("Play");
         button.addActionListener(new ActionListener() {
-                                     public void actionPerformed(ActionEvent e) {
-                                         String input = in.getText();
+            public void actionPerformed(ActionEvent e) {
+                String input = in.getText();
 
-                                         if (input.length() == 0) {
-                                            err.setVisible(true);
-                                         } else {
-                                             try {
-                                                 numPlayers = Integer.parseInt(input);
-                                                 if (numPlayers > 1) {
-                                                     frame.dispose();
-                                                     new MainFrame(numPlayers);
-                                                 } else {
-                                                     err.setVisible(true);
-                                                 }
-                                             } catch (NumberFormatException | IOException ex) {
-                                                 err.setVisible(true);
-                                             }
-                                         }
-                                     }
-                                 });
+                if (input.length() == 0) {
+                    err.setVisible(true);
+                } else {
+                    try {
+                        numPlayers = Integer.parseInt(input);
+                        if (numPlayers > 1) {
+                            frame.dispose();
+                            new MainFrame(numPlayers);
+                        } else {
+                            err.setVisible(true);
+                        }
+                    } catch (NumberFormatException ex) {
+                        err.setVisible(true);
+                    }
+                }
+            }
+        });
 
         JButton help = new JButton("Help");
         help.addActionListener(new ActionListener() {
-                                    public void actionPerformed(ActionEvent e) {
-                                        JDialog dialog = new JDialog();
-                                        JTextArea textarea = new JTextArea("" +
-                                                "Game Goal: \n" +
-                                                "- To be the player who isn't bankrupt.\n" +
-                                                "\n" +
-                                                "Game Settings: \n" +
-                                                "- There are 22 properties on the board\n" +
-                                                "- Every player starts with 1500$\n" +
-                                                "\n" +
-                                                "Game Rules: \n" +
-                                                "- Player rolls the dice and moves that many spaces on the board \n" +
-                                                "- When a player lands on an unowned property, players can either buy or pass\n" +
-                                                "- When a player lands on an owned property, players have to pay rent\n" +
-                                                "- If players don't have enough money to pay rent, they go bankrupt\n" +
-                                                "- Goal is to balance your budget so that you won't go bankrupt.\n" +
-                                                "\n" +
-                                                "\n" +
-                                                "Game Commands: \n" +
-                                                "- buy: can be used to buy a property\n" +
-                                                "- pass: can be used to skip your turn\n" +
-                                                "- sell: used to sell your property\n" +
-                                                "- quit: will change player's status to quit and player can exit the game\n" +
-                                                "- help: can be used to view the instructions again");
-                                        textarea.setEditable(false);
-                                        dialog.add(textarea);
-                                        dialog.setModalityType(ModalityType.APPLICATION_MODAL);
-                                        dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-                                        dialog.setSize(600, 600);
+            public void actionPerformed(ActionEvent e) {
+                JDialog dialog = new JDialog();
+                JTextArea textarea = new JTextArea("" +
+                        "Game Goal: \n" +
+                        "- To be the player who isn't bankrupt.\n" +
+                        "\n" +
+                        "Game Settings: \n" +
+                        "- There are 22 properties on the board\n" +
+                        "- Every player starts with 1500$\n" +
+                        "\n" +
+                        "Game Rules: \n" +
+                        "- Player rolls the dice and moves that many spaces on the board \n" +
+                        "- When a player lands on an unowned property, players can either buy or pass\n" +
+                        "- When a player lands on an owned property, players have to pay rent\n" +
+                        "- If players don't have enough money to pay rent, they go bankrupt\n" +
+                        "- Goal is to balance your budget so that you won't go bankrupt.\n" +
+                        "\n" +
+                        "\n" +
+                        "Game Commands: \n" +
+                        "- buy: can be used to buy a property\n" +
+                        "- pass: can be used to skip your turn\n" +
+                        "- sell: used to sell your property\n" +
+                        "- quit: will change player's status to quit and player can exit the game\n" +
+                        "- help: can be used to view the instructions again");
+                textarea.setEditable(false);
+                dialog.add(textarea);
+                dialog.setModalityType(ModalityType.APPLICATION_MODAL);
+                dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+                dialog.setSize(600, 600);
 
-                                        dialog.setVisible(true);
+                dialog.setVisible(true);
 
-                                    }
-                                 });
+            }
+        });
 
         frame.add(l);
         frame.add(in);
@@ -101,16 +101,8 @@ public class WelcomeScreen {
         frame.setSize(300, 200);
         // makes the frame visible
         frame.setVisible(true);
-    }
 
-    /**
-     *
-     * for testing purposes
-     *
-     * @param a num of players
-     */
-    public WelcomeScreen(int a) {
-        numPlayers = 2;
+
     }
 
     public void setNumPlayers(int players) {
