@@ -1,5 +1,5 @@
 import java.awt.*;
-import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Creates and initializes the board
@@ -11,19 +11,20 @@ import java.util.ArrayList;
  */
 public class Board {
 
-    private final ArrayList<Property> properties;
+    private Property tiles[];
     private Property newLocation;
-    private Property jailProperty;
 
+    private boolean endSet = false;
+    Property jail = new JailTile("JAIL", Color.WHITE);
+    Property goToJail = new JailTile("GoToJail", Color.WHITE);
 
     /**
      * Initializes the array that will hold the properties.
      * And then calls a method to create properties to add.
      */
     public Board() {
-        this.properties = new ArrayList<>();
+        this.tiles = new Property[32];
         this.newLocation = null;
-        this.jailProperty = new Property("JAIL", Color.WHITE);
         createProperties();
         createRailRoads();
         createFreeParking();
@@ -31,39 +32,43 @@ public class Board {
         createGO();
         createUtility();
 
+        for(Property t : tiles){
+            System.out.println(t.getPropertyName());
+        }
+
     }
     private void createUtility(){
-        Property utility1 = new Property("ELECTRIC COMPANY", 25, 50, 150);
-        properties.add(utility1);
-        Property utility2 = new Property("WATER WORKS", 25, 50, 150);
-        properties.add(utility2);
+        Property space12 = new UtilityTile("ELECTRIC COMPANY", 25, 50, 150);
+        tiles[9] = space12;
+        Property space28 = new UtilityTile("WATER WORKS", 25, 50, 150);
+        tiles[23] = space28;
 
     }
     private void createGO(){
-        properties.add(new Property("GO", Color.WHITE));
+        tiles[0] = new GoTile("GO", Color.WHITE);
 
     }
 
     private void createJAIL(){
-        properties.add(jailProperty);
+        tiles[25] = goToJail;
+        tiles[7] = jail;
 
     }
 
     private void createFreeParking() {
-
-        properties.add(new Property("FREE PARKING", Color.WHITE));
+        Property space20 = new PassingTile("FREE PARKING", Color.WHITE);
+        tiles[16] = space20;
     }
 
     private void createRailRoads(){
-        Property railroad1 = new Property("SHORT LINE", Color.WHITE, 25, 50, 100, 200, 200);
-        properties.add(railroad1);
-        Property railroad2 = new Property("READING RAILROAD", Color.WHITE, 25, 50, 100, 200, 200);
-        properties.add(railroad2);
-        Property railroad3 = new Property("PENNSYLVANIA RAILROAD", Color.WHITE, 25, 50, 100, 200, 200);
-        properties.add(railroad3);
-        Property railroad4 = new Property("B. & O. RAILROAD", Color.WHITE, 25, 50, 100, 200, 200);
-        properties.add(railroad4);
-
+        Property space5 = new RailRoadTile("READING RAILROAD", Color.WHITE, 25, 50, 100, 200, 200);
+        tiles[3] = space5;
+        Property space15 = new RailRoadTile("PENNSYLVANIA RAILROAD", Color.WHITE, 25, 50, 100, 200, 200);
+        tiles[12] = space15;
+        Property space25 = new RailRoadTile("B. & O. RAILROAD", Color.WHITE, 25, 50, 100, 200, 200);
+        tiles[20] = space25;
+        Property space35 = new RailRoadTile("SHORT LINE", Color.WHITE, 25, 50, 100, 200, 200);
+        tiles[29] = space35;
     }
 
     /**
@@ -73,46 +78,67 @@ public class Board {
      *
      */
     private void createProperties(){
-        //All the spaces on the board
-        Property space1 = new Property("Mediterranean Avenue", new Color(139,69,19), 2, 60, 50);
-        Property space2 = new Property("Baltic Avenue", new Color(139,69,19), 4, 60, 50);
-        Property space3 = new Property("Oriental Avenue", Color.CYAN, 6, 100, 50);
-        Property space4 = new Property("Vermont Avenue", Color.CYAN, 6, 100, 50);
-        Property space5 = new Property("Connecticut Avenue", Color.CYAN, 8, 120, 50);
-        Property space6 = new Property("St. Charles Place", Color.PINK, 10, 140, 100);
-        Property space7 = new Property("States Avenue",Color.PINK, 10, 140, 100);
-        Property space8 = new Property("Virginia Avenue", Color.PINK, 12, 160, 100);
-        Property space9 = new Property("St. James Place", Color.ORANGE, 14, 180, 100);
-        Property space10 = new Property("Tennessee Avenue", Color.ORANGE, 14, 180, 100);
-        Property space11 = new Property("New York Avenue", Color.ORANGE, 16, 200, 100);
-        Property space12 = new Property("Kentucky Avenue", Color.RED, 18, 220, 150);
-        Property space13  = new Property("Indiana Avenue", Color.RED, 18, 220, 150);
-        Property space14 = new Property("Illinois Avenue", Color.RED, 20, 240, 150);
-        Property space15 = new Property("Atlantic Avenue", Color.YELLOW, 22, 260, 150);
-        Property space16 = new Property("Ventnor Avenue", Color.YELLOW, 22, 260, 150);
-        Property space17 = new Property("Marvin Gardens", Color.YELLOW, 24, 280, 150);
-        Property space18 = new Property("Pacific Avenue", Color.GREEN, 26, 300, 200);
-        Property space19 = new Property("North Carolina Avenue", Color.GREEN, 26, 300, 200);
-        Property space20 = new Property("Pennsylvania Avenue", Color.GREEN, 28, 320, 200);
-        Property space21 = new Property("Park Place", Color.BLUE, 35, 350, 200);
-        Property space22 = new Property("Boardwalk", Color.BLUE, 50, 400, 200);
 
-        initBoard(space1, space2, space3, space4, space5, space6, space7, space8, space9, space10, space11);
-        initBoard(space12, space13, space14, space15, space16, space17, space18, space19, space20, space21, space22);
-    }
+        //Brown set tiles
+        Property space1 = new BrownPropertyTile("Mediterranean Avenue", endSet);
+        Property space3 = new BrownPropertyTile("Baltic Avenue", !endSet);
 
-    private void initBoard(Property space1, Property space2, Property space3, Property space4, Property space5, Property space6, Property space7, Property space8, Property space9, Property space10, Property space11) {
-        properties.add(space1);
-        properties.add(space2);
-        properties.add(space3);
-        properties.add(space4);
-        properties.add(space5);
-        properties.add(space6);
-        properties.add(space7);
-        properties.add(space8);
-        properties.add(space9);
-        properties.add(space10);
-        properties.add(space11);
+        //Cyan set tiles
+        Property space6 = new CyanPropertyTile("Oriental Avenue", endSet);
+        Property space8 = new CyanPropertyTile("Vermont Avenue", endSet);
+        Property space9 = new CyanPropertyTile("Connecticut Avenue",!endSet);
+
+        //Pink set tiles
+        Property space11 = new PinkPropertyTile("St. Charles Place", endSet);
+        Property space13 = new PinkPropertyTile("States Avenue",endSet);
+        Property space14 = new PinkPropertyTile("Virginia Avenue", !endSet);
+
+        //Orange set tiles
+        Property space16 = new OrangePropertyTile("St. James Place", endSet);
+        Property space18 = new OrangePropertyTile("Tennessee Avenue", endSet);
+        Property space19 = new OrangePropertyTile("New York Avenue", !endSet);
+
+        //Red set tiles
+        Property space21 = new RedPropertyTile("Kentucky Avenue", endSet);
+        Property space23 = new RedPropertyTile("Indiana Avenue",endSet);
+        Property space24 = new RedPropertyTile("Illinois Avenue", !endSet);
+
+        //Yellow set tiles
+        Property space26 = new YellowPropertyTile("Atlantic Avenue", endSet);
+        Property space27 = new YellowPropertyTile("Ventnor Avenue", endSet);
+        Property space29 = new YellowPropertyTile("Marvin Gardens", !endSet);
+
+        //Green set tiles
+        Property space31 = new GreenPropertyTile("Pacific Avenue", endSet);
+        Property space32 = new GreenPropertyTile("North Carolina Avenue", endSet);
+        Property space34 = new GreenPropertyTile("Pennsylvania Avenue", !endSet);
+
+        //Blue set tiles
+        Property space37 = new BluePropertyTile("Park Place", endSet);
+        Property space39 = new BluePropertyTile("Boardwalk", !endSet);
+
+        tiles[1] = space1;
+        tiles[2] = space3;
+        tiles[4] = space6;
+        tiles[5] = space8;
+        tiles[6] = space9;
+        tiles[8] = space11;
+        tiles[10] = space13;
+        tiles[11] = space14;
+        tiles[13] = space16;
+        tiles[14] = space18;
+        tiles[15] = space19;
+        tiles[17] = space21;
+        tiles[18] = space23;
+        tiles[19] = space24;
+        tiles[21] = space26;
+        tiles[22] = space27;
+        tiles[24] = space29;
+        tiles[26] = space31;
+        tiles[27] = space32;
+        tiles[28] = space34;
+        tiles[30] = space37;
+        tiles[31] = space39;
     }
 
     /**
@@ -124,35 +150,32 @@ public class Board {
      * @return the new location of the player
      */
     public Property move(int spaces, Property location){
-        int i = properties.indexOf(location);
+        int i = Arrays.asList(tiles).indexOf(location);
         i = i + spaces;
         //The index can not be EQUAL or more.
         // I just added the equal sign
-        if(i >= properties.size()){
-            i = i - properties.size();
+        if(i >= tiles.length){
+            i = i - tiles.length;
         }
-        newLocation = properties.get(i);
+        newLocation = tiles[i];
         return newLocation;
     }
 
     /**
      * @return the list of properties
      */
-    public ArrayList<Property> propertiesList(){
-        return properties;
+    public Property[] tilesList(){
+        return tiles;
     }
-
-    public Property getJailProperty(){
-        return  this.jailProperty;
-    }
+    
     /**
 
      * @return property identified by name
      */
     public Property getProperty(String name){
-        for(Property p : properties){
-            if(p.getPropertyName().equals(name)){
-                return p;
+        for(Property t : tiles){
+            if(t.getPropertyName().equals(name)){
+                return t;
             }
         }
         return null;
@@ -173,12 +196,15 @@ public class Board {
      */
     @Override
     public String toString() {
-        return "Board [properties Count=" + properties.size() + "]";
+        return "Board [properties Count=" + tiles.length + "]";
     }
 
     public Property moveToJail() {
-        newLocation = this.jailProperty;
+        newLocation = tiles[7];
         return newLocation;
     }
 
+    public Property getJailProperty() {
+        return jail;
+    }
 }

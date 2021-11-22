@@ -76,7 +76,7 @@ public class CardFrame extends JFrame implements MonopolyView, ActionListener {
       
         initInfoPanel("Property Information", propertyInfo);
         JLabel propertyRent = new JLabel();
-        initInfoPanel("Rent: "+ property.getInitialRent(), propertyRent);
+        initInfoPanel("Rent: "+ property.getRent(), propertyRent);
         JLabel propertyCost = new JLabel();
         initInfoPanel("Cost: "+ property.getCost(), propertyCost);
         initInfoPanel("Owner: None", propertyOwner);
@@ -134,12 +134,12 @@ public class CardFrame extends JFrame implements MonopolyView, ActionListener {
      */
     private void updateBuyInfo(Property location) {
         System.out.println(property.getState());
-        if(property.getState() == Property.HouseState.RENT){
+        if(property.getState() == HouseState.RENT){
             propertyOwner.setText("Owner: Player " + location.getOwner().getPlayerId());
         }
         sell.setEnabled(true);
         propertyHouses.setText("Houses Owned: " + property.getState().getHouseNum());
-        if(property.getState() == Property.HouseState.HOTEL){
+        if(property.getState() == HouseState.HOTEL){
             propertyHouses.setText("Hotel Owned");
             buy.setEnabled(false);
         }
@@ -170,13 +170,13 @@ public class CardFrame extends JFrame implements MonopolyView, ActionListener {
             }
            //if property is owned by current player himself
             else if(property.getOwner() == model.getCurrentPlayer()){
-                buy.setEnabled(property.getState() != Property.HouseState.HOTEL);
+                buy.setEnabled(property.getState() != HouseState.HOTEL);
                sell.setEnabled(true);
 
            }
         } //if player not on property but owns the property
         else if(property.getOwner() == model.getCurrentPlayer()) {
-            buy.setEnabled(property.getState() != Property.HouseState.HOTEL);
+            buy.setEnabled(property.getState() != HouseState.HOTEL);
             sell.setEnabled(true);
         }
         else { //if not on property and does not own the property

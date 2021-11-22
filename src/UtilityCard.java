@@ -82,8 +82,8 @@ public class UtilityCard extends JFrame implements MonopolyView, ActionListener{
 
         //initialize the information on the card
         initInfoPanel("Property Information", utilityInfo);
-        initInfoPanel("Rent: "+ property.getRent(), utilityRent1);
-        initInfoPanel("Rent2: "+ property.getRent2(), utilityRent2);
+        initInfoPanel("Rent: "+ ((UtilityTile)property).getRent1(), utilityRent1);
+        initInfoPanel("Rent2: "+ ((UtilityTile)property).getRent2(), utilityRent2);
         initInfoPanel("Cost: "+ property.getCost(), utilityCost);
         initInfoPanel("Owner: None",utilityOwner);
 

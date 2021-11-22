@@ -77,10 +77,10 @@ public class RailroadCard extends JFrame implements MonopolyView, ActionListener
 
         //initialize the information on the card
         initInfoPanel("Property Information", railroadInfo);
-        initInfoPanel("Rent: "+ property.getRent(), railroadRent1);
-        initInfoPanel("Rent2: "+ property.getRent2(), railroadRent2);
-        initInfoPanel("Rent3: "+ property.getRent3(), railroadRent3);
-        initInfoPanel("Rent4: "+ property.getRent4(), railroadRent4);
+        initInfoPanel("Rent: "+ ((RailRoadTile)property).getRent1(), railroadRent1);
+        initInfoPanel("Rent2: "+ ((RailRoadTile)property).getRent2(), railroadRent2);
+        initInfoPanel("Rent3: "+ ((RailRoadTile)property).getRent3(), railroadRent3);
+        initInfoPanel("Rent4: "+ ((RailRoadTile)property).getRent4(), railroadRent4);
         initInfoPanel("Cost: "+ property.getCost(), railroadCost);
         initInfoPanel("Owner: None",railroadOwner);
 

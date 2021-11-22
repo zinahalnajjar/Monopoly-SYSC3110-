@@ -32,10 +32,12 @@ public class Game {
     private final ArrayList<Player> players;
     private final Dice dice;
 
+    private Property start;
+
     private Player currentPlayer;
     private final int playerCount;
     private Player previousPlayer;
-    Property newLocation;
+    private Property newLocation;
     boolean win = false;
     private boolean passByJail = false;
 
@@ -107,6 +109,8 @@ public class Game {
         this.playerCount = playerCount;
         this.dice = new Dice();
 
+        start = board.getProperty("GO");
+
         previousPlayer = null;
 
         newLocation = null;
@@ -121,7 +125,7 @@ public class Game {
      */
     private void initPlayers() {
         for (int i = 1; i <= playerCount; i++) {
-            players.add(new Player(1500, i)); //player id and rent
+            players.add(new Player(1500, i, start)); //player id and rent
         }
         currentPlayer = players.get(0);
     }
@@ -404,7 +408,7 @@ public class Game {
     
     public String buy(Property property){
         String info;
-        if(property.getState() == Property.HouseState.UNOWNED) {
+        if(property.getState() == HouseState.UNOWNED) {
             if (currentPlayer.getLocation() == property){
                 int cost = property.getCost();
                 int money = currentPlayer.getMoney(); //return players total money
@@ -424,7 +428,7 @@ public class Game {
             } else {
                 info = "You are ineligible to buy this property";
             }
-        } else if (property.getState() == Property.HouseState.HOTEL) {
+        } else if (property.getState() == HouseState.HOTEL) {
             info = "This property has the maximum number of houses built on it";
         } else if (currentPlayer == property.getOwner()) {
             int cost = property.getCostPerHouse();
@@ -519,16 +523,16 @@ public class Game {
         int rentUtil = 0;
         // get rent amount
         if(rentLevel == 1) {
-            rentUtil = property.getRent1();
+            rentUtil = ((RailRoadTile)property).getRent1();
         }
         else if(rentLevel == 2) {
-            rentUtil = property.getRent2();
+            rentUtil = ((RailRoadTile)property).getRent2();
         }
         else if(rentLevel == 3) {
-            rentUtil = property.getRent3();
+            rentUtil = ((RailRoadTile)property).getRent3();
         }
         else if(rentLevel == 4) {
-            rentUtil = property.getRent4();
+            rentUtil = ((RailRoadTile)property).getRent4();
         }
         System.out.println("Player "+currentPlayer.getPlayerId() + " has $" + currentPlayer.getMoney()); //dispay how much the player owns
 
