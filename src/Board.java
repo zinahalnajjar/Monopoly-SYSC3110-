@@ -31,11 +31,6 @@ public class Board {
         createJAIL();
         createGO();
         createUtility();
-
-        for(Property t : tiles){
-            System.out.println(t.getPropertyName());
-        }
-
     }
     private void createUtility(){
         Property space12 = new UtilityTile("ELECTRIC COMPANY", 25, 50, 150);

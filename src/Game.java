@@ -185,6 +185,7 @@ public class Game {
         if ("roll".equals(command)) {
             //check if player is in Jail
             boolean jailPlayer = !passByJail && currentPlayer.getLocation().getPropertyName().equals("JAIL");
+            System.out.println(jailPlayer);
             if (jailPlayer) {
                 if (hasCurrentPlayerPaidJailFee()) {// if they haven't paid the jail fee yet
                     System.out.println("JAIL. Player: " + currentPlayer.getPlayerId() + " MADE PAYMENT, rolling permitted.");
@@ -312,62 +313,59 @@ public class Game {
                 }
                 notifyView(command, info);
             }
+        }
 
-            if ("buy".equals(command)) {
-                String info1 = buy(newLocation);
-                for (MonopolyView view : views) {
-                    view.handleMonopolyBuy(info1, newLocation);
-                }
-
+        if ("buy".equals(command)) {
+            String info1 = buy(newLocation);
+            for (MonopolyView view : views) {
+                view.handleMonopolyBuy(info1, newLocation);
             }
+        }
 
-            if ("sell".equals(command)) {
-                boolean success = sell(newLocation);
-                for (MonopolyView view : views) {
-                    view.handleMonopolySell(success, newLocation);
-                }
+        if ("sell".equals(command)) {
+            boolean success = sell(newLocation);
+            for (MonopolyView view : views) {
+                view.handleMonopolySell(success, newLocation);
             }
+        }
 
-            if ("rent".equals(command)) {
-                String result1 = payRent(newLocation);
-                for (MonopolyView view : views) {
-                    view.handleMonopolyRentResult(result1, newLocation);
+        if ("rent".equals(command)) {
+            String result1 = payRent(newLocation);
+            for (MonopolyView view : views) {
+                view.handleMonopolyRentResult(result1, newLocation);
 //                view.handleMonopolyRentUtility(result1, newLocation);
-                }
-            } else if (command.startsWith("rent")) {
-                int rentLevel = getRentLevel(command);
+            }
+        } else if (command.startsWith("rent")) {
+            int rentLevel = getRentLevel(command);
 
-                String result1 = payRent(newLocation, rentLevel);
-                for (MonopolyView view : views) {
-                    view.handleMonopolyRentResult(result1, newLocation);
-                    view.handleMonopolyRentUtility(result1, newLocation);
-                }
-
+            String result1 = payRent(newLocation, rentLevel);
+            for (MonopolyView view : views) {
+                view.handleMonopolyRentResult(result1, newLocation);
+                view.handleMonopolyRentUtility(result1, newLocation);
             }
 
-            if ("Collect".equals(command)) {
-                for (MonopolyView view : views) {
-                    view.handleMonopolyGOResult();
-                }
+        }
 
+        if ("Collect".equals(command)) {
+            for (MonopolyView view : views) {
+                view.handleMonopolyGOResult();
             }
+        }
 
-            if ("pass".equals(command)) {
-                notifyView(command, pass());
-            }
-            if ("quit".equals(command)) {
-                notifyView(command, quit());
-            }
-            if ("help".equals(command)) {
-                notifyView(command, help());
-            }
-            if ("player info".equals(command)) {
-                notifyView(command, displayPlayerInfo());
-            }
-            if (win) {
-                notifyView("win", checkWin());
-            }
-
+        if ("pass".equals(command)) {
+            notifyView(command, pass());
+        }
+        if ("quit".equals(command)) {
+            notifyView(command, quit());
+        }
+        if ("help".equals(command)) {
+            notifyView(command, help());
+        }
+        if ("player info".equals(command)) {
+            notifyView(command, displayPlayerInfo());
+        }
+        if (win) {
+            notifyView("win", checkWin());
         }
     }
 
@@ -658,6 +656,7 @@ public class Game {
     public Player getPreviousPlayer(){
         return previousPlayer;
     }
+
     public boolean isPassByJail(){
         return passByJail;
     }

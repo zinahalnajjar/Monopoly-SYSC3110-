@@ -96,8 +96,6 @@ public class MainFrame extends JFrame implements MonopolyView  {
 
         addListeners(model, mc);
 
-
-
         //Display the window.
         this.pack();
         this.setVisible(true);
@@ -153,8 +151,6 @@ public class MainFrame extends JFrame implements MonopolyView  {
         pane.add(sidePanel);
         sidePanel.setBackground(BG_COLOR);
 
-        addEmptyLabel(sidePanel, 1);
-
         addButton(roll, "roll", mc);
         addButton(pass, "pass", mc);
         addButton(help, "help", mc);
@@ -182,7 +178,6 @@ public class MainFrame extends JFrame implements MonopolyView  {
 
         JPanel centerSpacePanel = new JPanel();
         centerSpacePanel.setBackground(BG_COLOR);
-        addEmptyLabel(centerSpacePanel, 5);
 
         commandButtonsPanel.add(northSpaceLabel, BorderLayout.NORTH);
         commandButtonsPanel.add(centerSpacePanel, BorderLayout.CENTER);
@@ -326,16 +321,11 @@ public class MainFrame extends JFrame implements MonopolyView  {
         JPanel southPanel = new JPanel();
         southPanel.setBackground(BG_COLOR);
 
-        addEmptyLabel(southPanel, 3);
 
         Jail = new JButton("JAIL");
         //setHeightSouth(Jail);
         southPanel.add(Jail);
         properties.add(Jail);
-
-        addEmptyLabel(southPanel, 3);
-
-        addEmptyLabel(southPanel, 6);
 
 
         empty = new JLabel(" ");
@@ -374,23 +364,15 @@ public class MainFrame extends JFrame implements MonopolyView  {
         southPanel.add(Property);
         properties.add(Property);
 
-        addEmptyLabel(southPanel, 6);
-
         Go = new JButton("GO");
         //setHeightSouth(Go);
         southPanel.add(Go);
         properties.add(Go);
 
-        addEmptyLabel(southPanel, 6);
 
         return southPanel;
     }
 
-    private static void addEmptyLabel(JPanel panel, int count) {
-//        for (int i = 0; i < count; i++) {
-//            panel.add(new JLabel(" "));
-//        }
-    }
 
 
     /**
@@ -400,13 +382,11 @@ public class MainFrame extends JFrame implements MonopolyView  {
         JPanel northPanel = new JPanel();
         northPanel.setBackground(BG_COLOR);
 
-        addEmptyLabel(northPanel, 3);
 
         Property = new JButton("FREE PARKING");
         northPanel.add(Property);
         properties.add(Property);
 
-        addEmptyLabel(northPanel, 3);
 
         Property = new JButton("Kentucky Avenue");
         northPanel.add(Property);
@@ -447,12 +427,9 @@ public class MainFrame extends JFrame implements MonopolyView  {
         northPanel.add(Property);
         properties.add(Property);
 
-        addEmptyLabel(northPanel, 3);
 
         GoToJail = new JLabel("GO TO JAIL");
         northPanel.add(GoToJail);
-
-        addEmptyLabel(northPanel, 3);
 
         return northPanel;
     }
