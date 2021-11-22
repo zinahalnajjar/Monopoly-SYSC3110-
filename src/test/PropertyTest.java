@@ -10,7 +10,7 @@ import static org.junit.Assert.*;
  */
 public class PropertyTest {
 
-    Property a = new Property("Carleton", Color.RED, 5000, 6000);
+    Property a = new Property("Carleton", Color.RED, 5000, 6000,400);
     Player T = new Player(1500,1);
     @Test
     public void getPropertyName() {

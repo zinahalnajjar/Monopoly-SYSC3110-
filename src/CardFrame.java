@@ -173,23 +173,34 @@ public class CardFrame extends JFrame implements MonopolyView, ActionListener {
             if(property.getOwner() == null){ //if property owner is null
                 buy.setEnabled(true);
                 sell.setEnabled(false);
-            } //if property owner is some other player
-            else if(property.getOwner() != model.getCurrentPlayer()){
+            }
+            //if property owner is some other player
+           else if(property.getOwner() != model.getCurrentPlayer()){
                 buy.setEnabled(false);
                 sell.setEnabled(false);
                 String info = model.payRent(property);
                 JOptionPane.showMessageDialog(this, info, "Pay rent", JOptionPane.INFORMATION_MESSAGE);
-            } //if property is owned by current player himself
-            else if(property.getOwner() == model.getCurrentPlayer()){
-                buy.setEnabled(false);
-                sell.setEnabled(true);
             }
+           //if property is owned by current player himself
+            else if(property.getOwner() == model.getCurrentPlayer()){
+                if (property.getState() == Property.HouseState.HOTEL){
+                    buy.setEnabled(false);
+                } else {
+                    buy.setEnabled(true);
+                }
+               sell.setEnabled(true);
+
+           }
         } //if player not on property but owns the property
-        else if(property.getOwner() == model.getCurrentPlayer()){
-            buy.setEnabled(false);
+        else if(property.getOwner() == model.getCurrentPlayer()) {
+            if (property.getState() == Property.HouseState.HOTEL){
+                buy.setEnabled(false);
+            } else {
+                buy.setEnabled(true);
+            }
             sell.setEnabled(true);
         }
-        else{ //if not on property and does not own the property
+        else { //if not on property and does not own the property
             buy.setEnabled(false);
             sell.setEnabled(false);
         }
@@ -203,25 +214,12 @@ public class CardFrame extends JFrame implements MonopolyView, ActionListener {
     /**
      * handles the buy update
      *
-     * @param success true if property bought successfully
+     * @param info Holds info about whether the property was bought successfully
      * @param location to bought
      */
     @Override
-    public void handleMonopolyBuy(boolean success, Property location) {
-        if(property == location && success == false){
-            if(model.getCurrentPlayer().getLocation() != property){
-                JOptionPane.showMessageDialog(this,"You are not eligible to buy this property");
-                buy.setEnabled(false);
-                this.setVisible(true);
-            }else{
-                JOptionPane.showMessageDialog(this,"You don't have enough money");
-            }
-        }
-        else if(property == location && success){
-                updateInfo(location);
-                buy.setEnabled(false);
-                this.setVisible(true);
-        }
+    public void handleMonopolyBuy(String info, Property location) {
+        JOptionPane.showMessageDialog(this,info);
     }
 
     /**

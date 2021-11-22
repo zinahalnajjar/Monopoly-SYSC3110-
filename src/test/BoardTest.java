@@ -11,11 +11,11 @@ import static org.junit.Assert.*;
 public class BoardTest {
 
     Board b = new Board();
-    Property space3 = new Property("Oriental Avenue", Color.CYAN, 6, 100);
+    Property space3 = new Property("Oriental Avenue", Color.CYAN, 6, 100,200);
 
     @Test
     public void move() {
-        assertEquals( b.move(3, new Property("Start", null,0,0)), b.getProperty("Oriental Avenue"));
+        assertEquals( b.move(3, new Property("Start", null,0,0,0)), b.getProperty("Oriental Avenue"));
     }
 
     @Test

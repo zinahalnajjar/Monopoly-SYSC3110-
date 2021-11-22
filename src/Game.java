@@ -214,7 +214,7 @@ public class Game {
         }
 
         if ("buy".equals(command)) {
-            boolean success = buy(newLocation);
+            String success = buy(newLocation);
             for (MonopolyView view : views){
                 view.handleMonopolyBuy(success, newLocation);
             }
@@ -295,32 +295,55 @@ public class Game {
      * The player will be able to buy once he lands on an unowned property
      * @param property
      */
-    public boolean buy(Property property){
-        if(property.getBuyCounter() == 6){
-            if (currentPlayer.getLocation() == property && property.getOwner() == null){
+    public String buy(Property property){
 
+        String info = "";
+        if(property.getState() == Property.HouseState.UNOWNED) {
+            if (currentPlayer.getLocation() == property){
                 int cost = property.getCost();
                 int money = currentPlayer.getMoney(); //return players total money
 
                 if (cost > money){
-                    System.out.println("You don't have enough money.");
-                    return false;
+                    info = "You don't have enough money.";
                 } else{
                     property.setOwner(currentPlayer);
                     currentPlayer.addProperty(property);
                     currentPlayer.removeMoney(cost);
 
-                    property.incrementBuyCounter();
+                    property.incrementState();
 
-                    System.out.println("You have successfully bought the property.");
-                    System.out.println("You have " + currentPlayer.getMoney() +"$ left.");
-                    return true;
+                    info = "You have successfully bought the property.\n";
+                    info += "You have " + currentPlayer.getMoney() +"$ left.";
                 }
-            } else if (currentPlayer == property.getOwner()){
-                property.incrementBuyCounter();
+            } else {
+                info = "You are ineligible to buy this property";
             }
+        } else if (property.getState() == Property.HouseState.HOTEL) {
+            info = "This property has the maximum number of houses built on it";
+        } else if (currentPlayer == property.getOwner()) {
+            int cost = property.getCostPerHouse();
+            int money = currentPlayer.getMoney(); //return players total money
+
+            if (cost > money){
+                info = "You don't have enough money.";
+            } else{
+                currentPlayer.removeMoney(cost);
+
+                property.incrementState();
+
+                String houseNumHolder = String.valueOf(property.getState().getHouseNum());
+
+                if(property.getState().getHouseNum() == 5){
+                    houseNumHolder = "hotel";
+                }
+                info = "You have successfully bought " + houseNumHolder + " number of houses\n";
+                info += "You have " + currentPlayer.getMoney() +"$ left.";
+            }
+        } else {
+            info = "You are not the owner of this property";
         }
-        return false;
+
+        return info;
     }
 
     /**

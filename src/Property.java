@@ -9,26 +9,37 @@ import java.awt.*;
  */
 public class Property {
 
-    public enum State{
-        UNOWNED(0),
-        RENT(1),
-        H1(20),
-        H2(40),
-        H3(60),
-        H4(80),
-        HOTEL(100);
+    public enum HouseState{
+        UNOWNED(0, 0),
+        RENT(1, 0),
+        H1(20, 1),
+        H2(40, 2),
+        H3(60, 3),
+        H4(80, 4),
+        HOTEL(100, 5);
 
         private int rentMultiplier;
+        private int houseNum;
 
-        State(int rentMultiplier) {
+        HouseState(int rentMultiplier, int house) {
             this.rentMultiplier = rentMultiplier;
+            this.houseNum = house;
         }
         public int getRentMultiplier(){
             return rentMultiplier;
         }
+
+        public HouseState next(){
+            return values()[ordinal() + 1];
+        }
+
+        public int getHouseNum() {
+            return houseNum;
+        }
+
     }
 
-    private State state;
+    private HouseState state;
 
     private int buyCounter;
 
@@ -36,8 +47,8 @@ public class Property {
     private Color color;
     private Player owner;
     private int initialRent;
-    private int cost;
-
+    private int initialCost;
+    private int costPerHouse;
 
 
     /**
@@ -57,16 +68,17 @@ public class Property {
      * @param propertyName name of property
      * @param color color of the property to help determine set
      * @param initialRent the rent of the property
-     * @param cost the cost of the property
+     * @param initCost the cost of the property
      */
-    public Property(String propertyName, Color color, int initialRent, int cost) {
+    public Property(String propertyName, Color color, int initialRent, int initCost, int costHouse) {
         this.propertyName = propertyName;
         this.color = color;
         this.initialRent = initialRent;
-        this.cost = cost;
+        this.initialCost = initCost;
         this.owner = null;
         buyCounter = 0;
-        state = State.UNOWNED;
+        state = HouseState.UNOWNED;
+        this.costPerHouse = costHouse;
     }
 
     /**
@@ -136,14 +148,14 @@ public class Property {
      * @return the cost
      */
     public int getCost() {
-        return cost;
+        return initialCost;
     }
 
     /**
      * @param cost holds the cost
      */
     public void setCost(int cost) {
-        this.cost = cost;
+        this.initialCost = cost;
     }
 
     /**
@@ -153,27 +165,27 @@ public class Property {
     public String toString(){
         String ownerInfo = (owner ==null) ? "" : owner.getPlayerId() + "";
 
-        return "Property [property name=" + propertyName + ", cost=" + cost +", rent="+ initialRent +", color=" + color + ", owner id=" + ownerInfo + "]";
+        return "Property [property name=" + propertyName + ", cost=" + initialCost +", rent="+ initialRent +", color=" + color + ", owner id=" + ownerInfo + "]";
     }
 
-    public int getBuyCounter() {
-        return buyCounter;
+    public void incrementState() {
+        state.next();
     }
 
-    public void setBuyCounter(int buyCounter) {
-        this.buyCounter = buyCounter;
-    }
-
-    public void incrementBuyCounter() {
-        this.buyCounter++;
-    }
-
-    public State getState() {
+    public HouseState getState() {
         return state;
     }
 
-    public void setState(State state) {
+    public void setState(HouseState state) {
         this.state = state;
+    }
+
+    public int getCostPerHouse() {
+        return costPerHouse;
+    }
+
+    public void setCostPerHouse(int costPerHouse) {
+        this.costPerHouse = costPerHouse;
     }
 }
 

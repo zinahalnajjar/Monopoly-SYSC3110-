@@ -450,7 +450,7 @@ public class MainFrame extends JFrame implements MonopolyView  {
     }
 
     @Override
-    public void handleMonopolyBuy(boolean success, Property location) {
+    public void handleMonopolyBuy(String success, Property location) {
     }
 
     @Override
