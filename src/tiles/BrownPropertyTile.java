@@ -21,9 +21,6 @@ public class BrownPropertyTile  implements Property {
         this.owner = null;
         this.state = HouseState.UNOWNED;
 
-        if(endSet){
-
-        }
     }
 
     /**

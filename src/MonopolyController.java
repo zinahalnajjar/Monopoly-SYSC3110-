@@ -16,6 +16,9 @@ public class MonopolyController implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         String command = e.getActionCommand();
+
+        System.out.println(command);
+
         model.run(command);
     }
 }
