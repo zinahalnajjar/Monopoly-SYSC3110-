@@ -35,7 +35,7 @@ public class CardFrame extends JFrame implements MonopolyView, ActionListener {
     //buttons on the deed card
     private JButton buy = new JButton();
     private JButton sell = new JButton();
-//    private JButton pass = new JButton();
+
 
     //reference to the model and controller
     private MonopolyController mc;
@@ -88,10 +88,15 @@ public class CardFrame extends JFrame implements MonopolyView, ActionListener {
         initInfoPanel("Cost: "+ property.getCost(), propertyCost);
         initInfoPanel("Owner: None", propertyOwner);
 
-        //initialize the buy and sell button the card
-        initButtonPanel("buy", buy, mc);
-        initButtonPanel("sell", sell, mc);
-//        initButtonPanel("pass", pass, mc);
+
+        if(property.getPropertyName().equals(board.getJailProperty().getPropertyName())) {
+
+        }
+        else{
+            //initialize the buy and sell button the card
+            initButtonPanel("buy", buy, mc);
+            initButtonPanel("sell", sell, mc);
+        }
 
         //add all the panels to the deed card view
         this.add(titlePanel);
@@ -171,7 +176,11 @@ public class CardFrame extends JFrame implements MonopolyView, ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         //current player is on the property that was clicked
-        if(model.getCurrentPlayer().getLocation().equals(property)){
+        if(model.getCurrentPlayer().getLocation().equals(board.getJailProperty())){
+            //player in jail property
+//            pass.setEnabled(true);
+        }
+        else if(model.getCurrentPlayer().getLocation().equals(property)){
             if("FREE PARKING".equals(e.getActionCommand())){
                 FreeParkingNotification();
                 return;
@@ -266,12 +275,17 @@ public class CardFrame extends JFrame implements MonopolyView, ActionListener {
     }
 
     @Override
+    public void handleMonopolyRentUtility(String result, Property location) {
+
+    }
+
+    @Override
     public void handleMonopolyJailFeePaymentResult(boolean paymentSuccess) {
         //DO NOTHING
     }
 
     @Override
-    public void handleMonopolyJailPlayerRollResult(String result) {
+    public void handleMonopolyJailPlayerRollResult(String result, boolean forceJailFee) {
         //DO NOTHING
 
     }

@@ -9,6 +9,7 @@ import java.util.List;
  *
  * @author Tooba
  * @author Kareem
+ * @author Zinah
  */
 public class Board {
 
@@ -35,7 +36,7 @@ public class Board {
     private void createUtility(){
         Property utility1 = new Property("ELECTRIC COMPANY", Color.WHITE, 25, 50, 150);
         properties.add(utility1);
-        Property utility2 = new Property("WATER WORKS", Color.WHITE, 4, 10, 150);
+        Property utility2 = new Property("WATER WORKS", Color.WHITE, 25, 50, 150);
         properties.add(utility2);
 
     }
@@ -132,7 +133,9 @@ public class Board {
     public Property move(int spaces, Property location){
         int i = properties.indexOf(location);
         i = i + spaces;
-        if(i > properties.size()){
+        //The index can not be EQUAL or more.
+        // I just added the equal sign
+        if(i >= properties.size()){
             i = i - properties.size();
         }
         newLocation = properties.get(i);
@@ -187,4 +190,5 @@ public class Board {
         newLocation = this.jailProperty;
         return newLocation;
     }
+
 }

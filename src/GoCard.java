@@ -3,8 +3,6 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.HashMap;
-import java.util.Map;
 
 public class GoCard extends JFrame implements MonopolyView, ActionListener{
 
@@ -111,12 +109,8 @@ public class GoCard extends JFrame implements MonopolyView, ActionListener{
             //current player is on the property that was clicked
             if (model.getCurrentPlayer().getLocation().equals(property)) {
                 this.setVisible(true);
-            }
-        }
-        else if ("Collect".equals(e.getActionCommand())) {
-            //current player is on the property that was clicked
-            if (model.getCurrentPlayer().getLocation().equals(property)) {
                 model.collect();
+                collect.setEnabled(true);
             }
         }
 
@@ -142,12 +136,17 @@ public class GoCard extends JFrame implements MonopolyView, ActionListener{
     }
 
     @Override
+    public void handleMonopolyRentUtility(String result, Property location) {
+
+    }
+
+    @Override
     public void handleMonopolyJailFeePaymentResult(boolean paymentSuccess) {
 
     }
 
     @Override
-    public void handleMonopolyJailPlayerRollResult(String result) {
+    public void handleMonopolyJailPlayerRollResult(String result, boolean forceJailFee) {
         //DO NOTHING
 
     }

@@ -1,8 +1,6 @@
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -43,7 +41,6 @@ public class MainFrame extends JFrame implements MonopolyView  {
     private static ArrayList<JButton> properties;
     private static ArrayList<JButton> railroads;
     private static ArrayList<JButton> utilities;
-    //private static ArrayList<JButton> railroads;
     private static JButton Property;
     private static JLabel Chance;
     private static JButton RailRoad;
@@ -71,10 +68,7 @@ public class MainFrame extends JFrame implements MonopolyView  {
         super("Monopoly!!");
 
         cf = null;
-//        Game model = new Game(playerCount); //OLD CODE
 
-        //Make model as member field so that
-        //it can be accessed by other methods like *Notification
         model = new Game(playerCount);
 
         model.addMonopolyView(this);
@@ -97,8 +91,7 @@ public class MainFrame extends JFrame implements MonopolyView  {
 
         addListeners(model, mc);
 
-        //To display player pieces on the board
-        //initPlayerPieces(playerCount);
+
 
         //Display the window.
         this.pack();
@@ -149,16 +142,6 @@ public class MainFrame extends JFrame implements MonopolyView  {
             RailroadCard rf = new RailroadCard(bttn.getText(), m.getBoard(), mc, m, this);
             bttn.addActionListener(rf);
 
-//            bttn.addActionListener(new ActionListener() {
-//                @Override
-//                public void actionPerformed(ActionEvent e) {
-//                    e.getActionCommand();
-//                    e.getSource();
-//                    //creates frame afresh EACH TIME the button is clicked and shows a frame
-//                    cf = new CardFrame(bttn.getText(), m.getBoard(), mc, m, this);
-//                    cf.setVisible(true);
-//                }
-//            });
         }// add another for loop
 
         for(JButton bttn : utilities){
@@ -530,22 +513,40 @@ public class MainFrame extends JFrame implements MonopolyView  {
     }
 
     @Override
+    public void handleMonopolyRentUtility(String result, Property location) {
+
+    }
+
+    @Override
     public void handleMonopolyJailFeePaymentResult(boolean paymentSuccess) {
         if(paymentSuccess){
             String info = "You're free to move out of Jail.\n\nYou can Roll dice, to move out of Jail.";
             JOptionPane.showMessageDialog(this, info, "Help", JOptionPane.INFORMATION_MESSAGE);
             roll.setEnabled(true);
+            pass.setEnabled(false);
         }
         else{
-            String info = "Your payment failed. You're bankrupt!";
+            String info = "Your payment failed. You're bankrupt!\nYOU'RE OUT OF THE GAME!\n\n" +
+                    "You must pass turn to the next player!";
             JOptionPane.showMessageDialog(this, info, "Help", JOptionPane.INFORMATION_MESSAGE);
+            roll.setEnabled(false);
+            pass.setEnabled(true);
         }
     }
 
     @Override
-    public void handleMonopolyJailPlayerRollResult(String result) {
+    public void handleMonopolyJailPlayerRollResult(String result, boolean forceJailFee) {
         JOptionPane.showMessageDialog(this, result, "Jail Player roll result.", JOptionPane.INFORMATION_MESSAGE);
-
+        if (forceJailFee) {
+            roll.setEnabled(false);
+            pass.setEnabled(false);
+        }
+        else{
+            String info =  "You must pass turn to the next player!";
+            JOptionPane.showMessageDialog(this, info, "Help", JOptionPane.INFORMATION_MESSAGE);
+            roll.setEnabled(false);
+            pass.setEnabled(true);
+        }
     }
 
     @Override
@@ -655,6 +656,20 @@ public class MainFrame extends JFrame implements MonopolyView  {
             }
         }
 
+        for(JButton bttn : railroads){
+            if(bttn.getText().equals(location.getPropertyName())){
+                bttn.doClick();
+                break;
+            }
+        }
+
+        for(JButton bttn : utilities){
+            if(bttn.getText().equals(location.getPropertyName())){
+                bttn.doClick();
+                break;
+            }
+        }
+
 //double rolls
         if(dice.getDie1() == dice.getDie2()){
             if (model.isPlayerInJail()) {
@@ -667,6 +682,11 @@ public class MainFrame extends JFrame implements MonopolyView  {
             roll.setEnabled(false);
             pass.setEnabled(true);
         }
+
+        if(model.isPassByJail()){
+            pass.setEnabled(true);
+        }
+
     }
 
     public void enableRollButton() {

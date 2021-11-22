@@ -3,8 +3,6 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.HashMap;
-import java.util.Map;
 
 public class UtilityCard extends JFrame implements MonopolyView, ActionListener{
 
@@ -33,6 +31,7 @@ public class UtilityCard extends JFrame implements MonopolyView, ActionListener{
     private JButton buy = new JButton();
     private JButton rent1 = new JButton();
     private JButton rent2 = new JButton();
+
 
 
     //reference to the model and controller
@@ -64,11 +63,11 @@ public class UtilityCard extends JFrame implements MonopolyView, ActionListener{
 
         this.setLayout(new FlowLayout(FlowLayout.CENTER));
 
-        this.setSize(250, 290);
+        this.setSize(450, 390);
 
         //set layout for the each panel
         titlePanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        infoPanel = new JPanel(new GridLayout(1,1));
+        infoPanel = new JPanel(new GridLayout(8,1));
         buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
 
         //initialize the title section of the panel
@@ -84,7 +83,7 @@ public class UtilityCard extends JFrame implements MonopolyView, ActionListener{
         //initialize the information on the card
         initInfoPanel("Property Information", utilityInfo);
         initInfoPanel("Rent: "+ property.getRent(), utilityRent1);
-        initInfoPanel("Rent2: "+ property.getRent2(), utilityRent1);
+        initInfoPanel("Rent2: "+ property.getRent2(), utilityRent2);
         initInfoPanel("Cost: "+ property.getCost(), utilityCost);
         initInfoPanel("Owner: None",utilityOwner);
 
@@ -98,8 +97,6 @@ public class UtilityCard extends JFrame implements MonopolyView, ActionListener{
         this.add(infoPanel);
         this.add(buttonPanel);
 
-
-        this.setVisible(true);
     }
 
 
@@ -130,11 +127,52 @@ public class UtilityCard extends JFrame implements MonopolyView, ActionListener{
         bttn.setText(bttnLabel);
         bttn.setEnabled(false);
         bttn.setActionCommand(bttn.getText());
-        bttn.addActionListener(this);
+        bttn.addActionListener(mc);
         buttonPanel.setBorder(new EmptyBorder(15,20,10,20));
         buttonPanel.add(bttn);
     }
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        //current player is on the property that was clicked
 
+        if(model.getCurrentPlayer().getLocation().equals(property)){
+
+            if(property.getOwner() == null){ //if property owner is null
+                buy.setEnabled(true);
+                rent1.setEnabled(false);
+                rent2.setEnabled(false);
+                //sell.setEnabled(false);
+            } //if property owner is some other player
+            else if(property.getOwner() != model.getCurrentPlayer()){
+                buy.setEnabled(false);
+                rent1.setEnabled(true);
+                rent2.setEnabled(true);
+
+            } //if property is owned by current player himself
+            else if(property.getOwner() == model.getCurrentPlayer()){
+                buy.setEnabled(false);
+                rent1.setEnabled(false);
+                rent2.setEnabled(false);
+
+                //sell.setEnabled(true);
+            }
+        } //if player not on property but owns the property
+        else if(property.getOwner() == model.getCurrentPlayer()){
+            buy.setEnabled(false);
+            rent1.setEnabled(true);
+            rent2.setEnabled(true);
+            //sell.setEnabled(true);
+        }
+        else{ //if not on property and does not own the property
+            buy.setEnabled(false);
+            rent1.setEnabled(false);
+            rent2.setEnabled(false);
+            //sell.setEnabled(false);
+        }
+
+        this.setVisible(true);
+
+    }
 
     @Override
     public void handleMonopolyStatusUpdate(String command) {
@@ -165,22 +203,22 @@ public class UtilityCard extends JFrame implements MonopolyView, ActionListener{
 
     }
 
+
     @Override
     public void handleMonopolyRentResult(String result, Property location) {
+
+    }
+
+    @Override
+    public void handleMonopolyRentUtility(String result, Property location) {
         if(property == location) {
             // update the view with the owner of the railroad
 
             updateInfo(location);
 
-            //enable buy button if the property is not owned by anyone.
-            if(property.getOwner() == null){
-                buy.setEnabled(false);
-            }
-            else if(property.getOwner() != model.getCurrentPlayer()) {
-                //enable rent buttons if the property is owned by someone else
-                rent1.setEnabled(true);
-                rent2.setEnabled(true);
-            }
+            //post rent payment disable all rent buttons
+            rent1.setEnabled(false);
+            rent2.setEnabled(false);
 
 
             this.setVisible(true);
@@ -194,7 +232,7 @@ public class UtilityCard extends JFrame implements MonopolyView, ActionListener{
     }
 
     @Override
-    public void handleMonopolyJailPlayerRollResult(String result) {
+    public void handleMonopolyJailPlayerRollResult(String result, boolean forceJailFee) {
         //DO NOTHING
     }
 
@@ -203,53 +241,18 @@ public class UtilityCard extends JFrame implements MonopolyView, ActionListener{
 
     }
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        //current player is on the property that was clicked
 
-        if(model.getCurrentPlayer().getLocation().equals(property)){
-            /*
-            if("FREE PARKING".equals(e.getActionCommand())){
-                FreeParkingNotification();
-                return;
-            }
-            */
-            if(property.getOwner() == null){ //if property owner is null
-                buy.setEnabled(true);
-                rent1.setEnabled(false);
-                rent2.setEnabled(false);
-                //sell.setEnabled(false);
-            } //if property owner is some other player
-            else if(property.getOwner() != model.getCurrentPlayer()){
-                buy.setEnabled(false);
-                rent1.setEnabled(false);
-                rent2.setEnabled(false);
-                //sell.setEnabled(false);
-                String info = model.payUtilityRent(property);
-                JOptionPane.showMessageDialog(this, info, "Pay rent", JOptionPane.INFORMATION_MESSAGE);
-            } //if property is owned by current player himself
-            else if(property.getOwner() == model.getCurrentPlayer()){
-                buy.setEnabled(false);
-                rent1.setEnabled(true);
-                rent2.setEnabled(true);
-
-                //sell.setEnabled(true);
-            }
-        } //if player not on property but owns the property
-        else if(property.getOwner() == model.getCurrentPlayer()){
-            buy.setEnabled(false);
-            rent1.setEnabled(true);
-            rent2.setEnabled(true);
-            //sell.setEnabled(true);
+    private int getRentLevel(String buttonLabel) {
+        switch (buttonLabel){
+            case "rent":
+                return 1;
+            case "rent2":
+                return 2;
+            case "rent3":
+                return 3;
+            case "rent4":
+                return 4;
         }
-        else{ //if not on property and does not own the property
-            buy.setEnabled(false);
-            rent1.setEnabled(false);
-            rent2.setEnabled(false);
-            //sell.setEnabled(false);
-        }
-
-        this.setVisible(true);
-
+        return 1;
     }
 }

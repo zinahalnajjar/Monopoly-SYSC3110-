@@ -13,9 +13,11 @@ public interface MonopolyView {
 
     void handleMonopolyRentResult(String result, Property location);
 
+    void handleMonopolyRentUtility(String result, Property location);
+
     void handleMonopolyJailFeePaymentResult(boolean paymentSuccess);
 
-    void handleMonopolyJailPlayerRollResult(String result);
+    void handleMonopolyJailPlayerRollResult(String result, boolean forceJailFee);
 
     void handleMonopolyGOResult();
 }

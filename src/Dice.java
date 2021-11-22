@@ -31,6 +31,7 @@ public class Dice {
         die1 = (int)(Math.random()*6) + 1;
         die2 = (int)(Math.random()*6) + 1;
 
+
     }
 
     /**
