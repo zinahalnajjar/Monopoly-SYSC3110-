@@ -498,8 +498,8 @@ public class Game {
      * decide the next player, in the order as found in the list starting from index 0
      */
     public void nextPlayer() {
+        previousPlayer = currentPlayer;
         if (players.size() == players.indexOf(currentPlayer) + 1) {
-
             currentPlayer = players.get(0);
         } else {
             currentPlayer = players.get(players.indexOf(currentPlayer) + 1);
