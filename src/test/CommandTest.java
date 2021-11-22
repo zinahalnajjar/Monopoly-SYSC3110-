@@ -8,7 +8,7 @@ import static org.junit.Assert.*;
  */
 public class CommandTest {
 
-    Command c = new Command("a");
+    final Command c = new Command("a");
 
     @Test
     public void getUserCommand() {
