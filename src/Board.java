@@ -33,9 +33,9 @@ public class Board {
 
     }
     private void createUtility(){
-        Property utility1 = new Property("ELECTRIC COMPANY", Color.WHITE, 25, 50, 150);
+        Property utility1 = new Property("ELECTRIC COMPANY", 25, 50, 150);
         properties.add(utility1);
-        Property utility2 = new Property("WATER WORKS", Color.WHITE, 25, 50, 150);
+        Property utility2 = new Property("WATER WORKS", 25, 50, 150);
         properties.add(utility2);
 
     }

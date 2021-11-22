@@ -78,6 +78,18 @@ public class Game {
         return board.getJailProperty().equals(currentPlayer.getLocation());
     }
 
+    public Board getBoard() {
+        return this.board;
+    }
+
+    public Dice getDice() {
+        return this.dice;
+    }
+
+    public Player getCurrentPlayer() {
+        return this.currentPlayer;
+    }
+
 
     public enum Status {}
 
@@ -139,9 +151,9 @@ public class Game {
      * location of the player is updated
      * next  is the turn of next player
      */
-    private void AITurn() {
+    /*private void AITurn() {
 
-        dice.Roll();
+        dice.roll();
         int sum = dice.sumOfDice();
         Property newLocationOfThePlayer = board.move(sum, AILand());
         currentPlayer = players.get(currentPlayerIndex);
@@ -152,7 +164,7 @@ public class Game {
         }
 
     }//AI-Turn
-
+*/
 
     private void notifyViewJailPlayerRoll(String result, boolean forceJailFee) {
         for (MonopolyView view : views){
@@ -169,7 +181,7 @@ public class Game {
         if ("roll".equals(command)) {
             //check if player is in Jail
             boolean jailPlayer = !passByJail && currentPlayer.getLocation().getPropertyName().equals("JAIL");
-            if(jailPlayer) {
+            if (jailPlayer) {
                 if (hasCurrentPlayerPaidJailFee()) {// if they haven't paid the jail fee yet
                     System.out.println("JAIL. Player: " + currentPlayer.getPlayerId() + " MADE PAYMENT, rolling permitted.");
                 } else {
@@ -198,9 +210,9 @@ public class Game {
 
             System.out.println("Rolling the dice...");
             // calling the roll method from Dice class.
-            
+
             String info = "";
-            
+
             dice.roll();
             System.out.println("Die 1: " + dice.getDie1());
             System.out.println("Die 2: " + dice.getDie2());
@@ -209,37 +221,36 @@ public class Game {
 
             //if in Jail check if roll result is doubles
             boolean playerMovedToJail = false;
-            if(jailPlayer) {
+            if (jailPlayer) {
                 if (hasCurrentPlayerPaidJailFee()) {
                     System.out.println("JAIL. Player: " + currentPlayer.getPlayerId() + " MADE PAYMENT, DOUBLE check NOT required.");
                 } else {
                     System.out.println("JAIL. Player: " + currentPlayer.getPlayerId() + " has NOT paid, DOUBLE check required.");
-                    if(!dice.isDouble()){// this is for checking if th eplayer got double while attempting tp roll while still in jail
+                    if (!dice.isDouble()) {// this is for checking if th eplayer got double while attempting tp roll while still in jail
                         Integer doubleAttemptCount = jailPlayerRollCountMap.get(currentPlayer.getPlayerId());
                         boolean forceJailFee;
                         String result;
-                        if(doubleAttemptCount == 3){
+                        if (doubleAttemptCount == 3) {
                             result = "No DOUBLE in Dice roll.\n"
                                     + "You've attempted " + doubleAttemptCount + " times.\n"
                                     + "You must pay Jail Fee.";
                             forceJailFee = true;// if they don't get double by the third attempt then force the jail fee
-                        }
-                        else{
+                        } else {
                             result = "No DOUBLE in Dice roll. You can't proceed!\n"
                                     + "You've attempted " + doubleAttemptCount + " times.";
                             forceJailFee = false;
                         }
-                      
+
                         notifyViewJailPlayerRoll(result, forceJailFee);
                         return;
                     }
                 }
             }
             // not in jail we keep track of the rolling doubles
-            else if(dice.isDouble()){
+            else if (dice.isDouble()) {
                 //check if double for a non-jail player
                 Integer value = playerDoubleRollCountMap.get(currentPlayer.getPlayerId());
-                if(value == null){
+                if (value == null) {
                     //first double
                     // init to zero. Increment happens below.
                     value = 0;
@@ -248,14 +259,14 @@ public class Game {
                 value += 1;
                 playerDoubleRollCountMap.put(currentPlayer.getPlayerId(), value);
 
-                if(value == 3){
+                if (value == 3) {
                     //3 times doubles. move to Jail
                     newLocation = board.moveToJail();
-                    playerMovedToJail = true; playerDoubleRollCountMap.put(currentPlayer.getPlayerId(), null);
+                    playerMovedToJail = true;
+                    playerDoubleRollCountMap.put(currentPlayer.getPlayerId(), null);
                     System.out.println("3 Doubles. Moved to JAIL. Player: " + currentPlayer.getPlayerId());
-                }
-                else{
-                    System.out.println("Player: " + currentPlayer.getPlayerId() + ", Double count: " + value) ;
+                } else {
+                    System.out.println("Player: " + currentPlayer.getPlayerId() + ", Double count: " + value);
                 }
             }
 
@@ -267,96 +278,93 @@ public class Game {
                 //So, move as per dice values.
                 newLocation = board.move(dice.sumOfDice(), currentPlayer.getLocation());
 
-                if(newLocation.equals(board.getJailProperty())){
+                if (newLocation.equals(board.getJailProperty())) {
                     //player lands in jail
                     System.out.println("Player lands in jail. Player: " + currentPlayer.getPlayerId());
                     passByJail = true;
 
-                }
-                else if(jailPlayer){
+                } else if (jailPlayer) {
                     passByJail = false;
                     //already player in jail
                     System.out.println("Moved OUT OF JAIL. Player: " + currentPlayer.getPlayerId());
                     //REMOVE tracking for the jail player.
                     jailPlayerRollCountMap.put(currentPlayer.getPlayerId(), null);
                     jailPlayerPaymentStatusMap.put(currentPlayer.getPlayerId(), null);
-                }
-                else{
+                } else {
                     passByJail = false;
                 }
             }
 
-            if(board.getValidLocation(newLocation) == true){
-            newLocation = board.move(dice.sumOfDice(), currentPlayer.getLocation());
-            if(board.getValidLocation(newLocation)){
+            if (board.getValidLocation(newLocation) == true) {
+                newLocation = board.move(dice.sumOfDice(), currentPlayer.getLocation());
+                if (board.getValidLocation(newLocation)) {
 
-                currentPlayer.setLocation(newLocation);
-                if(newLocation.getOwner() != null) {
-                    if (newLocation.getOwner() != currentPlayer){
-                        info = payRent(newLocation);
+                    currentPlayer.setLocation(newLocation);
+                    if (newLocation.getOwner() != null) {
+                        if (newLocation.getOwner() != currentPlayer) {
+                            info = payRent(newLocation);
+                        }
                     }
                 }
-            }
-            notifyView(command, info);
-        }
-
-        if ("buy".equals(command)) {
-            String info = buy(newLocation);
-            for (MonopolyView view : views){
-                view.handleMonopolyBuy(info, newLocation);
+                notifyView(command, info);
             }
 
-        }
+            if ("buy".equals(command)) {
+                String info1 = buy(newLocation);
+                for (MonopolyView view : views) {
+                    view.handleMonopolyBuy(info1, newLocation);
+                }
 
-        if ("sell".equals(command)) {
-            boolean success = sell(newLocation);
-            for (MonopolyView view : views){
-                view.handleMonopolySell(success, newLocation);
             }
-        }
 
-        if("rent".equals(command)){
-            String result1 = payRent(newLocation);
-            for (MonopolyView view : views){
-                view.handleMonopolyRentResult(result1, newLocation);
+            if ("sell".equals(command)) {
+                boolean success = sell(newLocation);
+                for (MonopolyView view : views) {
+                    view.handleMonopolySell(success, newLocation);
+                }
+            }
+
+            if ("rent".equals(command)) {
+                String result1 = payRent(newLocation);
+                for (MonopolyView view : views) {
+                    view.handleMonopolyRentResult(result1, newLocation);
 //                view.handleMonopolyRentUtility(result1, newLocation);
-            }
-        }
-        else if(command.startsWith("rent")){
-            int rentLevel = getRentLevel(command);
+                }
+            } else if (command.startsWith("rent")) {
+                int rentLevel = getRentLevel(command);
 
-            String result1 = payRent(newLocation, rentLevel);
-            for (MonopolyView view : views){
-                view.handleMonopolyRentResult(result1, newLocation);
-                view.handleMonopolyRentUtility(result1, newLocation);
-            }
+                String result1 = payRent(newLocation, rentLevel);
+                for (MonopolyView view : views) {
+                    view.handleMonopolyRentResult(result1, newLocation);
+                    view.handleMonopolyRentUtility(result1, newLocation);
+                }
 
-        }
-
-        if("Collect".equals(command)){
-            for (MonopolyView view : views){
-                view.handleMonopolyGOResult();
             }
 
-        }
+            if ("Collect".equals(command)) {
+                for (MonopolyView view : views) {
+                    view.handleMonopolyGOResult();
+                }
 
-        if ("pass".equals(command)) {
-            notifyView(command,pass());
-        }
-        if("quit".equals(command)){
-            notifyView(command, quit());
-        }
-        if("help".equals(command)){
-            notifyView(command, help());
-        }
-        if("player info".equals(command)) {
-            notifyView(command, displayPlayerInfo());
-        }
-        if(win){
-            notifyView("win", checkWin());
-        }
+            }
 
+            if ("pass".equals(command)) {
+                notifyView(command, pass());
+            }
+            if ("quit".equals(command)) {
+                notifyView(command, quit());
+            }
+            if ("help".equals(command)) {
+                notifyView(command, help());
+            }
+            if ("player info".equals(command)) {
+                notifyView(command, displayPlayerInfo());
+            }
+            if (win) {
+                notifyView("win", checkWin());
+            }
 
+        }
     }
 
     private Boolean hasCurrentPlayerPaidJailFee() {
@@ -449,13 +457,17 @@ public class Game {
 
     /**
      * The player will be able to sell
-     *
      * @param property
+     * @return
      */
-    public void sell(Property property) {
-        currentPlayer.addMoney(property.getCost());
-        currentPlayer.removeProperty(property);
-        property.setOwner(null);
+    public boolean sell(Property property){
+        if (currentPlayer == property.getOwner()){
+            currentPlayer.addMoney(property.getCost());
+            currentPlayer.removeProperty(property);
+            property.setOwner(null);
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -541,6 +553,8 @@ public class Game {
         }
 
         checkWin();
+
+        return info;
     }
 
 
@@ -565,6 +579,8 @@ public class Game {
     public String checkWin(){
         int bankruptCount = 0;
         Player winner = null;
+
+        String info = "";
 
         //loop to tally the number of the bankrupts
         for(Player p : players){
@@ -624,10 +640,6 @@ public class Game {
 
     public int getPlayerCount() {
         return playerCount;
-    }
-
-    public Board getBoard() {
-        return board;
     }
 
     public void addMonopolyView(MonopolyView view) {

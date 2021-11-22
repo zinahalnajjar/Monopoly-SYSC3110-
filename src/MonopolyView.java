@@ -5,6 +5,10 @@
  */
 public interface MonopolyView {
 
+    void handleMonopolyRailRoadBuy(boolean success, Property location);
+
+    void handleMonopolyUtilityBuy(boolean success, Property location);
+
     void handleMonopolyStatusUpdate(String command, String info);
 
     void handleMonopolyBuy(String success, Property location);

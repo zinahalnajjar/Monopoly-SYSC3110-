@@ -28,21 +28,23 @@ public class CardFrame extends JFrame implements MonopolyView, ActionListener {
 //    private JButton pass = new JButton();
 
     private final Game model;
+    private final Object mf;
 
     /**
      *
      * initializes the card view depending on which property it is attached to
-     *  @param pName property name
+     * @param pName property name
      * @param board current board
      * @param mc controller
      * @param model model
+     * @param mainFrame
      */
-    public CardFrame(String pName, Board board, MonopolyController mc, Game model){
+    public CardFrame(String pName, Board board, MonopolyController mc, Game model, MainFrame mainFrame){
         super("Monopoly!!");
 
         //reference to board and property
 
-        this.mf = mf;
+        this.mf = mainFrame;
         System.out.println("property.getPropertyName(): " + pName);
         property = board.getProperty(pName);
 
@@ -190,6 +192,16 @@ public class CardFrame extends JFrame implements MonopolyView, ActionListener {
         JOptionPane.showMessageDialog(this, info, "Help", JOptionPane.INFORMATION_MESSAGE);
     }
 
+
+    @Override
+    public void handleMonopolyRailRoadBuy(boolean success, Property location) {
+
+    }
+
+    @Override
+    public void handleMonopolyUtilityBuy(boolean success, Property location) {
+
+    }
 
     @Override
     public void handleMonopolyStatusUpdate(String command, String info) { }//updated with the parameter

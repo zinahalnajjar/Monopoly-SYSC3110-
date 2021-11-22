@@ -201,10 +201,6 @@ public class RailroadCard extends JFrame implements MonopolyView, ActionListener
         this.setVisible(true);
     }
 
-
-    @Override
-    public void handleMonopolyStatusUpdate(String command) { }//updated with the paramter
-
     /**
      * handles the buy update
      *
@@ -212,7 +208,7 @@ public class RailroadCard extends JFrame implements MonopolyView, ActionListener
      * @param location to bought
      */
     @Override
-    public void handleMonopolyBuy(boolean success, Property location) {
+    public void handleMonopolyRailRoadBuy(boolean success, Property location) {
 
         if(property == location && success == false){
             if(model.getCurrentPlayer().getLocation() != property){
@@ -229,6 +225,21 @@ public class RailroadCard extends JFrame implements MonopolyView, ActionListener
             this.setVisible(true);
         }
 
+
+    }
+
+    @Override
+    public void handleMonopolyUtilityBuy(boolean success, Property location) {
+
+    }
+
+    @Override
+    public void handleMonopolyStatusUpdate(String command, String info) {
+
+    }
+
+    @Override
+    public void handleMonopolyBuy(String success, Property location) {
 
     }
 

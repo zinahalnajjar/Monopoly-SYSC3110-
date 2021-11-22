@@ -10,6 +10,10 @@ import java.awt.*;
 @SuppressWarnings("unused")
 public class Property {
 
+    public Property(String jail, Color white) {
+
+    }
+
     public enum HouseState{
         UNOWNED(0, 0),
         RENT(1, 0),
@@ -45,10 +49,12 @@ public class Property {
     private String propertyName;
     private Color color;
     private Player owner;
-    private int rent;
+    private int rent1;
     private int rent2;
     private int rent3;
     private int rent4;
+    private int cost;
+
     private int initialRent;
     private int initialCost;
     private int costPerHouse;
@@ -69,13 +75,13 @@ public class Property {
      *
      * @param propertyName name of property
      * @param color color of the property to help determine set
-     * @param initialRent the rent of the property
-     * @param initCost the cost of the property
+     * @param rent the rent of the property
+     * @param rent2 the cost of the property
      */
     public Property(String propertyName, Color color, int rent, int rent2, int rent3, int rent4, int cost) {
         this.propertyName = propertyName;
         this.color = color;
-        this.rent = rent;
+        this.rent1 = rent;
         this.rent2 = rent2;
         this.rent3 = rent3;
         this.rent4 = rent4;
@@ -93,15 +99,10 @@ public class Property {
         state = HouseState.UNOWNED;
         this.costPerHouse = costHouse;
     }
-      
-    public Property(String propertyName, Color color) {
-        this(propertyName, color, 0, 0);
-    }
 
-    public Property(String propertyName, Color color, int rent, int rent2, int cost) {
+   public Property(String propertyName, int rent, int rent2, int cost) {
         this.propertyName = propertyName;
-        this.color = color;
-        this.rent = rent;
+        this.rent1 = rent;
         this.rent2 = rent2;
         this.cost = cost;
         this.owner = null;

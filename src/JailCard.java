@@ -169,7 +169,14 @@ public class JailCard extends JFrame implements MonopolyView, ActionListener {
     }
 
     @Override
-    public void handleMonopolyStatusUpdate(String command) { }//updated with the paramter
+    public void handleMonopolyRailRoadBuy(boolean success, Property location) {
+
+    }
+
+    @Override
+    public void handleMonopolyUtilityBuy(boolean success, Property location) {
+
+    }
 
     /**
      * handles the buy update
@@ -177,9 +184,15 @@ public class JailCard extends JFrame implements MonopolyView, ActionListener {
      * @param success true if property bought successfully
      * @param location to bought
      */
+
     @Override
-    public void handleMonopolyBuy(boolean success, Property location) {
-     //DO NOTHING
+    public void handleMonopolyStatusUpdate(String command, String info) {
+
+    }
+
+    @Override
+    public void handleMonopolyBuy(String success, Property location) {
+
     }
 
     /**
