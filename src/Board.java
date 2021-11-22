@@ -7,11 +7,13 @@ import java.util.ArrayList;
  *
  * @author Tooba
  * @author Kareem
+ * @author Zinah
  */
 public class Board {
 
     private final ArrayList<Property> properties;
     private Property newLocation;
+    private Property jailProperty;
 
 
     /**
@@ -21,7 +23,47 @@ public class Board {
     public Board() {
         this.properties = new ArrayList<>();
         this.newLocation = null;
+        this.jailProperty = new Property("JAIL", Color.WHITE);
         createProperties();
+        createRailRoads();
+        createFreeParking();
+        createJAIL();
+        createGO();
+        createUtility();
+
+    }
+    private void createUtility(){
+        Property utility1 = new Property("ELECTRIC COMPANY", Color.WHITE, 25, 50, 150);
+        properties.add(utility1);
+        Property utility2 = new Property("WATER WORKS", Color.WHITE, 25, 50, 150);
+        properties.add(utility2);
+
+    }
+    private void createGO(){
+        properties.add(new Property("GO", Color.WHITE));
+
+    }
+
+    private void createJAIL(){
+        properties.add(jailProperty);
+
+    }
+
+    private void createFreeParking() {
+
+        properties.add(new Property("FREE PARKING", Color.WHITE));
+    }
+
+    private void createRailRoads(){
+        Property railroad1 = new Property("SHORT LINE", Color.WHITE, 25, 50, 100, 200, 200);
+        properties.add(railroad1);
+        Property railroad2 = new Property("READING RAILROAD", Color.WHITE, 25, 50, 100, 200, 200);
+        properties.add(railroad2);
+        Property railroad3 = new Property("PENNSYLVANIA RAILROAD", Color.WHITE, 25, 50, 100, 200, 200);
+        properties.add(railroad3);
+        Property railroad4 = new Property("B. & O. RAILROAD", Color.WHITE, 25, 50, 100, 200, 200);
+        properties.add(railroad4);
+
     }
 
     /**
@@ -84,7 +126,9 @@ public class Board {
     public Property move(int spaces, Property location){
         int i = properties.indexOf(location);
         i = i + spaces;
-        if(i > properties.size()){
+        //The index can not be EQUAL or more.
+        // I just added the equal sign
+        if(i >= properties.size()){
             i = i - properties.size();
         }
         newLocation = properties.get(i);
@@ -92,6 +136,17 @@ public class Board {
     }
 
     /**
+     * @return the list of properties
+     */
+    public ArrayList<Property> propertiesList(){
+        return properties;
+    }
+
+    public Property getJailProperty(){
+        return  this.jailProperty;
+    }
+    /**
+
      * @return property identified by name
      */
     public Property getProperty(String name){
@@ -119,6 +174,11 @@ public class Board {
     @Override
     public String toString() {
         return "Board [properties Count=" + properties.size() + "]";
+    }
+
+    public Property moveToJail() {
+        newLocation = this.jailProperty;
+        return newLocation;
     }
 
 }

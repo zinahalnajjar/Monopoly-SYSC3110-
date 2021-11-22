@@ -1,8 +1,5 @@
 
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 /**
  * Initializes the board and the players.
@@ -15,14 +12,73 @@ import java.util.Scanner;
  */
 public class Game {
 
+
+    private static final int JAIL_FEE = 50;
+    private static final int GO_AMOUNT = 200;
+//    private static boolean DEBUG_FIRST = true;
+
+    //keeps track of rolls count for jail-player
+    //player id is key and roll count is value
+    private Map<Integer, Integer> jailPlayerRollCountMap = new HashMap<>() ;
+    //keeps track of payment by jail-player
+    //player id is key and paid tru/false is value
+    private Map<Integer, Boolean> jailPlayerPaymentStatusMap = new HashMap<>() ;
+    //keeps track of double rolls count for non-jail-player
+    //player id is key and roll count is value
+    private Map<Integer, Integer> playerDoubleRollCountMap = new HashMap<>() ;
+    
+
     private final Board board;
     private final ArrayList<Player> players;
     private final Dice dice;
+
     private Player currentPlayer;
     private final int playerCount;
     private Player previousPlayer;
     Property newLocation;
     boolean win = false;
+    private boolean passByJail = false;
+
+    /**
+     *
+     * @return
+     */
+    public void payJailFee() {
+        String info = "";
+        System.out.println("Player "+currentPlayer.getPlayerId() + " has $" + currentPlayer.getMoney()); //dispay how much the player owns
+        currentPlayer.removeMoney(JAIL_FEE);// remove money from player based on what they paid
+        boolean bankrupt = checkBankruptcy();
+
+        boolean paymentSuccess;
+        if (bankrupt) {
+            paymentSuccess = false;
+        } else {
+            info = "Player " + currentPlayer.getPlayerId() + " PAID JAIL FEE: " + JAIL_FEE +
+                    "\nPlayer" + currentPlayer.getPlayerId() + " has $" + currentPlayer.getMoney();
+            System.out.println(info);
+            paymentSuccess = true;
+            jailPlayerPaymentStatusMap.put(currentPlayer.getPlayerId(), true);
+
+        }
+
+        for (MonopolyView view : views){
+            view.handleMonopolyJailFeePaymentResult(paymentSuccess);
+        }
+
+
+    }
+
+    public void collect(){
+        currentPlayer.addMoney(GO_AMOUNT);
+        for (MonopolyView view : views){
+            view.handleMonopolyGOResult();
+        }
+    }
+
+    public boolean isPlayerInJail() {
+        return board.getJailProperty().equals(currentPlayer.getLocation());
+    }
+
 
     public enum Status {}
 
@@ -65,30 +121,143 @@ public class Game {
     }
 
 
-    /**
-     *
-     * Implements the run loop that goes till the game is ended by finding a winner
-     * Implements all the commands
-     *  -roll: rolls the dice
-     *  -buy: helps player buy the property
-     *  -pass: ends the turn
-     *  -status: print the status
-     *  -help: calls help
-     *  -quit: sets the current player to bankrupt and goes to the next player
-     *
-     *  Checks
-     */
+    private void notifyViewJailPlayerRoll(String result, boolean forceJailFee) {
+        for (MonopolyView view : views){
+            view.handleMonopolyJailPlayerRollResult(result, forceJailFee);
+        }
+
+    }
+
     public void run(String command) {
         if(currentPlayer.getBankruptcy()){
             nextPlayer();
         }
 
         if ("roll".equals(command)) {
-            String info = "";
-            dice.roll();
 
+            //check if player is in Jail
+            boolean jailPlayer = !passByJail && currentPlayer.getLocation().getPropertyName().equals("JAIL");
+            if(jailPlayer) {
+                if (hasCurrentPlayerPaidJailFee()) {// if they haven't paid the jail fee yet
+                    System.out.println("JAIL. Player: " + currentPlayer.getPlayerId() + " MADE PAYMENT, rolling permitted.");
+                } else {
+                    System.out.println("JAIL. Player: " + currentPlayer.getPlayerId() + " has NOT paid. Attempts rolling.");
+                    Integer value = jailPlayerRollCountMap.get(currentPlayer.getPlayerId()); // this is for when the player is choosing to roll and get double to get out of jai;
+                    if (value == null) {
+                        //first double
+                        // init to zero. Increment happens below.
+                        value = 0;
+                    }
+                    //increment by 1
+                    value += 1;
+                    jailPlayerRollCountMap.put(currentPlayer.getPlayerId(), value);
+
+                    if (value == 3) {
+                        //if roll count is 3 do not proceed to roll
+                        //this should not happen. The roll button shouldn't be enabled for this case.
+                        System.out.println("Rolling dice PROHIBITED for JAIL Player: " + currentPlayer.getPlayerId()
+                                + ". And must pay Jail Fee.");
+
+                    } else {
+                        System.out.println("JAIL. Player: " + currentPlayer.getPlayerId() + ", rolling count: " + value);
+                    }
+                }
+            }
+
+            System.out.println("Rolling the dice...");
+            // calling the roll method from Dice class.
+            
+            String info = "";
+            
+            dice.roll();
+            System.out.println("Die 1: " + dice.getDie1());
+            System.out.println("Die 2: " + dice.getDie2());
+
+            newLocation = null;
+
+            //if in Jail check if roll result is doubles
+            boolean playerMovedToJail = false;
+            if(jailPlayer) {
+                if (hasCurrentPlayerPaidJailFee()) {
+                    System.out.println("JAIL. Player: " + currentPlayer.getPlayerId() + " MADE PAYMENT, DOUBLE check NOT required.");
+                } else {
+                    System.out.println("JAIL. Player: " + currentPlayer.getPlayerId() + " has NOT paid, DOUBLE check required.");
+                    if(!dice.isDouble()){// this is for checking if th eplayer got double while attempting tp roll while still in jail
+                        Integer doubleAttemptCount = jailPlayerRollCountMap.get(currentPlayer.getPlayerId());
+                        boolean forceJailFee;
+                        String result;
+                        if(doubleAttemptCount == 3){
+                            result = "No DOUBLE in Dice roll.\n"
+                                    + "You've attempted " + doubleAttemptCount + " times.\n"
+                                    + "You must pay Jail Fee.";
+                            forceJailFee = true;// if they don't get double by the third attempt then force the jail fee
+                        }
+                        else{
+                            result = "No DOUBLE in Dice roll. You can't proceed!\n"
+                                    + "You've attempted " + doubleAttemptCount + " times.";
+                            forceJailFee = false;
+                        }
+
+                        notifyViewJailPlayerRoll(result, forceJailFee);
+                        return;
+                    }
+                }
+            }
+            // not in jail we keep track of the rolling doubles
+            else if(dice.isDouble()){
+                //check if double for a non-jail player
+                Integer value = playerDoubleRollCountMap.get(currentPlayer.getPlayerId());
+                if(value == null){
+                    //first double
+                    // init to zero. Increment happens below.
+                    value = 0;
+                }
+                //increment by 1
+                value += 1;
+                playerDoubleRollCountMap.put(currentPlayer.getPlayerId(), value);
+
+                if(value == 3){
+                    //3 times doubles. move to Jail
+                    newLocation = board.moveToJail();
+                    playerMovedToJail = true; playerDoubleRollCountMap.put(currentPlayer.getPlayerId(), null);
+                    System.out.println("3 Doubles. Moved to JAIL. Player: " + currentPlayer.getPlayerId());
+                }
+                else{
+                    System.out.println("Player: " + currentPlayer.getPlayerId() + ", Double count: " + value) ;
+                }
+            }
+
+            if (playerMovedToJail) {
+//                Player Moved JAIL. Player. No need to move in board as per dice value.
+                System.out.println("Player Moved JAIL. Player: " + currentPlayer.getPlayerId());
+            } else {
+                //Current player is not moved to Jail.
+                //So, move as per dice values.
+                newLocation = board.move(dice.sumOfDice(), currentPlayer.getLocation());
+
+                if(newLocation.equals(board.getJailProperty())){
+                    //player lands in jail
+                    System.out.println("Player lands in jail. Player: " + currentPlayer.getPlayerId());
+                    passByJail = true;
+
+                }
+                else if(jailPlayer){
+                    passByJail = false;
+                    //already player in jail
+                    System.out.println("Moved OUT OF JAIL. Player: " + currentPlayer.getPlayerId());
+                    //REMOVE tracking for the jail player.
+                    jailPlayerRollCountMap.put(currentPlayer.getPlayerId(), null);
+                    jailPlayerPaymentStatusMap.put(currentPlayer.getPlayerId(), null);
+                }
+                else{
+                    passByJail = false;
+                }
+            }
+
+            if(board.getValidLocation(newLocation) == true){
             newLocation = board.move(dice.sumOfDice(), currentPlayer.getLocation());
             if(board.getValidLocation(newLocation)){
+
                 currentPlayer.setLocation(newLocation);
                 if(newLocation.getOwner() != null) {
                     if (newLocation.getOwner() != currentPlayer){
@@ -114,10 +283,34 @@ public class Game {
             }
         }
 
+        if("rent".equals(command)){
+            String result1 = payRent(newLocation);
+            for (MonopolyView view : views){
+                view.handleMonopolyRentResult(result1, newLocation);
+//                view.handleMonopolyRentUtility(result1, newLocation);
+            }
+        }
+        else if(command.startsWith("rent")){
+            int rentLevel = getRentLevel(command);
+
+            String result1 = payRent(newLocation, rentLevel);
+            for (MonopolyView view : views){
+                view.handleMonopolyRentResult(result1, newLocation);
+                view.handleMonopolyRentUtility(result1, newLocation);
+            }
+
+        }
+
+        if("Collect".equals(command)){
+            for (MonopolyView view : views){
+                view.handleMonopolyGOResult();
+            }
+
+        }
+
         if ("pass".equals(command)) {
             notifyView(command,pass());
         }
-
         if("quit".equals(command)){
             notifyView(command, quit());
         }
@@ -130,6 +323,16 @@ public class Game {
         if(win){
             notifyView("win", checkWin());
         }
+
+
+    }
+
+    private Boolean hasCurrentPlayerPaidJailFee() {
+        Boolean paid = jailPlayerPaymentStatusMap.get(currentPlayer.getPlayerId());
+        if(paid == null){
+            paid = false;
+        }
+        return paid;
     }
 
     /**
@@ -142,12 +345,24 @@ public class Game {
         }
     }
 
-    /**
-     * The player will be able to buy once he lands on an unowned property
-     * @param property
-     */
-    public String buy(Property property){
+    // rents for railraod and utility
 
+    private int getRentLevel(String buttonLabel) {
+        switch (buttonLabel){
+            case "rent1":
+                return 1;
+            case "rent2":
+                return 2;
+            case "rent3":
+                return 3;
+            case "rent4":
+                return 4;
+        }
+        return 1;
+    }
+
+    
+    public String buy(Property property){
         String info;
         if(property.getState() == Property.HouseState.UNOWNED) {
             if (currentPlayer.getLocation() == property){
@@ -179,7 +394,6 @@ public class Game {
                 info = "You don't have enough money.";
             } else{
                 currentPlayer.removeMoney(cost);
-
                 property.incrementState();
 
                 info = "You have successfully bought " + property.getState().getHouseNum() + " houses\n";
@@ -257,7 +471,28 @@ public class Game {
      * @param property the property for which the rent needs to be paid
      */
     public String payRent(Property property){
+        //default rent
+        return payRent(property, 1);
+
+    }
+    public String payRent(Property property, int rentLevel){
         String info = "";
+        int rentUtil = 0;
+        // get rent amount
+        if(rentLevel == 1) {
+            rentUtil = property.getRent1();
+        }
+        else if(rentLevel == 2) {
+            rentUtil = property.getRent2();
+        }
+        else if(rentLevel == 3) {
+            rentUtil = property.getRent3();
+        }
+        else if(rentLevel == 4) {
+            rentUtil = property.getRent4();
+        }
+        System.out.println("Player "+currentPlayer.getPlayerId() + " has $" + currentPlayer.getMoney()); //dispay how much the player owns
+
         int rent;
 
         rent = property.getRent();// get rent amount
@@ -283,6 +518,8 @@ public class Game {
 
         return info;
     }
+
+
 
     /**
      * checks if a player still has enough money to play the game before losing
@@ -392,8 +629,17 @@ public class Game {
         views.add(view);
     }
 
+
     public void removeMonopolyView(MonopolyView view){
         views.remove(view);
     }
 
+    public Player getPreviousPlayer(){
+        return previousPlayer;
+    }
+    public boolean isPassByJail(){
+        return passByJail;
+    }
+
 }
+

@@ -42,6 +42,8 @@ public class CardFrame extends JFrame implements MonopolyView, ActionListener {
 
         //reference to board and property
 
+        this.mf = mf;
+        System.out.println("property.getPropertyName(): " + pName);
         property = board.getProperty(pName);
 
         //reference to the model and controller
@@ -61,6 +63,7 @@ public class CardFrame extends JFrame implements MonopolyView, ActionListener {
         //initialize the title section of the panel
         //deed card values
         JLabel propertyName = new JLabel(property.getPropertyName());
+
         propertyName.setFont(new Font("SANS_SERIF", Font.BOLD, 20));
         titlePanel.add(propertyName);
         titlePanel.setBackground(property.getColor());
@@ -68,6 +71,7 @@ public class CardFrame extends JFrame implements MonopolyView, ActionListener {
 
         //initialize the information on the card
         JLabel propertyInfo = new JLabel();
+      
         initInfoPanel("Property Information", propertyInfo);
         JLabel propertyRent = new JLabel();
         initInfoPanel("Rent: "+ property.getInitialRent(), propertyRent);
@@ -76,10 +80,15 @@ public class CardFrame extends JFrame implements MonopolyView, ActionListener {
         initInfoPanel("Owner: None", propertyOwner);
         initInfoPanel("Houses Owned: None", propertyHouses);
 
-        //initialize the buy and sell button the card
-        initButtonPanel("buy", buy, mc);
-        initButtonPanel("sell", sell, mc);
+        if(property.getPropertyName().equals(board.getJailProperty().getPropertyName())) {
 
+        }
+        else{
+            //initialize the buy and sell button the card
+            initButtonPanel("buy", buy, mc);
+            initButtonPanel("sell", sell, mc);
+        }
+      
         //add all the panels to the deed card view
         this.add(titlePanel);
         this.add(infoPanel);
@@ -175,6 +184,12 @@ public class CardFrame extends JFrame implements MonopolyView, ActionListener {
 
         this.setVisible(true);
     }
+  
+    private void FreeParkingNotification(){
+        String info = "Press Pass to move to the next turn";
+        JOptionPane.showMessageDialog(this, info, "Help", JOptionPane.INFORMATION_MESSAGE);
+    }
+
 
     @Override
     public void handleMonopolyStatusUpdate(String command, String info) { }//updated with the parameter
@@ -215,6 +230,32 @@ public class CardFrame extends JFrame implements MonopolyView, ActionListener {
             sell.setEnabled(false);
             this.setVisible(true);
         }
+    }
+
+    @Override
+    public void handleMonopolyRentResult(String result, Property location) {
+
+    }
+
+    @Override
+    public void handleMonopolyRentUtility(String result, Property location) {
+
+    }
+
+    @Override
+    public void handleMonopolyJailFeePaymentResult(boolean paymentSuccess) {
+        //DO NOTHING
+    }
+
+    @Override
+    public void handleMonopolyJailPlayerRollResult(String result, boolean forceJailFee) {
+        //DO NOTHING
+
+    }
+
+    @Override
+    public void handleMonopolyGOResult() {
+
     }
 
 }
