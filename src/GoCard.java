@@ -115,13 +115,24 @@ public class GoCard extends JFrame implements MonopolyView, ActionListener{
         }
 
     }
-        @Override
-    public void handleMonopolyStatusUpdate(String command) {
+
+    @Override
+    public void handleMonopolyRailRoadBuy(boolean success, Property location) {
 
     }
 
     @Override
-    public void handleMonopolyBuy(boolean success, Property location) {
+    public void handleMonopolyUtilityBuy(boolean success, Property location) {
+
+    }
+
+    @Override
+    public void handleMonopolyStatusUpdate(String command, String info) {
+
+    }
+
+    @Override
+    public void handleMonopolyBuy(String info, Property location) {
 
     }
 

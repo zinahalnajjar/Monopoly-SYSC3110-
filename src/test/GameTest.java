@@ -57,7 +57,7 @@ public class GameTest {
         g.getBoard().getProperty("Oriental Avenue").setOwner(g.getCurrentPlayer());
         g.nextPlayer();
         String info = g.payRent(g.getBoard().getProperty("Oriental Avenue"));
-        String actualInfo = "Player " + g.getCurrentPlayer().getPlayerId() + " PAID rent: " + g.getBoard().getProperty("Oriental Avenue").getInitialRent() +
+        String actualInfo = "Player " + g.getCurrentPlayer().getPlayerId() + " PAID rent: " + g.getBoard().getProperty("Oriental Avenue").getRent() +
                 "\nPlayer" +g.getCurrentPlayer().getPlayerId() + " has $" + g.getCurrentPlayer().getMoney();
 
         assertEquals(info, actualInfo);

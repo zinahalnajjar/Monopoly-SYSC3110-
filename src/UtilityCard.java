@@ -82,8 +82,8 @@ public class UtilityCard extends JFrame implements MonopolyView, ActionListener{
 
         //initialize the information on the card
         initInfoPanel("Property Information", utilityInfo);
-        initInfoPanel("Rent: "+ property.getRent(), utilityRent1);
-        initInfoPanel("Rent2: "+ property.getRent2(), utilityRent2);
+        initInfoPanel("Rent: "+ ((UtilityTile)property).getRent1(), utilityRent1);
+        initInfoPanel("Rent2: "+ ((UtilityTile)property).getRent2(), utilityRent2);
         initInfoPanel("Cost: "+ property.getCost(), utilityCost);
         initInfoPanel("Owner: None",utilityOwner);
 
@@ -175,12 +175,12 @@ public class UtilityCard extends JFrame implements MonopolyView, ActionListener{
     }
 
     @Override
-    public void handleMonopolyStatusUpdate(String command) {
+    public void handleMonopolyRailRoadBuy(boolean success, Property location) {
 
     }
 
     @Override
-    public void handleMonopolyBuy(boolean success, Property location) {
+    public void handleMonopolyUtilityBuy(boolean success, Property location) {
         if(property == location && success == false){
             if(model.getCurrentPlayer().getLocation() != property){
                 JOptionPane.showMessageDialog(this,"You are not eligible to buy this property");
@@ -195,6 +195,16 @@ public class UtilityCard extends JFrame implements MonopolyView, ActionListener{
             buy.setEnabled(false);
             this.setVisible(true);
         }
+
+    }
+
+    @Override
+    public void handleMonopolyStatusUpdate(String command, String info) {
+
+    }
+
+    @Override
+    public void handleMonopolyBuy(String success, Property location) {
 
     }
 

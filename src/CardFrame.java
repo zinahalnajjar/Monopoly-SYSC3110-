@@ -28,21 +28,23 @@ public class CardFrame extends JFrame implements MonopolyView, ActionListener {
 //    private JButton pass = new JButton();
 
     private final Game model;
+    private final Object mf;
 
     /**
      *
      * initializes the card view depending on which property it is attached to
-     *  @param pName property name
+     * @param pName property name
      * @param board current board
      * @param mc controller
      * @param model model
+     * @param mainFrame
      */
-    public CardFrame(String pName, Board board, MonopolyController mc, Game model){
+    public CardFrame(String pName, Board board, MonopolyController mc, Game model, MainFrame mainFrame){
         super("Monopoly!!");
 
         //reference to board and property
 
-        this.mf = mf;
+        this.mf = mainFrame;
         System.out.println("property.getPropertyName(): " + pName);
         property = board.getProperty(pName);
 
@@ -74,7 +76,7 @@ public class CardFrame extends JFrame implements MonopolyView, ActionListener {
       
         initInfoPanel("Property Information", propertyInfo);
         JLabel propertyRent = new JLabel();
-        initInfoPanel("Rent: "+ property.getInitialRent(), propertyRent);
+        initInfoPanel("Rent: "+ property.getRent(), propertyRent);
         JLabel propertyCost = new JLabel();
         initInfoPanel("Cost: "+ property.getCost(), propertyCost);
         initInfoPanel("Owner: None", propertyOwner);
@@ -132,12 +134,12 @@ public class CardFrame extends JFrame implements MonopolyView, ActionListener {
      */
     private void updateBuyInfo(Property location) {
         System.out.println(property.getState());
-        if(property.getState() == Property.HouseState.RENT){
+        if(property.getState() == HouseState.RENT){
             propertyOwner.setText("Owner: Player " + location.getOwner().getPlayerId());
         }
         sell.setEnabled(true);
         propertyHouses.setText("Houses Owned: " + property.getState().getHouseNum());
-        if(property.getState() == Property.HouseState.HOTEL){
+        if(property.getState() == HouseState.HOTEL){
             propertyHouses.setText("Hotel Owned");
             buy.setEnabled(false);
         }
@@ -168,13 +170,13 @@ public class CardFrame extends JFrame implements MonopolyView, ActionListener {
             }
            //if property is owned by current player himself
             else if(property.getOwner() == model.getCurrentPlayer()){
-                buy.setEnabled(property.getState() != Property.HouseState.HOTEL);
+                buy.setEnabled(property.getState() != HouseState.HOTEL);
                sell.setEnabled(true);
 
            }
         } //if player not on property but owns the property
         else if(property.getOwner() == model.getCurrentPlayer()) {
-            buy.setEnabled(property.getState() != Property.HouseState.HOTEL);
+            buy.setEnabled(property.getState() != HouseState.HOTEL);
             sell.setEnabled(true);
         }
         else { //if not on property and does not own the property
@@ -190,6 +192,16 @@ public class CardFrame extends JFrame implements MonopolyView, ActionListener {
         JOptionPane.showMessageDialog(this, info, "Help", JOptionPane.INFORMATION_MESSAGE);
     }
 
+
+    @Override
+    public void handleMonopolyRailRoadBuy(boolean success, Property location) {
+
+    }
+
+    @Override
+    public void handleMonopolyUtilityBuy(boolean success, Property location) {
+
+    }
 
     @Override
     public void handleMonopolyStatusUpdate(String command, String info) { }//updated with the parameter

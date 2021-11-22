@@ -10,17 +10,11 @@ import static org.junit.Assert.*;
  */
 public class PropertyTest {
 
-    final Property a = new Property("Carleton", Color.RED, 5000, 6000,400);
-    final Player T = new Player(1500,1);
+    final Property a = new BluePropertyTile("Carleton", false);
+    final Player T = new Player(1500,1, new GoTile("GO", Color.WHITE));
     @Test
     public void getPropertyName() {
         assertEquals(a.getPropertyName(),"Carleton");
-    }
-
-    @Test
-    public void setPropertyName() {
-        a.setPropertyName("Minto");
-        assertEquals(a.getPropertyName(),"Minto");
     }
 
     @Test
@@ -28,11 +22,6 @@ public class PropertyTest {
         assertEquals(a.getColor(),Color.RED);
     }
 
-    @Test
-    public void setColor() {
-        a.setColor(Color.BLACK);
-        assertEquals(a.getColor(),Color.BLACK);
-    }
 
     @Test
     public void getOwner() {
@@ -54,23 +43,13 @@ public class PropertyTest {
 
     @Test
     public void getRent() {
-        assertEquals(a.getInitialRent(),5000);
+        assertEquals(a.getRent(),5000);
     }
 
-    @Test
-    public void setRent() {
-        a.setInitialRent(1);
-        assertEquals(a.getInitialRent(),1);
-    }
 
     @Test
     public void getCost() {
         assertEquals(a.getCost(),6000);
     }
 
-    @Test
-    public void setCost() {
-        a.setCost(3);
-        assertEquals(a.getCost(),3);
-    }
 }

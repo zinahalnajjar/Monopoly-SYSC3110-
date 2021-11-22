@@ -30,10 +30,11 @@ public class Player {
      * creates a player on the board
      * @param money
      * @param aPlayerID
+     * @param start
      */
-    public Player(int money, int aPlayerID) {
+    public Player(int money, int aPlayerID, Property start) {
 
-        this. location = new Property("Start");
+        this.location = start;
 
         this.playerId = aPlayerID;
         this.money = money;

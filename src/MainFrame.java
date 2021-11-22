@@ -1,8 +1,6 @@
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Objects;
@@ -61,7 +59,7 @@ public class MainFrame extends JFrame implements MonopolyView  {
     private static int SOUTH_HEIGHT = 100;
   
     //The model
-    private final Game model;
+    private Game model;
 
     /**
      * Constructor
@@ -179,9 +177,9 @@ public class MainFrame extends JFrame implements MonopolyView  {
         commandButtonsPanel.setBackground(BG_COLOR);
 
         JLabel northSpaceLabel = new JLabel(" ");
-        setHeightNorth(northSpaceLabel);
+
         JLabel southSpaceLabel = new JLabel(" ");
-        setHeightSouth(southSpaceLabel);
+
         JPanel centerSpacePanel = new JPanel();
         centerSpacePanel.setBackground(BG_COLOR);
         addEmptyLabel(centerSpacePanel, 5);
@@ -452,7 +450,6 @@ public class MainFrame extends JFrame implements MonopolyView  {
         addEmptyLabel(northPanel, 3);
 
         GoToJail = new JLabel("GO TO JAIL");
-        setHeightNorth(GoToJail);
         northPanel.add(GoToJail);
 
         addEmptyLabel(northPanel, 3);
@@ -490,8 +487,6 @@ public class MainFrame extends JFrame implements MonopolyView  {
     @Override
     public void handleMonopolyRentUtility(String result, Property location) {
 
-    @Override
-    public void handleMonopolyBuy(String success, Property location) {
     }
 
     @Override
@@ -532,6 +527,16 @@ public class MainFrame extends JFrame implements MonopolyView  {
     }
 
     @Override
+    public void handleMonopolyRailRoadBuy(boolean success, Property location) {
+
+    }
+
+    @Override
+    public void handleMonopolyUtilityBuy(boolean success, Property location) {
+
+    }
+
+    @Override
     public void handleMonopolyStatusUpdate(String command, String info) {
         System.out.println("...Notified of command: " + command);
         switch (command) {
@@ -547,9 +552,6 @@ public class MainFrame extends JFrame implements MonopolyView  {
             case "player info":
                 infoNotification(info);
                 break;
-            case "player info":
-                infoNotification();
-                break;
             case "quit":
                 quitNotification(info);
                 break;
@@ -559,6 +561,11 @@ public class MainFrame extends JFrame implements MonopolyView  {
             default:
                 break;
         }
+    }
+
+    @Override
+    public void handleMonopolyBuy(String success, Property location) {
+
     }
 
     /**

@@ -1,6 +1,8 @@
 
 import org.junit.Test;
 
+import java.awt.*;
+
 import static org.junit.Assert.*;
 
 /**
@@ -12,7 +14,7 @@ public class BoardTest {
 
     @Test
     public void move() {
-        assertEquals( b.move(3, new Property("Start", null,0,0,0)), b.getProperty("Oriental Avenue"));
+        assertEquals( b.move(3, new GoTile("Start", Color.WHITE)), b.getProperty("Oriental Avenue"));
     }
 
     @Test

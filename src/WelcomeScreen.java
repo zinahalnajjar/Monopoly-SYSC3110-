@@ -49,7 +49,7 @@ public class WelcomeScreen {
                         } else {
                             err.setVisible(true);
                         }
-                    } catch (NumberFormatException ex) {
+                    } catch (NumberFormatException | IOException ex) {
                         err.setVisible(true);
                     }
                 }

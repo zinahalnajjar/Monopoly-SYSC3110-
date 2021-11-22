@@ -77,10 +77,10 @@ public class RailroadCard extends JFrame implements MonopolyView, ActionListener
 
         //initialize the information on the card
         initInfoPanel("Property Information", railroadInfo);
-        initInfoPanel("Rent: "+ property.getRent(), railroadRent1);
-        initInfoPanel("Rent2: "+ property.getRent2(), railroadRent2);
-        initInfoPanel("Rent3: "+ property.getRent3(), railroadRent3);
-        initInfoPanel("Rent4: "+ property.getRent4(), railroadRent4);
+        initInfoPanel("Rent: "+ ((RailRoadTile)property).getRent1(), railroadRent1);
+        initInfoPanel("Rent2: "+ ((RailRoadTile)property).getRent2(), railroadRent2);
+        initInfoPanel("Rent3: "+ ((RailRoadTile)property).getRent3(), railroadRent3);
+        initInfoPanel("Rent4: "+ ((RailRoadTile)property).getRent4(), railroadRent4);
         initInfoPanel("Cost: "+ property.getCost(), railroadCost);
         initInfoPanel("Owner: None",railroadOwner);
 
@@ -201,10 +201,6 @@ public class RailroadCard extends JFrame implements MonopolyView, ActionListener
         this.setVisible(true);
     }
 
-
-    @Override
-    public void handleMonopolyStatusUpdate(String command) { }//updated with the paramter
-
     /**
      * handles the buy update
      *
@@ -212,7 +208,7 @@ public class RailroadCard extends JFrame implements MonopolyView, ActionListener
      * @param location to bought
      */
     @Override
-    public void handleMonopolyBuy(boolean success, Property location) {
+    public void handleMonopolyRailRoadBuy(boolean success, Property location) {
 
         if(property == location && success == false){
             if(model.getCurrentPlayer().getLocation() != property){
@@ -229,6 +225,21 @@ public class RailroadCard extends JFrame implements MonopolyView, ActionListener
             this.setVisible(true);
         }
 
+
+    }
+
+    @Override
+    public void handleMonopolyUtilityBuy(boolean success, Property location) {
+
+    }
+
+    @Override
+    public void handleMonopolyStatusUpdate(String command, String info) {
+
+    }
+
+    @Override
+    public void handleMonopolyBuy(String success, Property location) {
 
     }
 

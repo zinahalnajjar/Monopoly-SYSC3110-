@@ -11,10 +11,10 @@ import static org.junit.Assert.*;
  */
 public class PlayerTest {
 
-    final Property a = new Property("Carleton", Color.RED, 2,3,5);
-    final Property b = new Property("Carleton2", Color.RED, 2,3,5);
+    final Property a = new BluePropertyTile("Carleton", false);
+    final Property b = new BluePropertyTile("Carleton2", false);
 
-    final Player p = new Player(1500,1);
+    final Player p = new Player(1500,1, new GoTile("Go", Color.WHITE));
 
     @Test
     public void getPlayerId() {
