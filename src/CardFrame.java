@@ -31,6 +31,8 @@ public class CardFrame extends JFrame implements MonopolyView, ActionListener {
     private JLabel propertyRent = new JLabel();
     private JLabel propertyCost = new JLabel();
     private JLabel propertyOwner = new JLabel();
+    private JLabel propertyHouses = new JLabel();
+
 
     //buttons on the deed card
     private JButton buy = new JButton();
@@ -66,11 +68,11 @@ public class CardFrame extends JFrame implements MonopolyView, ActionListener {
 
         this.setLayout(new FlowLayout(FlowLayout.CENTER));
 
-        this.setSize(250, 290);
+        this.setSize(250, 320);
 
         //set layout for the each panel
         titlePanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        infoPanel = new JPanel(new GridLayout(4,1));
+        infoPanel = new JPanel(new GridLayout(5,1));
         buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
 
         //initialize the title section of the panel
@@ -85,11 +87,11 @@ public class CardFrame extends JFrame implements MonopolyView, ActionListener {
         initInfoPanel("Rent: "+ property.getInitialRent(), propertyRent);
         initInfoPanel("Cost: "+ property.getCost(), propertyCost);
         initInfoPanel("Owner: None", propertyOwner);
+        initInfoPanel("Houses Owned: None", propertyHouses);
 
         //initialize the buy and sell button the card
         initButtonPanel("buy", buy, mc);
-        initButtonPanel("sell", sell, mc);
-//        initButtonPanel("pass", pass, mc);
+        initButtonPanel("sell", sell, mc);;
 
         //add all the panels to the deed card view
         this.add(titlePanel);
@@ -132,26 +134,24 @@ public class CardFrame extends JFrame implements MonopolyView, ActionListener {
     /**
      * @param location updates whether the property owner field
      */
-    private void updateInfo(Property location) {
-        if(property.getOwner() != null){
+    private void updateBuyInfo(Property location) {
+        System.out.println(property.getState());
+        if(property.getState() == Property.HouseState.RENT){
             propertyOwner.setText("Owner: Player " + location.getOwner().getPlayerId());
-        }else{
-            propertyOwner.setText("Owner: None");
+        }
+        sell.setEnabled(true);
+        propertyHouses.setText("Houses Owned: " + property.getState().getHouseNum());
+        if(property.getState() == Property.HouseState.HOTEL){
+            propertyHouses.setText("Hotel Owned");
         }
     }
 
-    /**
-     * @return the buy button
-     */
-    public JButton getBuy(){
-        return buy;
-    }
 
     /**
-     * @return the sell button
+     * @param location updates whether the property owner field
      */
-    public JButton getSell(){
-        return sell;
+    private void updateSellInfo(Property location) {
+        propertyOwner.setText("Owner: None");
     }
 
     /**
@@ -178,8 +178,6 @@ public class CardFrame extends JFrame implements MonopolyView, ActionListener {
            else if(property.getOwner() != model.getCurrentPlayer()){
                 buy.setEnabled(false);
                 sell.setEnabled(false);
-                String info = model.payRent(property);
-                JOptionPane.showMessageDialog(this, info, "Pay rent", JOptionPane.INFORMATION_MESSAGE);
             }
            //if property is owned by current player himself
             else if(property.getOwner() == model.getCurrentPlayer()){
@@ -209,7 +207,7 @@ public class CardFrame extends JFrame implements MonopolyView, ActionListener {
     }
 
     @Override
-    public void handleMonopolyStatusUpdate(String command) { }//updated with the paramter
+    public void handleMonopolyStatusUpdate(String command, String info) { }//updated with the paramter
 
     /**
      * handles the buy update
@@ -219,7 +217,11 @@ public class CardFrame extends JFrame implements MonopolyView, ActionListener {
      */
     @Override
     public void handleMonopolyBuy(String info, Property location) {
-        JOptionPane.showMessageDialog(this,info);
+        if(location == property){
+            JOptionPane.showMessageDialog(this,info);
+            updateBuyInfo(location);
+            this.setVisible(true);
+        }
     }
 
     /**
@@ -239,7 +241,7 @@ public class CardFrame extends JFrame implements MonopolyView, ActionListener {
             }
         }
         else if(success && property == location){
-            updateInfo(location);
+            updateSellInfo(location);
             sell.setEnabled(false);
             this.setVisible(true);
         }

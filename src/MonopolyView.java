@@ -5,7 +5,7 @@
  */
 public interface MonopolyView {
 
-    void handleMonopolyStatusUpdate(String command);
+    void handleMonopolyStatusUpdate(String command, String info);
 
     void handleMonopolyBuy(String success, Property location);
 

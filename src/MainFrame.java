@@ -459,26 +459,26 @@ public class MainFrame extends JFrame implements MonopolyView  {
     }
 
     @Override
-    public void handleMonopolyStatusUpdate(String command) {
+    public void handleMonopolyStatusUpdate(String command, String info) {
         System.out.println("...Notified of command: " + command);
         switch (command) {
             case "roll":
-                rollNotification();
+                rollNotification(info);
                 break;
             case "pass":
-                passNotification();
+                passNotification(info);
                 break;
             case "help":
-                helpNotification();
+                helpNotification(info);
                 break;
             case "player info":
-                infoNotification();
+                infoNotification(info);
                 break;
             case "quit":
-                quitNotification();
+                quitNotification(info);
                 break;
             case "win":
-                winNotification();
+                winNotification(info);
                 break;
             default:
                 break;
@@ -488,16 +488,14 @@ public class MainFrame extends JFrame implements MonopolyView  {
     /**
      * displays player info
      */
-    private void infoNotification() {
-        String info = model.displayPlayerInfo();
+    private void infoNotification(String info) {
         JOptionPane.showMessageDialog(this, info, "Player Info", JOptionPane.INFORMATION_MESSAGE);
     }
 
     /**
      * displays win notification
      */
-    private void winNotification() {
-        String info = "Player " +model.getCurrentPlayer().getPlayerId()+ " has won the game!!!";
+    private void winNotification(String info) {
         JOptionPane.showMessageDialog(this, info , "Winner", JOptionPane.INFORMATION_MESSAGE);
         System.exit(0);
     }
@@ -507,17 +505,14 @@ public class MainFrame extends JFrame implements MonopolyView  {
     /**
      * when the user clicks on the quit command they will exit the program
      */
-    private void quitNotification(){
-        String info = "Player "+model.getPreviousPlayer().getPlayerId()+" has quit\n" +
-                "It is now Player " +model.getCurrentPlayer().getPlayerId()+ "'s turn";
+    private void quitNotification(String info){
         JOptionPane.showMessageDialog(this, info , "Quit", JOptionPane.INFORMATION_MESSAGE);
     }
 
     /**
      * displays help info
      */
-    private void helpNotification() {
-        String info = model.help();
+    private void helpNotification(String info) {
         JOptionPane.showMessageDialog(this, info, "Help", JOptionPane.INFORMATION_MESSAGE);
 
     }
@@ -526,10 +521,7 @@ public class MainFrame extends JFrame implements MonopolyView  {
      * Display the information of 'pass' result.
      * The current player and the next player details.
      */
-    private void passNotification() {
-        Player currentPlayer = model.getCurrentPlayer();
-        String info = "The turn has been passed on to:\n\n";
-        info += "Player " + currentPlayer.getPlayerId(); // i used the ID to represent the players- Kareem might need to change this
+    private void passNotification(String info) {
         JOptionPane.showMessageDialog(this, info, "Pass result", JOptionPane.INFORMATION_MESSAGE);
 
         roll.setEnabled(true);
@@ -539,7 +531,7 @@ public class MainFrame extends JFrame implements MonopolyView  {
     /**
      * Updates the user on what happens after rolling the dice, plus checks for double rolls
      */
-    private void rollNotification(){
+    private void rollNotification(String payRentInfo){
         Dice dice = model.getDice(); // get the dice from model- also need to add the getter in Game class to return the dice
         Player currentPlayer = model.getCurrentPlayer(); // get the current player
         Property location = currentPlayer.getLocation(); // get the location of the current player on the board
@@ -556,6 +548,10 @@ public class MainFrame extends JFrame implements MonopolyView  {
             if(bttn.getText().equals(location.getPropertyName())){
                 bttn.doClick();
             }
+        }
+
+        if(payRentInfo != ""){
+            JOptionPane.showMessageDialog(this, payRentInfo, "Payed Rent", JOptionPane.INFORMATION_MESSAGE);
         }
 
         //double rolls

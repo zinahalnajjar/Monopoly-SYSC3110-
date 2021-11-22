@@ -204,22 +204,29 @@ public class Game {
         }
 
         if ("roll".equals(command)) {
+            String info = "";
             dice.roll();
 
             newLocation = board.move(dice.sumOfDice(), currentPlayer.getLocation());
             if(board.getValidLocation(newLocation) == true){
                 currentPlayer.setLocation(newLocation);
+                if(newLocation.getOwner() != null) {
+                    if (newLocation.getOwner() != currentPlayer){
+                        info = payRent(newLocation);
+                    }
+                }
             }
-            notifyView(command);
+            notifyView(command, info);
         }
 
         if ("buy".equals(command)) {
-            String success = buy(newLocation);
+            String info = buy(newLocation);
             for (MonopolyView view : views){
-                view.handleMonopolyBuy(success, newLocation);
+                view.handleMonopolyBuy(info, newLocation);
             }
-            //notifyView(command);
+
         }
+
         if ("sell".equals(command)) {
             boolean success = sell(newLocation);
             for (MonopolyView view : views){
@@ -228,24 +235,20 @@ public class Game {
         }
 
         if ("pass".equals(command)) {
-            nextPlayer();
-            notifyView(command);
+            notifyView(command,pass());
         }
 
         if("quit".equals(command)){
-            quit();
-            notifyView(command);
+            notifyView(command, quit());
         }
         if("help".equals(command)){
-            help();
-            notifyView(command);
+            notifyView(command, help());
         }
         if("player info".equals(command)) {
-            String info = displayPlayerInfo();
-            notifyView(command);
+            notifyView(command, displayPlayerInfo());
         }
         if(win){
-            notifyView("win");
+            notifyView("win", checkWin());
         }
     }
 
@@ -253,9 +256,9 @@ public class Game {
      * method to notify each view that chnages has happened
      */
 
-    private void notifyView(String command){
+    private void notifyView(String command, String info){
         for (MonopolyView view : views){
-            view.handleMonopolyStatusUpdate(command);
+            view.handleMonopolyStatusUpdate(command, info);
         }
     }
 
@@ -331,12 +334,12 @@ public class Game {
 
                 property.incrementState();
 
-                String houseNumHolder = String.valueOf(property.getState().getHouseNum());
+                info = "You have successfully bought " + property.getState().getHouseNum() + " number of houses\n";
 
                 if(property.getState().getHouseNum() == 5){
-                    houseNumHolder = "hotel";
+                    info = "You have successfully bought a Hotel\n";
                 }
-                info = "You have successfully bought " + houseNumHolder + " number of houses\n";
+
                 info += "You have " + currentPlayer.getMoney() +"$ left.";
             }
         } else {
@@ -364,19 +367,23 @@ public class Game {
     /**
      * turn is passed to next player
      */
-    public void pass(){
-        System.out.println("Player " + currentPlayer.getPlayerId() +" has finished his turn");
+    public String pass(){
+        String info = "Player " + currentPlayer.getPlayerId() +" has finished his turn";
         nextPlayer();
+        info += "It is now Player " + currentPlayer.getPlayerId() + "'s turn";
+
+        return info;
     }
 
     /**
      * player has quit the game/bankrupt
      */
-    public void quit(){
-        System.out.println("Player " + currentPlayer.getPlayerId() + " has quit the game");
-        currentPlayer.setBankruptcy(true);
+    public String quit(){
+        String info = "Player "+ previousPlayer.getPlayerId()+" has quit\n" +
+                "It is now Player " +currentPlayer.getPlayerId()+ "'s turn";
         nextPlayer();
         checkWin();
+        return info;
     }
 
     /**
@@ -399,13 +406,17 @@ public class Game {
      */
     public String payRent(Property property){
         String info = "";
-        int rent = property.getInitialRent();// get rent amount
+        int rent = 0;
+
+        rent = property.getRent();// get rent amount
+
         System.out.println("Player "+currentPlayer.getPlayerId() + " has $" + currentPlayer.getMoney()); //dispay how much the player owns
         currentPlayer.removeMoney(rent);// remove money from player based on what they paid
         boolean bankrupt = checkBankruptcy();
 
         if(bankrupt){
-            info = "bankrupt";
+            info = "Player " + currentPlayer.getPlayerId() + " didn't have enough money to pay rent to Player " + property.getOwner().getPlayerId()+ " at " + property.getPropertyName();
+            info += "\n Player " + currentPlayer.getPlayerId() + "has gone bankrupt";
         }
 
         //if the player is bankrupt then don't add money
@@ -415,6 +426,7 @@ public class Game {
             System.out.println(info);
             property.getOwner().addMoney(rent);// the owner of the property will receive the rent money
         }
+
         checkWin();
 
         return info;
@@ -436,7 +448,7 @@ public class Game {
     /**
      * Winner is whoever is not bankrupt
      */
-    public void checkWin(){
+    public String checkWin(){
         int bankruptCount = 0;
         Player winner = null;
 
@@ -460,6 +472,8 @@ public class Game {
             info = "Player " + winner.getPlayerId() + " is the winner!!" ;
             System.out.println(info);
         }
+
+        return info;
     }
 
     /**

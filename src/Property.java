@@ -163,13 +163,13 @@ public class Property {
      */
     @Override
     public String toString(){
-        String ownerInfo = (owner ==null) ? "" : owner.getPlayerId() + "";
+        String ownerInfo = (owner == null) ? "" : owner.getPlayerId() + "";
 
         return "Property [property name=" + propertyName + ", cost=" + initialCost +", rent="+ initialRent +", color=" + color + ", owner id=" + ownerInfo + "]";
     }
 
     public void incrementState() {
-        state.next();
+        this.state = state.next();
     }
 
     public HouseState getState() {
