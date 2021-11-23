@@ -121,7 +121,7 @@ public class WelcomeScreen {
         return this.numPlayers;
     }
 
-    public int setNumAIPlayers() {
+    public void setNumAIPlayers() {
         numAIPlayers = numAIPlayers;
     }
     public int getNumAIPlayers(){
