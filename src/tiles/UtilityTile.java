@@ -10,6 +10,8 @@ public class UtilityTile implements Property {
 
     private int cost;
 
+    private final PropertyType TYPE = PropertyType.UTILITY;
+
     public UtilityTile(String propertyName, int rent, int rent2, int cost) {
         this.propertyName = propertyName;
         this.rent1 = rent;
@@ -79,6 +81,10 @@ public class UtilityTile implements Property {
         return cost;
     }
 
+    @Override
+    public void setState(HouseState s) {
+    }
+
     /**
      * @return the string description of each of the variables
      */
@@ -89,4 +95,7 @@ public class UtilityTile implements Property {
         return "Property [property name=" + propertyName + ", cost=" + cost +", rent="+ rent1 +", color=" + color + ", owner id=" + ownerInfo + "]";
     }
 
+    public PropertyType getTYPE() {
+        return TYPE;
+    }
 }

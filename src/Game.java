@@ -19,14 +19,14 @@ public class Game {
 
     //keeps track of rolls count for jail-player
     //player id is key and roll count is value
-    private Map<Integer, Integer> jailPlayerRollCountMap = new HashMap<>() ;
+    private Map<Integer, Integer> jailPlayerRollCountMap = new HashMap<>();
     //keeps track of payment by jail-player
     //player id is key and paid tru/false is value
-    private Map<Integer, Boolean> jailPlayerPaymentStatusMap = new HashMap<>() ;
+    private Map<Integer, Boolean> jailPlayerPaymentStatusMap = new HashMap<>();
     //keeps track of double rolls count for non-jail-player
     //player id is key and roll count is value
-    private Map<Integer, Integer> playerDoubleRollCountMap = new HashMap<>() ;
-    
+    private Map<Integer, Integer> playerDoubleRollCountMap = new HashMap<>();
+
 
     private final Board board;
     private final ArrayList<Player> players;
@@ -42,12 +42,11 @@ public class Game {
     private boolean passByJail = false;
 
     /**
-     *
      * @return
      */
     public void payJailFee() {
         String info = "";
-        System.out.println("Player "+currentPlayer.getPlayerId() + " has $" + currentPlayer.getMoney()); //dispay how much the player owns
+        System.out.println("Player " + currentPlayer.getPlayerId() + " has $" + currentPlayer.getMoney()); //dispay how much the player owns
         currentPlayer.removeMoney(JAIL_FEE);// remove money from player based on what they paid
         boolean bankrupt = checkBankruptcy();
 
@@ -63,15 +62,15 @@ public class Game {
 
         }
 
-        for (MonopolyView view : views){
+        for (MonopolyView view : views) {
             view.handleMonopolyJailFeePaymentResult(paymentSuccess);
         }
 
     }
 
-    public void collect(){
+    public void collect() {
         currentPlayer.addMoney(GO_AMOUNT);
-        for (MonopolyView view : views){
+        for (MonopolyView view : views) {
             view.handleMonopolyGOResult();
         }
     }
@@ -141,7 +140,7 @@ public class Game {
 
         Property property = currentPlayer.getLocation();
         if (currentPlayer.getLocation().getOwner().isSetOwned(property)) {
-            payRent(property);
+            rentRegular(property);
         } else {
             buy(property);
         }
@@ -169,16 +168,15 @@ public class Game {
 
     }//AI-Turn
 */
-
     private void notifyViewJailPlayerRoll(String result, boolean forceJailFee) {
-        for (MonopolyView view : views){
+        for (MonopolyView view : views) {
             view.handleMonopolyJailPlayerRollResult(result, forceJailFee);
         }
 
     }
 
     public void run(String command) {
-        if(currentPlayer.getBankruptcy()){
+        if (currentPlayer.getBankruptcy()) {
             nextPlayer();
         }
 
@@ -303,11 +301,10 @@ public class Game {
             if (board.getValidLocation(newLocation) == true) {
                 newLocation = board.move(dice.sumOfDice(), currentPlayer.getLocation());
                 if (board.getValidLocation(newLocation)) {
-
                     currentPlayer.setLocation(newLocation);
                     if (newLocation.getOwner() != null) {
                         if (newLocation.getOwner() != currentPlayer) {
-                            info = payRent(newLocation);
+                            info = rentRegular(newLocation);
                         }
                     }
                 }
@@ -316,9 +313,17 @@ public class Game {
         }
 
         if ("buy".equals(command)) {
-            String info1 = buy(newLocation);
-            for (MonopolyView view : views) {
-                view.handleMonopolyBuy(info1, newLocation);
+            String info1 = "";
+            if (newLocation.getTYPE() == PropertyType.PROPERTY) {
+                info1 = buy(newLocation);
+                for (MonopolyView view : views) {
+                    view.handleMonopolyBuy(info1, newLocation);
+                }
+            } else if (newLocation.getTYPE() == PropertyType.RAILROAD || newLocation.getTYPE() == PropertyType.UTILITY){
+                boolean b = buyUtility(newLocation);
+                for (MonopolyView view : views) {
+                    view.handleMonopolyUtilityRailRoadBuy(b, newLocation);
+                }
             }
         }
 
@@ -329,16 +334,10 @@ public class Game {
             }
         }
 
-        if ("rent".equals(command)) {
-            String result1 = payRent(newLocation);
-            for (MonopolyView view : views) {
-                view.handleMonopolyRentResult(result1, newLocation);
-//                view.handleMonopolyRentUtility(result1, newLocation);
-            }
-        } else if (command.startsWith("rent")) {
-            int rentLevel = getRentLevel(command);
 
-            String result1 = payRent(newLocation, rentLevel);
+        if (command.startsWith("rent") && !command.equals("rent")) {
+            int rentLevel = getRentLevel(command);
+            String result1 = rentUtility(newLocation, rentLevel);
             for (MonopolyView view : views) {
                 view.handleMonopolyRentResult(result1, newLocation);
                 view.handleMonopolyRentUtility(result1, newLocation);
@@ -371,7 +370,7 @@ public class Game {
 
     private Boolean hasCurrentPlayerPaidJailFee() {
         Boolean paid = jailPlayerPaymentStatusMap.get(currentPlayer.getPlayerId());
-        if(paid == null){
+        if (paid == null) {
             paid = false;
         }
         return paid;
@@ -381,8 +380,8 @@ public class Game {
      * method to notify each view that changes has happened
      */
 
-    private void notifyView(String command, String info){
-        for (MonopolyView view : views){
+    private void notifyView(String command, String info) {
+        for (MonopolyView view : views) {
             view.handleMonopolyStatusUpdate(command, info);
         }
     }
@@ -390,7 +389,7 @@ public class Game {
     // rents for railraod and utility
 
     private int getRentLevel(String buttonLabel) {
-        switch (buttonLabel){
+        switch (buttonLabel) {
             case "rent1":
                 return 1;
             case "rent2":
@@ -402,58 +401,76 @@ public class Game {
         }
         return 1;
     }
+    public boolean buyUtility(Property property){
+        if(currentPlayer.getLocation()==property){
+            int cost = property.getCost();
+            int money = currentPlayer.getMoney(); //return players total money
 
-    
+            if (cost > money) {
+                System.out.println("You don't have enough money.");
+                return false;
+            } else {
+                property.setOwner(currentPlayer);
+                currentPlayer.addProperty(property);
+                currentPlayer.removeMoney(cost);
+
+                System.out.println("You have successfully bought the property.");
+                System.out.println("You have " + currentPlayer.getMoney() + "$ left.");
+                return true;
+            }
+        }
+        return false;
+    }
+
     public String buy(Property property){
-        String info;
-        if(property.getState() == HouseState.UNOWNED) {
-            if (currentPlayer.getLocation() == property){
-                int cost = property.getCost();
+        String info = "";
+            if(property.getState() == HouseState.UNOWNED) {
+                if (currentPlayer.getLocation() == property){
+                    int cost = property.getCost();
+                    int money = currentPlayer.getMoney(); //return players total money
+
+                    if (cost > money){
+                        info = "You don't have enough money.";
+                    } else{
+                        property.setOwner(currentPlayer);
+                        currentPlayer.addProperty(property);
+                        currentPlayer.removeMoney(cost);
+
+                        property.incrementState();
+
+                        info = "You have successfully bought the property.\n";
+                        info += "You have " + currentPlayer.getMoney() +"$ left.";
+                    }
+                } else {
+                    info = "You are ineligible to buy this property";
+                }
+            } else if (property.getState() == HouseState.HOTEL) {
+                info = "This property has the maximum number of houses built on it";
+            } else if (currentPlayer == property.getOwner()) {
+                int cost = property.getCostPerHouse();
                 int money = currentPlayer.getMoney(); //return players total money
 
                 if (cost > money){
                     info = "You don't have enough money.";
                 } else{
-                    property.setOwner(currentPlayer);
-                    currentPlayer.addProperty(property);
                     currentPlayer.removeMoney(cost);
-
                     property.incrementState();
 
-                    info = "You have successfully bought the property.\n";
+                    info = "You have successfully bought " + property.getState().getHouseNum() + " houses\n";
+
+                    if(property.getState().getHouseNum() == 5){
+                        info = "You have successfully bought a Hotel\n";
+                    }
+
+                    if(property.getState().getHouseNum() == 1){
+                        info = "You have successfully bought " + property.getState().getHouseNum() + " house\n";
+                    }
+
                     info += "You have " + currentPlayer.getMoney() +"$ left.";
                 }
             } else {
-                info = "You are ineligible to buy this property";
+                info = "You are not the owner of this property";
             }
-        } else if (property.getState() == HouseState.HOTEL) {
-            info = "This property has the maximum number of houses built on it";
-        } else if (currentPlayer == property.getOwner()) {
-            int cost = property.getCostPerHouse();
-            int money = currentPlayer.getMoney(); //return players total money
-
-            if (cost > money){
-                info = "You don't have enough money.";
-            } else{
-                currentPlayer.removeMoney(cost);
-                property.incrementState();
-
-                info = "You have successfully bought " + property.getState().getHouseNum() + " houses\n";
-
-                if(property.getState().getHouseNum() == 5){
-                    info = "You have successfully bought a Hotel\n";
-                }
-
-                if(property.getState().getHouseNum() == 1){
-                    info = "You have successfully bought " + property.getState().getHouseNum() + " house\n";
-                }
-
-                info += "You have " + currentPlayer.getMoney() +"$ left.";
-            }
-        } else {
-            info = "You are not the owner of this property";
-        }
-
         return info;
     }
 
@@ -466,6 +483,8 @@ public class Game {
         if (currentPlayer == property.getOwner()){
             currentPlayer.addMoney(property.getCost());
             currentPlayer.removeProperty(property);
+            
+            property.setState(HouseState.UNOWNED);
             property.setOwner(null);
             return true;
         }
@@ -476,7 +495,7 @@ public class Game {
      * turn is passed to next player
      */
     public String pass(){
-        String info = "Player " + currentPlayer.getPlayerId() +" has finished his turn";
+        String info = "Player " + currentPlayer.getPlayerId() +" has finished his turn.\n";
         nextPlayer();
         info += "It is now Player " + currentPlayer.getPlayerId() + "'s turn";
 
@@ -498,8 +517,8 @@ public class Game {
      * decide the next player, in the order as found in the list starting from index 0
      */
     public void nextPlayer() {
+        previousPlayer = currentPlayer;
         if (players.size() == players.indexOf(currentPlayer) + 1) {
-
             currentPlayer = players.get(0);
         } else {
             currentPlayer = players.get(players.indexOf(currentPlayer) + 1);
@@ -511,14 +530,15 @@ public class Game {
      * If a player lands in a property owned by opposing player rent has to be paid
      * @param property the property for which the rent needs to be paid
      */
-    public String payRent(Property property){
-        //default rent
-        return payRent(property, 1);
-
+    public String rentRegular(Property property){
+        int rent =  property.getRent();
+        return payRent(property, rent);
     }
-    public String payRent(Property property, int rentLevel){
+
+    public String rentUtility(Property property, int rentLevel){
         String info = "";
         int rentUtil = 0;
+
         // get rent amount
         if(rentLevel == 1) {
             rentUtil = ((RailRoadTile)property).getRent1();
@@ -532,11 +552,18 @@ public class Game {
         else if(rentLevel == 4) {
             rentUtil = ((RailRoadTile)property).getRent4();
         }
-        System.out.println("Player "+currentPlayer.getPlayerId() + " has $" + currentPlayer.getMoney()); //dispay how much the player owns
 
-        int rent;
+        return payRent(property, rentUtil);
+    }
 
-        rent = property.getRent();// get rent amount
+
+    /**
+     *
+     * If a player lands in a property owned by opposing player rent has to be paid
+     * @param property the property for which the rent needs to be paid
+     */
+    public String payRent(Property property, int rent){
+        String info = "";
 
         System.out.println("Player "+currentPlayer.getPlayerId() + " has $" + currentPlayer.getMoney()); //display how much the player owns
         currentPlayer.removeMoney(rent);// remove money from player based on what they paid
@@ -557,8 +584,8 @@ public class Game {
         checkWin();
 
         return info;
-    }
 
+    }
 
 
     /**

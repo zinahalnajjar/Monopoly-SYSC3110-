@@ -1,19 +1,29 @@
 import java.awt.*;
 
+/**
+ * Class holding the properties of blue color set properties
+ */
 public class BluePropertyTile implements Property {
+
+    //Constants for the properties of the blue set
     private final int HOUSE_COST = 200;
     private final int INIT_COST = 350;
     private final int INIT_RENT = 35;
 
+    //The last deed card in a colored set is usually higher value.
+    //The following constants hold the multiplier.
     private final int END_RENT_VALUE = 15;
     private final int END_COST_VALUE = 50;
 
+    //constant for the color of the sett
     private final Color TILE_COLOR = Color.BLUE;
 
     private String tileName;
     private HouseState state;
     private Player owner;
     private boolean endSet;
+
+    private final PropertyType TYPE = PropertyType.PROPERTY;
 
     public BluePropertyTile(String name, boolean endSet){
         this.tileName = name;
@@ -68,6 +78,15 @@ public class BluePropertyTile implements Property {
             return (INIT_COST + END_COST_VALUE);
         }
         return INIT_COST;
+    }
+
+    public PropertyType getTYPE() {
+        return TYPE;
+    }
+
+    @Override
+    public void setState(HouseState s) {
+        this.state = s;
     }
 
     /**

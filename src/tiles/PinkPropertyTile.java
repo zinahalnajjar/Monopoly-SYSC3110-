@@ -10,6 +10,8 @@ public class PinkPropertyTile implements Property {
 
     private final Color TILE_COLOR = Color.PINK;
 
+    private final PropertyType TYPE = PropertyType.PROPERTY;
+
     private String tileName;
     private HouseState state;
     private Player owner;
@@ -20,6 +22,11 @@ public class PinkPropertyTile implements Property {
         this.endSet = endSet;
         this.owner = null;
         this.state = HouseState.UNOWNED;
+    }
+
+    @Override
+    public void setState(HouseState s) {
+        this.state = s;
     }
 
     /**
@@ -99,4 +106,7 @@ public class PinkPropertyTile implements Property {
         return "Property [property name=" + tileName + ", cost=" + INIT_COST + ", rent="+ rent +", House Cost="+ HOUSE_COST +"Number of houses built=" + state.getHouseNum() + "color=" + TILE_COLOR + ", owner id=" + ownerInfo + "]";
     }
 
+    public PropertyType getTYPE() {
+        return TYPE;
+    }
 }

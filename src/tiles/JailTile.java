@@ -5,9 +5,15 @@ public class JailTile implements Property {
     private String propertyName;
     private Color color;
 
+    private final PropertyType TYPE = PropertyType.JAIL;
+
     public JailTile(String name, Color white) {
         this.propertyName = name;
         this.color = white;
+    }
+
+    @Override
+    public void setState(HouseState s) {
     }
 
     @Override
@@ -53,5 +59,9 @@ public class JailTile implements Property {
     @Override
     public int getRent() {
         return 0;
+    }
+
+    public PropertyType getTYPE() {
+        return TYPE;
     }
 }

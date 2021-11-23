@@ -168,13 +168,9 @@ public class JailCard extends JFrame implements MonopolyView, ActionListener {
         }
     }
 
-    @Override
-    public void handleMonopolyRailRoadBuy(boolean success, Property location) {
-
-    }
 
     @Override
-    public void handleMonopolyUtilityBuy(boolean success, Property location) {
+    public void handleMonopolyUtilityRailRoadBuy(boolean success, Property location) {
 
     }
 

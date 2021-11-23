@@ -11,6 +11,8 @@ public class RailRoadTile implements Property {
     private int rent4;
     private int cost;
 
+    private final PropertyType TYPE = PropertyType.RAILROAD;
+
     /**
      * Initializes all the properties
      *
@@ -98,6 +100,10 @@ public class RailRoadTile implements Property {
         return cost;
     }
 
+    @Override
+    public void setState(HouseState s) {
+    }
+
     /**
      * @return the string description of each of the variables
      */
@@ -108,4 +114,7 @@ public class RailRoadTile implements Property {
         return "Property [property name=" + propertyName + ", cost=" + cost +", rent="+ rent1 +", color=" + color + ", owner id=" + ownerInfo + "]";
     }
 
+    public PropertyType getTYPE() {
+        return TYPE;
+    }
 }

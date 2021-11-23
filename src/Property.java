@@ -18,5 +18,9 @@ public interface Property {
     int getCostPerHouse();
 
     int getRent();
+
+    PropertyType getTYPE();
+
+    void setState(HouseState s);
 }
 

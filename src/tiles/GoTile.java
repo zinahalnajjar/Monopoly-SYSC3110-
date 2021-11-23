@@ -5,10 +5,17 @@ public class GoTile implements Property {
     private String propertyName;
     private Color color;
 
+    private final PropertyType TYPE = PropertyType.GO;
+
     public GoTile(String name, Color white) {
         this.propertyName = name;
         this.color = white;
     }
+
+    @Override
+    public void setState(HouseState s) {
+    }
+
     @Override
     public String getPropertyName() {
         return propertyName;
@@ -52,5 +59,9 @@ public class GoTile implements Property {
     @Override
     public int getRent() {
         return 0;
+    }
+
+    public PropertyType getTYPE() {
+        return TYPE;
     }
 }
