@@ -19,14 +19,14 @@ public class Game {
 
     //keeps track of rolls count for jail-player
     //player id is key and roll count is value
-    private Map<Integer, Integer> jailPlayerRollCountMap = new HashMap<>() ;
+    private Map<Integer, Integer> jailPlayerRollCountMap = new HashMap<>();
     //keeps track of payment by jail-player
     //player id is key and paid tru/false is value
-    private Map<Integer, Boolean> jailPlayerPaymentStatusMap = new HashMap<>() ;
+    private Map<Integer, Boolean> jailPlayerPaymentStatusMap = new HashMap<>();
     //keeps track of double rolls count for non-jail-player
     //player id is key and roll count is value
-    private Map<Integer, Integer> playerDoubleRollCountMap = new HashMap<>() ;
-    
+    private Map<Integer, Integer> playerDoubleRollCountMap = new HashMap<>();
+
 
     private final Board board;
     private final ArrayList<Player> players;
@@ -40,14 +40,15 @@ public class Game {
     private Property newLocation;
     boolean win = false;
     private boolean passByJail = false;
+    private int numAIPlayers;
+    private boolean ifAI;
 
     /**
-     *
      * @return
      */
     public void payJailFee() {
         String info = "";
-        System.out.println("Player "+currentPlayer.getPlayerId() + " has $" + currentPlayer.getMoney()); //dispay how much the player owns
+        System.out.println("Player " + currentPlayer.getPlayerId() + " has $" + currentPlayer.getMoney()); //dispay how much the player owns
         currentPlayer.removeMoney(JAIL_FEE);// remove money from player based on what they paid
         boolean bankrupt = checkBankruptcy();
 
@@ -63,15 +64,15 @@ public class Game {
 
         }
 
-        for (MonopolyView view : views){
+        for (MonopolyView view : views) {
             view.handleMonopolyJailFeePaymentResult(paymentSuccess);
         }
 
     }
 
-    public void collect(){
+    public void collect() {
         currentPlayer.addMoney(GO_AMOUNT);
-        for (MonopolyView view : views){
+        for (MonopolyView view : views) {
             view.handleMonopolyGOResult();
         }
     }
@@ -103,21 +104,19 @@ public class Game {
      *
      * @param playerCount the number of player in the game
      */
-    public Game(int playerCount) {
+    public Game(int playerCount, int aiPlayers) {
         board = new Board();
         players = new ArrayList<>();
         this.playerCount = playerCount;
+        this.numAIPlayers = aiPlayers;
         this.dice = new Dice();
-
         start = board.getProperty("GO");
-
         previousPlayer = null;
-
         newLocation = null;
-
         views = new ArrayList<MonopolyView>();
-
         initPlayers();
+        setAIPlayers(numAIPlayers);
+
     }
 
     /**
@@ -169,16 +168,15 @@ public class Game {
 
     }//AI-Turn
 */
-
     private void notifyViewJailPlayerRoll(String result, boolean forceJailFee) {
-        for (MonopolyView view : views){
+        for (MonopolyView view : views) {
             view.handleMonopolyJailPlayerRollResult(result, forceJailFee);
         }
 
     }
 
     public void run(String command) {
-        if(currentPlayer.getBankruptcy()){
+        if (currentPlayer.getBankruptcy()) {
             nextPlayer();
         }
 
@@ -373,7 +371,7 @@ public class Game {
 
     private Boolean hasCurrentPlayerPaidJailFee() {
         Boolean paid = jailPlayerPaymentStatusMap.get(currentPlayer.getPlayerId());
-        if(paid == null){
+        if (paid == null) {
             paid = false;
         }
         return paid;
@@ -383,8 +381,8 @@ public class Game {
      * method to notify each view that changes has happened
      */
 
-    private void notifyView(String command, String info){
-        for (MonopolyView view : views){
+    private void notifyView(String command, String info) {
+        for (MonopolyView view : views) {
             view.handleMonopolyStatusUpdate(command, info);
         }
     }
@@ -392,7 +390,7 @@ public class Game {
     // rents for railraod and utility
 
     private int getRentLevel(String buttonLabel) {
-        switch (buttonLabel){
+        switch (buttonLabel) {
             case "rent1":
                 return 1;
             case "rent2":
@@ -405,17 +403,17 @@ public class Game {
         return 1;
     }
 
-    
-    public String buy(Property property){
+
+    public String buy(Property property) {
         String info;
-        if(property.getState() == HouseState.UNOWNED) {
-            if (currentPlayer.getLocation() == property){
+        if (property.getState() == HouseState.UNOWNED) {
+            if (currentPlayer.getLocation() == property) {
                 int cost = property.getCost();
                 int money = currentPlayer.getMoney(); //return players total money
 
-                if (cost > money){
+                if (cost > money) {
                     info = "You don't have enough money.";
-                } else{
+                } else {
                     property.setOwner(currentPlayer);
                     currentPlayer.addProperty(property);
                     currentPlayer.removeMoney(cost);
@@ -423,7 +421,7 @@ public class Game {
                     property.incrementState();
 
                     info = "You have successfully bought the property.\n";
-                    info += "You have " + currentPlayer.getMoney() +"$ left.";
+                    info += "You have " + currentPlayer.getMoney() + "$ left.";
                 }
             } else {
                 info = "You are ineligible to buy this property";
@@ -434,23 +432,23 @@ public class Game {
             int cost = property.getCostPerHouse();
             int money = currentPlayer.getMoney(); //return players total money
 
-            if (cost > money){
+            if (cost > money) {
                 info = "You don't have enough money.";
-            } else{
+            } else {
                 currentPlayer.removeMoney(cost);
                 property.incrementState();
 
                 info = "You have successfully bought " + property.getState().getHouseNum() + " houses\n";
 
-                if(property.getState().getHouseNum() == 5){
+                if (property.getState().getHouseNum() == 5) {
                     info = "You have successfully bought a Hotel\n";
                 }
 
-                if(property.getState().getHouseNum() == 1){
+                if (property.getState().getHouseNum() == 1) {
                     info = "You have successfully bought " + property.getState().getHouseNum() + " house\n";
                 }
 
-                info += "You have " + currentPlayer.getMoney() +"$ left.";
+                info += "You have " + currentPlayer.getMoney() + "$ left.";
             }
         } else {
             info = "You are not the owner of this property";
@@ -461,11 +459,12 @@ public class Game {
 
     /**
      * The player will be able to sell
+     *
      * @param property
      * @return
      */
-    public boolean sell(Property property){
-        if (currentPlayer == property.getOwner()){
+    public boolean sell(Property property) {
+        if (currentPlayer == property.getOwner()) {
             currentPlayer.addMoney(property.getCost());
             currentPlayer.removeProperty(property);
             property.setOwner(null);
@@ -477,8 +476,8 @@ public class Game {
     /**
      * turn is passed to next player
      */
-    public String pass(){
-        String info = "Player " + currentPlayer.getPlayerId() +" has finished his turn";
+    public String pass() {
+        String info = "Player " + currentPlayer.getPlayerId() + " has finished his turn";
         nextPlayer();
         info += "It is now Player " + currentPlayer.getPlayerId() + "'s turn";
 
@@ -488,9 +487,9 @@ public class Game {
     /**
      * player has quit the game/bankrupt
      */
-    public String quit(){
-        String info = "Player "+ previousPlayer.getPlayerId()+" has quit\n" +
-                "It is now Player " +currentPlayer.getPlayerId()+ "'s turn";
+    public String quit() {
+        String info = "Player " + previousPlayer.getPlayerId() + " has quit\n" +
+                "It is now Player " + currentPlayer.getPlayerId() + "'s turn";
         nextPlayer();
         checkWin();
         return info;
@@ -509,43 +508,41 @@ public class Game {
     }
 
     /**
-     *
      * If a player lands in a property owned by opposing player rent has to be paid
+     *
      * @param property the property for which the rent needs to be paid
      */
-    public String payRent(Property property){
+    public String payRent(Property property) {
         //default rent
         return payRent(property, 1);
 
     }
-    public String payRent(Property property, int rentLevel){
+
+    public String payRent(Property property, int rentLevel) {
         String info = "";
         int rentUtil = 0;
         // get rent amount
-        if(rentLevel == 1) {
-            rentUtil = ((RailRoadTile)property).getRent1();
+        if (rentLevel == 1) {
+            rentUtil = ((RailRoadTile) property).getRent1();
+        } else if (rentLevel == 2) {
+            rentUtil = ((RailRoadTile) property).getRent2();
+        } else if (rentLevel == 3) {
+            rentUtil = ((RailRoadTile) property).getRent3();
+        } else if (rentLevel == 4) {
+            rentUtil = ((RailRoadTile) property).getRent4();
         }
-        else if(rentLevel == 2) {
-            rentUtil = ((RailRoadTile)property).getRent2();
-        }
-        else if(rentLevel == 3) {
-            rentUtil = ((RailRoadTile)property).getRent3();
-        }
-        else if(rentLevel == 4) {
-            rentUtil = ((RailRoadTile)property).getRent4();
-        }
-        System.out.println("Player "+currentPlayer.getPlayerId() + " has $" + currentPlayer.getMoney()); //dispay how much the player owns
+        System.out.println("Player " + currentPlayer.getPlayerId() + " has $" + currentPlayer.getMoney()); //dispay how much the player owns
 
         int rent;
 
         rent = property.getRent();// get rent amount
 
-        System.out.println("Player "+currentPlayer.getPlayerId() + " has $" + currentPlayer.getMoney()); //display how much the player owns
+        System.out.println("Player " + currentPlayer.getPlayerId() + " has $" + currentPlayer.getMoney()); //display how much the player owns
         currentPlayer.removeMoney(rent);// remove money from player based on what they paid
         boolean bankrupt = checkBankruptcy();
 
-        if(bankrupt){
-            info = "Player " + currentPlayer.getPlayerId() + " didn't have enough money to pay rent to Player " + property.getOwner().getPlayerId()+ " at " + property.getPropertyName();
+        if (bankrupt) {
+            info = "Player " + currentPlayer.getPlayerId() + " didn't have enough money to pay rent to Player " + property.getOwner().getPlayerId() + " at " + property.getPropertyName();
             info += "\n Player " + currentPlayer.getPlayerId() + "has gone bankrupt";
         }
 
@@ -560,7 +557,6 @@ public class Game {
 
         return info;
     }
-
 
 
     /**
@@ -580,15 +576,15 @@ public class Game {
     /**
      * Winner is whoever is not bankrupt
      */
-    public String checkWin(){
+    public String checkWin() {
         int bankruptCount = 0;
         Player winner = null;
 
         String info = "";
 
         //loop to tally the number of the bankrupts
-        for(Player p : players){
-            if(p.getBankruptcy()){
+        for (Player p : players) {
+            if (p.getBankruptcy()) {
                 bankruptCount++;
             } else {
                 winner = p;
@@ -600,7 +596,7 @@ public class Game {
         if (bankruptCount == playerCount - 1) {
             win = true;
             assert winner != null;
-            info = "Player " + winner.getPlayerId() + " is the winner!!" ;
+            info = "Player " + winner.getPlayerId() + " is the winner!!";
             System.out.println(info);
         }
 
@@ -613,7 +609,7 @@ public class Game {
     public String displayPlayerInfo() {
         String p = "";
         for (Player player : players) {
-            p += player +"\n";
+            p += player + "\n";
         }
         return p;
     }
@@ -621,7 +617,7 @@ public class Game {
     /**
      * Prints out all the goals, and rules of the game.
      */
-    public String help(){
+    public String help() {
 
         return "Game Goal: \n" +
                 "- To be the player who isn't bankrupt.\n\n" +
@@ -651,16 +647,185 @@ public class Game {
     }
 
 
-    public void removeMonopolyView(MonopolyView view){
+    public void removeMonopolyView(MonopolyView view) {
         views.remove(view);
     }
 
-    public Player getPreviousPlayer(){
+    public Player getPreviousPlayer() {
         return previousPlayer;
     }
-    public boolean isPassByJail(){
+
+    public boolean isPassByJail() {
         return passByJail;
     }
+
+
+    /**
+     * sets the AI players in the game
+     *
+     * @param numberOfAIPlayers number of AI players in the game
+     */
+    public void setNumberOfAIPlayers(int numberOfAIPlayers) {
+        numAIPlayers = numberOfAIPlayers;
+
+        if (numberOfAIPlayers != 0) {
+            ifAI = true;
+        } else {
+            ifAI = false;
+        }
+    }
+
+    /**
+     * sets the AI players in the game
+     * by changing the AI field in the player class to true
+     *
+     * @param numAIPlayers number of AI players in the game
+     */
+    private void setAIPlayers(int numAIPlayers) {
+        if (!(numAIPlayers == 0)) {
+            for (int i = 0; i < numAIPlayers; i++) {
+                players.get(i).setAI();
+            }
+        }
+    }
+
+    /**
+     * Processes the entirety of the AITurn
+     */
+    public void AITurn() {
+        aiRollDice();
+        if (currentPlayer.getLocation().getPropertyName().equals("JAIL")) {
+            currentPlayer.addJailCounter();
+            aiInJail();
+        } else {
+            aiMove();
+            aiLand();
+            if (dice.getDie1() == dice.getDie2()) {
+                AITurn();
+            } else {
+                pass();
+            }
+        }
+    }
+
+    /**
+     * Method to roll dice for the AI player
+     */
+    public void aiRollDice() {
+        dice.roll();
+    }
+
+    /**
+     * Moves the AI to the rolled on location
+     */
+    public void aiMove() {
+        int diceRoll = dice.sumOfDice();
+        Property currentPosition = currentPlayer.getLocation();
+        newLocation = board.move(diceRoll, currentPosition);
+        currentPlayer.setLocation(newLocation);
+    }
+
+    /**
+     * Determines what the AI does after it lands
+     */
+    public void aiLand() {
+        if (newLocation.getPropertyName().equals("JAIL") && newLocation.getPropertyName().equals("FREE PARKING") && newLocation.getOwner() == currentPlayer && newLocation.getPropertyName().equals("GO")) {
+            pass();
+        } else {
+            if (newLocation.getOwner() == null && newLocation.getCost() < currentPlayer.getMoney()) {
+                aiBuy();
+            } else {
+                if (newLocation.getRent() < currentPlayer.getMoney()) {
+                    aiPayRent();
+                } else {
+                    currentPlayer.setBankruptcy(true);
+                    newLocation.getOwner().addMoney(currentPlayer.getMoney());
+                }
+            }
+        }
+    }
+
+    /**
+     * Buys property for AI player
+     */
+    public void aiBuy () {
+        currentPlayer.pay(newLocation.getCost());
+        newLocation.setOwner(currentPlayer);
+        currentPlayer.addProperty(newLocation);
+    }
+
+    /**
+     * AI pay rent
+     */
+    public void aiPayRent () {
+        int rent = newLocation.getRent();
+        currentPlayer.pay(rent);
+        newLocation.getOwner().addMoney(rent);
+    }
+
+    /**
+     * when an AI player goes bankrupt
+     */
+    public void aiBankrupt () {
+        currentPlayer.setBankruptcy(true);
+    }
+
+    public void aiInJail (){
+        // Check jailCounter
+        if (dice.getDie1() == dice.getDie2()) {
+            aiMove();
+            aiLand();
+            pass();
+            currentPlayer.resetJailCounter();
+        } else {
+            if (currentPlayer.getJailCounter() < 3) {
+                pass(); //Do nothing, because no double and don't want to pay
+            }
+            // Then its time to get out, jail counter is 3 and no double
+            else {
+                if (currentPlayer.getMoney() < 50) {
+                    currentPlayer.setBankruptcy(true);
+                    pass();
+                } else {
+                    payJailFee();
+                    currentPlayer.resetJailCounter(); //He has paid and its time to get out
+                    aiMove(); // and then
+                    aiLand();
+                    pass();
+                }
+            }
+        }
+    }
+
+    /**
+     * decide the next player, in the order as found in the list starting from index 0
+     */
+    public void nextPlayerT() {
+        if (players.size() == players.indexOf(currentPlayer) + 1) {
+
+            currentPlayer = players.get(0);
+            if (currentPlayer.getAIStatus()){
+                AITurn();
+            }
+        } else {
+            currentPlayer = players.get(players.indexOf(currentPlayer) + 1);
+            if (currentPlayer.getAIStatus()){
+                AITurn();
+            }
+        }
+    }
+
+    /**
+     * turn is passed to next player
+     */
+    public String passT() {
+        String info = "Player " + currentPlayer.getPlayerId() + " has finished his turn";
+        nextPlayer();
+        info += "It is now Player " + currentPlayer.getPlayerId() + "'s turn";
+
+        return info;
+    }
+
 
 }
 

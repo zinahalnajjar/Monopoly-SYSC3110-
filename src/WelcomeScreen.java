@@ -15,6 +15,7 @@ import java.io.IOException;
 public class WelcomeScreen {
     final JFrame frame;
     int numPlayers;
+    int numAIPlayers;
 
     /**
      * Initializes the start screen
@@ -28,24 +29,28 @@ public class WelcomeScreen {
         frame = new JFrame("Monopoly");
         //frame.setLayout(new GridLayout(10, 1, 5, 5));
         frame.setLayout(layout);
-        JLabel l = new JLabel("Enter the number of players:");
-        JLabel err = new JLabel("Invalid Entry. Input must be an integer above 1.");
+        JLabel l = new JLabel("Enter the total number of players:");
+        JTextField in = new JTextField("Enter the total number of players:",20);
+        JLabel l2 = new JLabel("Enter the number of AI Players:");
+        JTextField in2 = new JTextField("Enter the number of AI Players:", 20);
+        JLabel err = new JLabel("Invalid Entry. Input must be an integer above 1 and AI players must be less than or equal to the total number of Players.");
         err.setVisible(false);
-        JTextField in = new JTextField(20);
         // creates instance of JButton
         JButton button = new JButton("Play");
         button.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 String input = in.getText();
+                String inputAI = in2.getText();
 
-                if (input.length() == 0) {
+                if (input.length() == 0 || Integer.parseInt(inputAI) > Integer.parseInt(input)) {
                     err.setVisible(true);
                 } else {
                     try {
                         numPlayers = Integer.parseInt(input);
+                        numAIPlayers = Integer.parseInt(inputAI);
                         if (numPlayers > 1) {
                             frame.dispose();
-                            new MainFrame(numPlayers);
+                            new MainFrame(numPlayers, numAIPlayers);
                         } else {
                             err.setVisible(true);
                         }
@@ -94,11 +99,13 @@ public class WelcomeScreen {
         });
 
         frame.add(l);
+        frame.add(l2);
         frame.add(in);
+        frame.add(in2);
         frame.add(button);
         frame.add(help);
         frame.add(err);
-        frame.setSize(300, 200);
+        frame.setSize(300, 500);
         // makes the frame visible
         frame.setVisible(true);
 
@@ -108,11 +115,15 @@ public class WelcomeScreen {
     public void setNumPlayers(int players) {
         numPlayers = players;
     }
-
+    public void setNumAIPlayers(int aiPlayers){
+        numAIPlayers = aiPlayers;
+    }
     public int getNumPlayers() {
         return this.numPlayers;
     }
-
+    public int getNumAIPlayers(){
+        return this.numAIPlayers;
+    }
     public static void main(String[] args) {
         WelcomeScreen w = new WelcomeScreen();
     }
