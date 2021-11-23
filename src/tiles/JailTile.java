@@ -1,17 +1,35 @@
 import java.awt.*;
 
+/**
+ * Stores the properties and functionality of Jail Tile
+ * implements property interface
+ *
+ * @author Tooba
+ */
 public class JailTile implements Property {
 
+    //The name and assigned color of the tile
     private String propertyName;
     private Color color;
 
+    //The property type represents what type property this class is
     private final PropertyType TYPE = PropertyType.JAIL;
 
+    /**
+     * Constructor initializes the name and color of the property
+     *
+     * @param name string name of the property
+     * @param white assigned color value
+     */
     public JailTile(String name, Color white) {
         this.propertyName = name;
         this.color = white;
     }
 
+    /**
+     * The following methods are inherited from the implemented interface
+     *
+     */
     @Override
     public void setState(HouseState s) {
     }

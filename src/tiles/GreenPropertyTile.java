@@ -1,22 +1,37 @@
 import java.awt.*;
 
+/**
+ * Property tile that holds the green color set with their defined constant rent and cost
+ *
+ * @author Tooba
+ */
 public class GreenPropertyTile implements Property {
+    //Holds the constant properties of the class
     private final int HOUSE_COST = 200;
     private final int INIT_COST = 300;
     private final int INIT_RENT = 26;
 
+    //The value increase of the last card in the set
     private final int END_RENT_VALUE = 2;
     private final int END_COST_VALUE = 20;
 
+    //Color of the property
     private final Color TILE_COLOR = Color.GREEN;
 
+    //Type of property
     private final PropertyType TYPE = PropertyType.PROPERTY;
 
     private String tileName;
-    private HouseState state;
+    private HouseState state; //how many houses built
     private Player owner;
-    private boolean endSet;
+    private boolean endSet; //end set is true when it is the last card of the set because more expensive than the rest of the set
 
+    /**
+     * Initializes the properties of this orange set tile
+     *
+     * @param name String name of the property
+     * @param endSet boolean value which is true if the card is the last card of the deck
+     */
     public GreenPropertyTile(String name, boolean endSet){
         this.tileName = name;
         this.endSet = endSet;

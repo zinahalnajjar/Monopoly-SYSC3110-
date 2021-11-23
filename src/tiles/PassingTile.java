@@ -1,17 +1,32 @@
 import java.awt.*;
 
+/**
+ * Passing tiles are tiles such as free parking that can be passed with no affect to the player
+ */
 public class PassingTile implements Property {
 
+    //name and color of the property tile
     private String propertyName;
     private Color color;
 
+    //represents the type of property
     private final PropertyType TYPE = PropertyType.PASSING_TILE;
 
+    /**
+     * The following methods are inherited from the implemented interface
+     *
+     * @param name String name of the property
+     * @param white the assigned color of the property
+     */
     public PassingTile(String name, Color white) {
         this.propertyName = name;
         this.color = white;
     }
 
+    /**
+     * The following methods are inherited from the implemented interface
+     *
+     */
     @Override
     public void setState(HouseState s) {
     }

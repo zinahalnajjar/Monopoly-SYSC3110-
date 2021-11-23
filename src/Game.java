@@ -28,73 +28,20 @@ public class Game {
     private Map<Integer, Integer> playerDoubleRollCountMap = new HashMap<>();
 
 
-    private final Board board;
-    private final ArrayList<Player> players;
-    private final Dice dice;
+    private Board board;
+    private ArrayList<Player> players;
+    private Dice dice;
 
     private Property start;
 
     private Player currentPlayer;
-    private final int playerCount;
+    private int playerCount;
     private Player previousPlayer;
     private Property newLocation;
     boolean win = false;
     private boolean passByJail = false;
 
-    /**
-     * @return
-     */
-    public void payJailFee() {
-        String info = "";
-        System.out.println("Player " + currentPlayer.getPlayerId() + " has $" + currentPlayer.getMoney()); //dispay how much the player owns
-        currentPlayer.removeMoney(JAIL_FEE);// remove money from player based on what they paid
-        boolean bankrupt = checkBankruptcy();
-
-        boolean paymentSuccess;
-        if (bankrupt) {
-            paymentSuccess = false;
-        } else {
-            info = "Player " + currentPlayer.getPlayerId() + " PAID JAIL FEE: " + JAIL_FEE +
-                    "\nPlayer" + currentPlayer.getPlayerId() + " has $" + currentPlayer.getMoney();
-            System.out.println(info);
-            paymentSuccess = true;
-            jailPlayerPaymentStatusMap.put(currentPlayer.getPlayerId(), true);
-
-        }
-
-        for (MonopolyView view : views) {
-            view.handleMonopolyJailFeePaymentResult(paymentSuccess);
-        }
-
-    }
-
-    public void collect() {
-        currentPlayer.addMoney(GO_AMOUNT);
-        for (MonopolyView view : views) {
-            view.handleMonopolyGOResult();
-        }
-    }
-
-    public boolean isPlayerInJail() {
-        return board.getJailProperty().equals(currentPlayer.getLocation());
-    }
-
-    public Board getBoard() {
-        return this.board;
-    }
-
-    public Dice getDice() {
-        return this.dice;
-    }
-
-    public Player getCurrentPlayer() {
-        return this.currentPlayer;
-    }
-
-
-    public enum Status {}
-
-    private final List<MonopolyView> views;
+    private List<MonopolyView> views;
 
     /**
      * Initializes the game, sets up the scanner
@@ -110,7 +57,7 @@ public class Game {
 
         start = board.getProperty("GO");
 
-        previousPlayer = null;
+        previousPlayer = new Player(0,-500, start);
 
         newLocation = null;
 
@@ -154,11 +101,11 @@ public class Game {
      * location of the player is updated
      * next  is the turn of next player
      */
-    /*private void AITurn() {
-
+    private void AITurn() {
         dice.roll();
         int sum = dice.sumOfDice();
         Property newLocationOfThePlayer = board.move(sum, AILand());
+        int currentPlayerIndex = 0;
         currentPlayer = players.get(currentPlayerIndex);
         currentPlayerIndex += 1;
         currentPlayer.setLocation(newLocationOfThePlayer);
@@ -167,12 +114,46 @@ public class Game {
         }
 
     }//AI-Turn
-*/
+
     private void notifyViewJailPlayerRoll(String result, boolean forceJailFee) {
         for (MonopolyView view : views) {
             view.handleMonopolyJailPlayerRollResult(result, forceJailFee);
         }
 
+    }
+
+    /**
+     * @return
+     */
+    public void payJailFee() {
+        String info = "";
+        System.out.println("Player " + currentPlayer.getPlayerId() + " has $" + currentPlayer.getMoney()); //dispay how much the player owns
+        currentPlayer.removeMoney(JAIL_FEE);// remove money from player based on what they paid
+        boolean bankrupt = checkBankruptcy();
+
+        boolean paymentSuccess;
+        if (bankrupt) {
+            paymentSuccess = false;
+        } else {
+            info = "Player " + currentPlayer.getPlayerId() + " PAID JAIL FEE: " + JAIL_FEE +
+                    "\nPlayer" + currentPlayer.getPlayerId() + " has $" + currentPlayer.getMoney();
+            System.out.println(info);
+            paymentSuccess = true;
+            jailPlayerPaymentStatusMap.put(currentPlayer.getPlayerId(), true);
+
+        }
+
+        for (MonopolyView view : views) {
+            view.handleMonopolyJailFeePaymentResult(paymentSuccess);
+        }
+
+    }
+
+    public void collect() {
+        currentPlayer.addMoney(GO_AMOUNT);
+        for (MonopolyView view : views) {
+            view.handleMonopolyGOResult();
+        }
     }
 
     public void run(String command) {
@@ -667,6 +648,22 @@ public class Game {
                 "- help: can be used to view the instructions again\n";
     }
 
+    public boolean isPlayerInJail() {
+        return board.getJailProperty().equals(currentPlayer.getLocation());
+    }
+
+    public Board getBoard() {
+        return this.board;
+    }
+
+    public Dice getDice() {
+        return this.dice;
+    }
+
+    public Player getCurrentPlayer() {
+        return this.currentPlayer;
+    }
+
     public int getPlayerCount() {
         return playerCount;
     }
@@ -674,7 +671,6 @@ public class Game {
     public void addMonopolyView(MonopolyView view) {
         views.add(view);
     }
-
 
     public void removeMonopolyView(MonopolyView view){
         views.remove(view);

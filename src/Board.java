@@ -32,6 +32,11 @@ public class Board {
         createGO();
         createUtility();
     }
+
+
+    /**
+     * Initializes and adds the utility property in the Array
+     */
     private void createUtility(){
         Property space12 = new UtilityTile("ELECTRIC COMPANY", 25, 50, 150);
         tiles[9] = space12;
@@ -39,22 +44,34 @@ public class Board {
         tiles[23] = space28;
 
     }
+
+    /**
+     * Initializes and adds the GO tile in the Array
+     */
     private void createGO(){
         tiles[0] = new GoTile("GO", Color.WHITE);
-
     }
 
+    /**
+     * Initializes and adds the jail property in the Array
+     */
     private void createJAIL(){
         tiles[25] = goToJail;
         tiles[7] = jail;
 
     }
 
+    /**
+     * Initializes and adds the free parking property in the Array
+     */
     private void createFreeParking() {
         Property space20 = new PassingTile("FREE PARKING", Color.WHITE);
         tiles[16] = space20;
     }
 
+    /**
+     * Initializes and adds the railroads  in the Array
+     */
     private void createRailRoads(){
         Property space5 = new RailRoadTile("READING RAILROAD", Color.WHITE, 25, 50, 100, 200, 200);
         tiles[3] = space5;
@@ -147,8 +164,7 @@ public class Board {
     public Property move(int spaces, Property location){
         int i = Arrays.asList(tiles).indexOf(location);
         i = i + spaces;
-        //The index can not be EQUAL or more.
-        // I just added the equal sign
+
         if(i >= tiles.length){
             i = i - tiles.length;
         }
@@ -194,11 +210,19 @@ public class Board {
         return "Board [properties Count=" + tiles.length + "]";
     }
 
+    /**
+     * Literally moves person to Jail
+     *
+     * @return returns jail as the new property location
+     */
     public Property moveToJail() {
         newLocation = tiles[7];
         return newLocation;
     }
 
+    /**
+     * Initializes and adds the jail property in the Array
+     */
     public Property getJailProperty() {
         return jail;
     }

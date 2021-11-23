@@ -1,17 +1,36 @@
 import java.awt.*;
 
+/**
+ * Stores the properties and functionality of Go Tile
+ * implements property interface
+ *
+ * @author Tooba
+ */
 public class GoTile implements Property {
 
+    //The name and  assigned color of the tile
     private String propertyName;
     private Color color;
 
+    //The property type represents what type property this class is
     private final PropertyType TYPE = PropertyType.GO;
 
+    /**
+     * Constructor initializes the name and color of the property
+     *
+     * @param name string name of the property
+     * @param white assigned color value
+     */
     public GoTile(String name, Color white) {
         this.propertyName = name;
         this.color = white;
     }
 
+
+    /**
+     * The following methods are inherited from the implemented interface
+     *
+     */
     @Override
     public void setState(HouseState s) {
     }
@@ -43,7 +62,6 @@ public class GoTile implements Property {
 
     @Override
     public void setOwner(Player currentPlayer) {
-
     }
 
     @Override

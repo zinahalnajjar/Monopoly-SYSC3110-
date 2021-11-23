@@ -1,22 +1,37 @@
 import java.awt.*;
 
+/**
+ *Property tile that holds the pink color set with their defined constant rent and cost
+ *
+ * @author Tooba
+ */
 public class PinkPropertyTile implements Property {
+    //Holds the constant properties of the class
     private final int HOUSE_COST = 100;
     private final int INIT_COST = 140;
     private final int INIT_RENT = 10;
 
+    //The value increase of the last card in the set
     private final int END_RENT_VALUE = 2;
     private final int END_COST_VALUE = 20;
 
+    //Color of the property
     private final Color TILE_COLOR = Color.PINK;
 
+    //Type of property
     private final PropertyType TYPE = PropertyType.PROPERTY;
 
     private String tileName;
-    private HouseState state;
+    private HouseState state; //how many houses built
     private Player owner;
-    private boolean endSet;
+    private boolean endSet; //end set is true when it is the last card of the set because more expensive than the rest of the set
 
+    /**
+     * Initializes the properties of this orange set tile
+     *
+     * @param name String name of the property
+     * @param endSet boolean value which is true if the card is the last card of the deck
+     */
     public PinkPropertyTile(String name, boolean endSet){
         this.tileName = name;
         this.endSet = endSet;
@@ -24,6 +39,11 @@ public class PinkPropertyTile implements Property {
         this.state = HouseState.UNOWNED;
     }
 
+    /**
+     * sets the state of the houses
+     *
+     * @param s state of the houses
+     */
     @Override
     public void setState(HouseState s) {
         this.state = s;
@@ -78,21 +98,30 @@ public class PinkPropertyTile implements Property {
     }
 
     /**
-     * @return the string description of each of the variables
+     * Increments the state of the number of houses
      */
-
     public void incrementState() {
         this.state = state.next();
     }
 
+    /**
+     * @return the number houses - the "state" of property - in
+     */
     public HouseState getState() {
         return state;
     }
 
+
+    /**
+     * @return the cost of the houses
+     */
     public int getCostPerHouse() {
         return HOUSE_COST;
     }
 
+    /**
+     * @return the string description of the class
+     */
     @Override
     public String toString(){
         String ownerInfo = (owner == null) ? "" : owner.getPlayerId() + "";
