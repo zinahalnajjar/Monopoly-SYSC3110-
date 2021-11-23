@@ -12,6 +12,7 @@ import java.util.List;
  *
  * @author Zinah
  * @author Kareem
+ * @author Walid
  */
 
 public class Player {
@@ -21,6 +22,8 @@ public class Player {
     private int money;
     private boolean isBankrupt;
     private Property location;
+    private boolean isAI;
+    private int jailCounter;
 
     private final Map<Color, List<Property>> colourPropertyMap = new HashMap<>();
 
@@ -40,6 +43,9 @@ public class Player {
         this.money = money;
         this.properties = new ArrayList<>();
         this.isBankrupt = false;
+        this.isAI = false;
+        this.jailCounter = 0;
+
 
     }
 
@@ -194,4 +200,55 @@ public class Player {
                 + location.getPropertyName() + "\nProperties owned: \n"+ getStringProperties();
     }
 
+    /**
+     * Sets a player as AI
+     */
+    public void setAI() {
+        this.isAI = true;
+    }
+
+    /**
+     *  Unsets a player from AI to not an AI
+     */
+    public void unsetAI(){
+        this.isAI = false;
+    }
+
+    /**
+     * returns the status of a player if it is an AI or not
+     * @return
+     */
+    public boolean getAIStatus(){
+        return isAI;
+    }
+
+    /**
+     * Increments the Jail Counter
+     */
+    public void addJailCounter() {
+        jailCounter++;
+    }
+
+    /**
+     * resets the jail counter for the AI player
+     */
+    public void resetJailCounter() {
+        jailCounter = 0;
+    }
+
+    /**
+     * Returns the amount of the jail counter
+     * @return
+     */
+    public int getJailCounter() {
+        return jailCounter;
+    }
+
+    /**
+     * Pays for whatever needs to be paid
+     * @param cost
+     */
+    public void pay(int cost) {
+        money -= cost;
+    }
 }
