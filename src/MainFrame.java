@@ -621,7 +621,7 @@ public class MainFrame extends JFrame implements MonopolyView  {
             }
         }
 
-        if(!payRentInfo.equals("")){
+        if(!payRentInfo.isBlank()){
             JOptionPane.showMessageDialog(this, payRentInfo, "Payed Rent", JOptionPane.INFORMATION_MESSAGE);
         }
 
