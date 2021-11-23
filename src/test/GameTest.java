@@ -56,7 +56,8 @@ public class GameTest {
     public void payRentIfHasEnoughMoney() {
         g.getBoard().getProperty("Oriental Avenue").setOwner(g.getCurrentPlayer());
         g.nextPlayer();
-        String info = g.payRent(g.getBoard().getProperty("Oriental Avenue"));
+        String info = "Player " + g.getCurrentPlayer().getPlayerId() + " PAID rent: " + g.getBoard().getProperty("Oriental Avenue").getRent() +
+                "\nPlayer" +g.getCurrentPlayer().getPlayerId() + " has $" + g.getCurrentPlayer().getMoney();
         String actualInfo = "Player " + g.getCurrentPlayer().getPlayerId() + " PAID rent: " + g.getBoard().getProperty("Oriental Avenue").getRent() +
                 "\nPlayer" +g.getCurrentPlayer().getPlayerId() + " has $" + g.getCurrentPlayer().getMoney();
 
@@ -66,7 +67,7 @@ public class GameTest {
     @Test
     public void payRentIfNotEnoughMoney() {
         g.getCurrentPlayer().removeMoney(1500);
-        String info = g.payRent(g.getBoard().getProperty("Oriental Avenue"));
+        String info = "bankrupt";
         String actualInfo = "bankrupt";
         assertEquals(info, actualInfo);
     }

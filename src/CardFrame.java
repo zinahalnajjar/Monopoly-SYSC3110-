@@ -164,13 +164,13 @@ public class CardFrame extends JFrame implements MonopolyView, ActionListener {
                 sell.setEnabled(false);
             }
             //if property owner is some other player
-           else if(property.getOwner() != model.getCurrentPlayer()){
+            else if(property.getOwner() != model.getCurrentPlayer()){
                 buy.setEnabled(false);
                 sell.setEnabled(false);
             }
            //if property is owned by current player himself
             else if(property.getOwner() == model.getCurrentPlayer()){
-                buy.setEnabled(property.getState() != HouseState.HOTEL);
+               buy.setEnabled(property.getState() != HouseState.HOTEL);
                sell.setEnabled(true);
 
            }
@@ -192,14 +192,7 @@ public class CardFrame extends JFrame implements MonopolyView, ActionListener {
         JOptionPane.showMessageDialog(this, info, "Help", JOptionPane.INFORMATION_MESSAGE);
     }
 
-
-    @Override
-    public void handleMonopolyRailRoadBuy(boolean success, Property location) {
-
-    }
-
-    @Override
-    public void handleMonopolyUtilityBuy(boolean success, Property location) {
+    public void handleMonopolyUtilityRailRoadBuy(boolean success, Property location) {
 
     }
 

@@ -175,12 +175,7 @@ public class UtilityCard extends JFrame implements MonopolyView, ActionListener{
     }
 
     @Override
-    public void handleMonopolyRailRoadBuy(boolean success, Property location) {
-
-    }
-
-    @Override
-    public void handleMonopolyUtilityBuy(boolean success, Property location) {
+    public void handleMonopolyUtilityRailRoadBuy(boolean success, Property location) {
         if(property == location && success == false){
             if(model.getCurrentPlayer().getLocation() != property){
                 JOptionPane.showMessageDialog(this,"You are not eligible to buy this property");
