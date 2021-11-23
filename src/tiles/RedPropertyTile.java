@@ -88,26 +88,38 @@ public class RedPropertyTile implements Property {
     }
 
     /**
-     * @return the string description of each of the variables
+     * increments the state of the houses
      */
-
     public void incrementState() {
         this.state = state.next();
     }
 
+    /**
+     * @return the number houses - the "state" of property - in
+     */
     public HouseState getState() {
         return state;
     }
 
+
+    /**
+     * @return the cost of the houses
+     */
     public int getCostPerHouse() {
         return HOUSE_COST;
     }
 
+    /**
+     * @param s is the state that needs to be set
+     */
     @Override
     public void setState(HouseState s) {
         this.state = s;
     }
 
+    /**
+     * @return the string description of each of the variables
+     */
     @Override
     public String toString(){
         String ownerInfo = (owner == null) ? "" : owner.getPlayerId() + "";
@@ -121,6 +133,9 @@ public class RedPropertyTile implements Property {
         return "Property [property name=" + tileName + ", cost=" + INIT_COST + ", rent="+ rent +", House Cost="+ HOUSE_COST +"Number of houses built=" + state.getHouseNum() + "color=" + TILE_COLOR + ", owner id=" + ownerInfo + "]";
     }
 
+    /**
+     * @return the type of property
+     */
     public PropertyType getTYPE() {
         return TYPE;
     }
