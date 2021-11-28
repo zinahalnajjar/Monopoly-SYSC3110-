@@ -99,6 +99,7 @@ public class RailroadCard extends JFrame implements MonopolyView, ActionListener
 
 
     }
+
     /**
      *
      * initializes the info panel

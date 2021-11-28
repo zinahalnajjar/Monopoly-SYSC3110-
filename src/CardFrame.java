@@ -237,6 +237,10 @@ public class CardFrame extends JFrame implements MonopolyView, ActionListener {
         }
     }
 
+    /**
+     * Inherited methods
+     */
+
     @Override
     public void handleMonopolyRentResult(String result, Property location) {
 

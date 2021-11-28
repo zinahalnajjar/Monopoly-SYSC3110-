@@ -18,6 +18,9 @@ public class Board {
     Property jail = new JailTile("JAIL", Color.WHITE);
     Property goToJail = new JailTile("GoToJail", Color.WHITE);
 
+
+
+
     /**
      * Initializes the array that will hold the properties.
      * And then calls a method to create properties to add.
