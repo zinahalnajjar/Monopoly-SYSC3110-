@@ -13,7 +13,7 @@ public class JailCard extends JFrame implements MonopolyView, ActionListener {
 
     //reference to board and property
     private Board board;
-    private Property property;
+    private Tile property;
 
     //the panels for different sections of the deed card
     private JPanel titlePanel;
@@ -50,7 +50,7 @@ public class JailCard extends JFrame implements MonopolyView, ActionListener {
 
         this.mf = mf;
         System.out.println("property.getPropertyName(): " + pName);
-        property = board.getProperty(pName);
+        property = board.getTile(pName);
 
         this.mc = mc;
         this.model = model;
@@ -70,8 +70,9 @@ public class JailCard extends JFrame implements MonopolyView, ActionListener {
 
         propertyName = new JLabel("JAIL");
         propertyName.setFont(new Font("SANS_SERIF", Font.BOLD, 20));
+        propertyName.setForeground(Color.white);
         titlePanel.add(propertyName);
-        titlePanel.setBackground(property.getColor());
+        titlePanel.setBackground(Color.BLACK);
         titlePanel.setBorder(new EmptyBorder(10,20,10,20));
 
 
@@ -126,15 +127,6 @@ public class JailCard extends JFrame implements MonopolyView, ActionListener {
 
 
     /**
-     * @return this frame
-     */
-    public JailCard currentFrame(Property p){
-        if(property == p ){
-            return this;
-        }return null;
-    }
-
-    /**
      * @param e performs action based on who clicked the property card
      */
     @Override
@@ -170,7 +162,7 @@ public class JailCard extends JFrame implements MonopolyView, ActionListener {
 
 
     @Override
-    public void handleMonopolyUtilityRailRoadBuy(boolean success, Property location) {
+    public void handleMonopolyUtilityRailRoadBuy(boolean success, Tile location) {
 
     }
 
@@ -187,29 +179,28 @@ public class JailCard extends JFrame implements MonopolyView, ActionListener {
     }
 
     @Override
-    public void handleMonopolyBuy(String success, Property location) {
+    public void handleMonopolyBuy(String success, PropertyTile location) {
 
     }
 
     /**
      *
      * handles the sell update
-     *
-     * @param success true if property sold successfully
+     *  @param success true if property sold successfully
      * @param location to be sold
      */
     @Override
-    public void handleMonopolySell(boolean success, Property location) {
+    public void handleMonopolySell(boolean success, Tile location) {
         //DO NOTHING
     }
 
     @Override
-    public void handleMonopolyRentResult(String result, Property location) {
+    public void handleMonopolyRentResult(String result, Tile location) {
         //DO NOTHING
     }
 
     @Override
-    public void handleMonopolyRentUtility(String result, Property location) {
+    public void handleMonopolyRentUtility(String result, Tile location) {
 
     }
 

@@ -66,12 +66,12 @@ public class MainFrame extends JFrame implements MonopolyView  {
      *
      * @param playerCount
      */
-    public MainFrame(int playerCount) throws IOException {
+    public MainFrame(int playerCount, String filename) throws IOException {
         super("Monopoly!!");
 
         cf = null;
   
-        model = new Game(playerCount);
+        model = new Game(playerCount, filename);
 
         model.addMonopolyView(this);
 
@@ -118,18 +118,18 @@ public class MainFrame extends JFrame implements MonopolyView  {
                 bttn.addActionListener(gf);
             }
             else {
-                cf = new CardFrame(bttn.getText(), m.getBoard(), mc, m, this);
+                cf = new CardFrame(bttn.getText(), (PropertyTile)m.getBoard().getTile(bttn.getText()), mc, m, this);
                 bttn.addActionListener(cf);
             }
         }
         for(JButton bttn : railroads){
-            RailroadCard rf = new RailroadCard(bttn.getText(), m.getBoard(), mc, m, this);
+            CardFrame rf = new CardFrame(bttn.getText(), (PropertyTile)m.getBoard().getTile(bttn.getText()), mc, m, this);
             bttn.addActionListener(rf);
 
         }// add another for loop
 
         for(JButton bttn : utilities){
-            UtilityCard uf = new UtilityCard(bttn.getText(), m.getBoard(), mc, m, this);
+            CardFrame uf = new CardFrame(bttn.getText(), (PropertyTile)m.getBoard().getTile(bttn.getText()), mc, m, this);
             bttn.addActionListener(uf);
         }
 
@@ -452,17 +452,17 @@ public class MainFrame extends JFrame implements MonopolyView  {
 
 
     @Override
-    public void handleMonopolySell(boolean success, Property location) {
+    public void handleMonopolySell(boolean success, Tile location) {
 
     }
 
     @Override
-    public void handleMonopolyRentResult(String result, Property location) {
+    public void handleMonopolyRentResult(String result, Tile location) {
 
     }
 
     @Override
-    public void handleMonopolyRentUtility(String result, Property location) {
+    public void handleMonopolyRentUtility(String result, Tile location) {
 
     }
 
@@ -504,7 +504,7 @@ public class MainFrame extends JFrame implements MonopolyView  {
     }
 
     @Override
-    public void handleMonopolyUtilityRailRoadBuy(boolean success, Property location) {
+    public void handleMonopolyUtilityRailRoadBuy(boolean success, Tile location) {
 
     }
 
@@ -536,7 +536,7 @@ public class MainFrame extends JFrame implements MonopolyView  {
     }
 
     @Override
-    public void handleMonopolyBuy(String success, Property location) {
+    public void handleMonopolyBuy(String success, PropertyTile location) {
 
     }
 
@@ -591,31 +591,31 @@ public class MainFrame extends JFrame implements MonopolyView  {
     private void rollNotification(String payRentInfo){
         Dice dice = model.getDice(); // get the dice from model- also need to add the getter in Game class to return the dice
         Player currentPlayer = model.getCurrentPlayer(); // get the current player
-        Property location = currentPlayer.getLocation(); // get the location of the current player on the board
+        Tile location = currentPlayer.getLocation(); // get the location of the current player on the board
 
         String info = "Dice values:\n";
         info += "   " + dice.getDie1() + "\n";
         info += "   " + dice.getDie2() + "\n\n";
         info += "Player location:\n";
-        info += "   " + location.getPropertyName() + "\n";
+        info += "   " + location.getTileName() + "\n";
         JOptionPane.showMessageDialog(this, info, "Roll result", JOptionPane.INFORMATION_MESSAGE);
 
         //pops open the property landed on
         for(JButton bttn : properties){
-            if(bttn.getText().equals(location.getPropertyName())){
+            if(bttn.getText().equals(location.getTileName())){
                 bttn.doClick();
             }
         }
 
         for(JButton bttn : railroads){
-            if(bttn.getText().equals(location.getPropertyName())){
+            if(bttn.getText().equals(location.getTileName())){
                 bttn.doClick();
                 break;
             }
         }
 
         for(JButton bttn : utilities){
-            if(bttn.getText().equals(location.getPropertyName())){
+            if(bttn.getText().equals(location.getTileName())){
                 bttn.doClick();
                 break;
             }

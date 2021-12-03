@@ -45,7 +45,7 @@ public class WelcomeScreen {
                         numPlayers = Integer.parseInt(input);
                         if (numPlayers > 1) {
                             frame.dispose();
-                            new MainFrame(numPlayers);
+                            new MainFrame(numPlayers, "Original.xml");
                         } else {
                             err.setVisible(true);
                         }

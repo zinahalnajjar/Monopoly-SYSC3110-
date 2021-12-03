@@ -17,12 +17,13 @@ import java.util.List;
 public class Player {
 
     public final int playerId;
-    private final List<Property> properties;
+    private final List<Tile> properties;
     private int money;
     private boolean isBankrupt;
-    private Property location;
+    private Tile location;
 
-    private final Map<Color, List<Property>> colourPropertyMap = new HashMap<>();
+
+    private final Map<Color, List<Tile>> colourPropertyMap = new HashMap<>();
 
     //private Map<String, Boolean> colourPropertyMap = new HashMap<>();
 
@@ -32,7 +33,7 @@ public class Player {
      * @param aPlayerID players id
      * @param start the start location of the player
      */
-    public Player(int money, int aPlayerID, Property start) {
+    public Player(int money, int aPlayerID, Tile start) {
 
         this.location = start;
 
@@ -78,14 +79,14 @@ public class Player {
      * adds a property to the list of properties for each player
      * @param property the property to be added to the list
      */
-    public void addProperty(Property property) {
+    public void addProperty(PropertyTile property) {
         this.properties.add(property);
 
         //checkSet(property);
 
         //group properties based on Color
         Color colour = property.getColor();
-        List<Property> list = colourPropertyMap.get(colour);
+        List<Tile> list = colourPropertyMap.get(colour);
         if(list == null){
             //first property for this colour
             list = new ArrayList<>();
@@ -105,9 +106,9 @@ public class Player {
      * @return true if the set is owned
      */
 
-    public boolean isSetOwned(Property property){
+    public boolean isSetOwned(PropertyTile property){
         Color colour = property.getColor();
-        List<Property> list = colourPropertyMap.get(colour);
+        List<Tile> list = colourPropertyMap.get(colour);
         return (list != null) && (list.size() == 3);
         //for the purpose of testing fast we will make the list size 2 instead of 3
 
@@ -118,7 +119,7 @@ public class Player {
      * @param property the property to be removed
      */
 
-    public boolean removeProperty(Property property) {
+    public boolean removeProperty(Tile property) {
         return this.properties.remove(property);
     }
 
@@ -128,7 +129,7 @@ public class Player {
      * @param location the location of the player
      */
 
-    public void setLocation(Property location) {
+    public void setLocation(Tile location) {
         this.location = location;
 
     }
@@ -137,7 +138,7 @@ public class Player {
      *
      * @return location the location of the player on the board
      */
-    public Property getLocation(){
+    public Tile getLocation(){
         return location;
     }
 
@@ -175,8 +176,8 @@ public class Player {
     public String getStringProperties() {
         String p = "";
 
-        for(Property property : properties){
-            p += property.getPropertyName() + "\n";
+        for(Tile property : properties){
+            p += property.getTileName() + "\n";
         }
 
         return p;
@@ -192,7 +193,7 @@ public class Player {
             return "Player " + playerId + " is bankrupt.\n";
         }
         return "Player " + playerId + "\nMoney: " + money + ", Location: "
-                + location.getPropertyName() + "\nProperties owned: \n"+ getStringProperties();
+                + location.getTileName() + "\nProperties owned: \n"+ getStringProperties();
     }
 
 }

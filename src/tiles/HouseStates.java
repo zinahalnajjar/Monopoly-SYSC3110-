@@ -4,14 +4,17 @@
  *
  * @author Tooba
  */
-enum HouseState{
+enum PropertyState {
     UNOWNED(1, 0),
     RENT(1, 0),
     H1(1000, 1),
     H2(2000, 2),
     H3(3000, 3),
     H4(4000, 4),
-    HOTEL(5000, 5);
+    HOTEL(5000, 5),
+    RENT2(2, 0),
+    RENT3(4, 0),
+    RENT4(8, 0);
 
     private final int rentMultiplier;
     private final int houseNum;
@@ -23,7 +26,7 @@ enum HouseState{
      * @param rentMultiplier the multiplier for the rent
      * @param house the house number
      */
-    HouseState(int rentMultiplier, int house) {
+    PropertyState(int rentMultiplier, int house) {
         this.rentMultiplier = rentMultiplier;
         this.houseNum = house;
     }
@@ -39,7 +42,7 @@ enum HouseState{
     /**
      * @return the next state basically to increment
      */
-    public HouseState next(){
+    public PropertyState next(){
         return values()[ordinal() + 1];
     }
 

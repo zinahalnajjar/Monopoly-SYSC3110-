@@ -15,7 +15,6 @@ public class Game {
 
     private static final int JAIL_FEE = 50;
     private static final int GO_AMOUNT = 200;
-//    private static boolean DEBUG_FIRST = true;
 
     //keeps track of rolls count for jail-player
     //player id is key and roll count is value
@@ -32,12 +31,12 @@ public class Game {
     private ArrayList<Player> players;
     private Dice dice;
 
-    private Property start;
+    private Tile start;
 
     private Player currentPlayer;
     private int playerCount;
     private Player previousPlayer;
-    private Property newLocation;
+    private Tile newLocation;
     boolean win = false;
     private boolean passByJail = false;
 
@@ -49,19 +48,19 @@ public class Game {
      *
      * @param playerCount the number of player in the game
      */
-    public Game(int playerCount) {
-        board = new Board();
+    public Game(int playerCount, String filename) {
+        board = new Board(filename);
         players = new ArrayList<>();
         this.playerCount = playerCount;
         this.dice = new Dice();
 
-        start = board.getProperty("GO");
+        start = board.getTile("GO");
 
         previousPlayer = new Player(0,-500, start);
 
         newLocation = null;
 
-        views = new ArrayList<MonopolyView>();
+        views = new ArrayList<>();
 
         initPlayers();
     }
@@ -75,45 +74,6 @@ public class Game {
         }
         currentPlayer = players.get(0);
     }
-
-    /**
-     * if current property is owned by opponent
-     * then player pays rent but if it is unowned
-     * then player buys it
-     *
-     * @return current location of the player
-     */
-    private Property AILand() {
-
-        Property property = currentPlayer.getLocation();
-        if (currentPlayer.getLocation().getOwner().isSetOwned(property)) {
-            rentRegular(property);
-        } else {
-            buy(property);
-        }
-        return property;
-    }//AI-Land
-
-    /**
-     * Firstly this method rolls dice and gets results
-     * then gets the sum of the two dice rolling results
-     * Moves the player according to the sum of the dice
-     * location of the player is updated
-     * next  is the turn of next player
-     */
-    private void AITurn() {
-        dice.roll();
-        int sum = dice.sumOfDice();
-        Property newLocationOfThePlayer = board.move(sum, AILand());
-        int currentPlayerIndex = 0;
-        currentPlayer = players.get(currentPlayerIndex);
-        currentPlayerIndex += 1;
-        currentPlayer.setLocation(newLocationOfThePlayer);
-        if (currentPlayerIndex > playerCount) {
-            currentPlayerIndex = 0;
-        }
-
-    }//AI-Turn
 
     private void notifyViewJailPlayerRoll(String result, boolean forceJailFee) {
         for (MonopolyView view : views) {
@@ -163,7 +123,7 @@ public class Game {
 
         if ("roll".equals(command)) {
             //check if player is in Jail
-            boolean jailPlayer = !passByJail && currentPlayer.getLocation().getPropertyName().equals("JAIL");
+            boolean jailPlayer = !passByJail && currentPlayer.getLocation().getTileName().equals("JAIL");
             System.out.println(jailPlayer);
             if (jailPlayer) {
                 if (hasCurrentPlayerPaidJailFee()) {// if they haven't paid the jail fee yet
@@ -283,9 +243,11 @@ public class Game {
                 newLocation = board.move(dice.sumOfDice(), currentPlayer.getLocation());
                 if (board.getValidLocation(newLocation)) {
                     currentPlayer.setLocation(newLocation);
-                    if (newLocation.getOwner() != null) {
-                        if (newLocation.getOwner() != currentPlayer) {
-                            info = rentRegular(newLocation);
+                    if(newLocation.getTYPE().equals(TileType.PROPERTY)){
+                        if (((PropertyTile) newLocation).getOwner() != null) {
+                            if (((PropertyTile) newLocation).getOwner() != currentPlayer) {
+                                info = rentRegular((PropertyTile)newLocation);
+                            }
                         }
                     }
                 }
@@ -295,13 +257,13 @@ public class Game {
 
         if ("buy".equals(command)) {
             String info1 = "";
-            if (newLocation.getTYPE() == PropertyType.PROPERTY) {
-                info1 = buy(newLocation);
+            if (newLocation.getTYPE() == TileType.PROPERTY) {
+                info1 = buy((PropertyTile)newLocation);
                 for (MonopolyView view : views) {
-                    view.handleMonopolyBuy(info1, newLocation);
+                    ((CardFrame)view).handleMonopolyBuy(info1, (PropertyTile)newLocation);
                 }
-            } else if (newLocation.getTYPE() == PropertyType.RAILROAD || newLocation.getTYPE() == PropertyType.UTILITY){
-                boolean b = buyUtility(newLocation);
+            } else if (newLocation.getTYPE() == TileType.RAILROAD || newLocation.getTYPE() == TileType.UTILITY){
+                boolean b = buyUtility((PropertyTile)newLocation);
                 for (MonopolyView view : views) {
                     view.handleMonopolyUtilityRailRoadBuy(b, newLocation);
                 }
@@ -309,7 +271,7 @@ public class Game {
         }
 
         if ("sell".equals(command)) {
-            boolean success = sell(newLocation);
+            boolean success = sell((PropertyTile)newLocation);
             for (MonopolyView view : views) {
                 view.handleMonopolySell(success, newLocation);
             }
@@ -318,7 +280,7 @@ public class Game {
 
         if (command.startsWith("rent") && !command.equals("rent")) {
             int rentLevel = getRentLevel(command);
-            String result1 = rentUtility(newLocation, rentLevel);
+            String result1 = rentUtility((PropertyTile)newLocation, rentLevel);
             for (MonopolyView view : views) {
                 view.handleMonopolyRentResult(result1, newLocation);
                 view.handleMonopolyRentUtility(result1, newLocation);
@@ -382,7 +344,7 @@ public class Game {
         }
         return 1;
     }
-    public boolean buyUtility(Property property){
+    public boolean buyUtility(PropertyTile property){
         if(currentPlayer.getLocation()==property){
             int cost = property.getCost();
             int money = currentPlayer.getMoney(); //return players total money
@@ -403,9 +365,9 @@ public class Game {
         return false;
     }
 
-    public String buy(Property property){
+    public String buy(PropertyTile property){
         String info = "";
-            if(property.getState() == HouseState.UNOWNED) {
+            if(property.getState() == PropertyState.UNOWNED) {
                 if (currentPlayer.getLocation() == property){
                     int cost = property.getCost();
                     int money = currentPlayer.getMoney(); //return players total money
@@ -425,7 +387,7 @@ public class Game {
                 } else {
                     info = "You are ineligible to buy this property";
                 }
-            } else if (property.getState() == HouseState.HOTEL) {
+            } else if (property.getState() == PropertyState.HOTEL) {
                 info = "This property has the maximum number of houses built on it";
             } else if (currentPlayer == property.getOwner()) {
                 int cost = property.getCostPerHouse();
@@ -460,12 +422,12 @@ public class Game {
      * @param property
      * @return
      */
-    public boolean sell(Property property){
+    public boolean sell(PropertyTile property){
         if (currentPlayer == property.getOwner()){
             currentPlayer.addMoney(property.getCost());
             currentPlayer.removeProperty(property);
             
-            property.setState(HouseState.UNOWNED);
+            property.setState(PropertyState.UNOWNED);
             property.setOwner(null);
             return true;
         }
@@ -511,27 +473,27 @@ public class Game {
      * If a player lands in a property owned by opposing player rent has to be paid
      * @param property the property for which the rent needs to be paid
      */
-    public String rentRegular(Property property){
+    public String rentRegular(PropertyTile property){
         int rent =  property.getRent();
         return payRent(property, rent);
     }
 
-    public String rentUtility(Property property, int rentLevel){
+    public String rentUtility(PropertyTile property, int rentLevel){
         String info = "";
         int rentUtil = 0;
 
         // get rent amount
         if(rentLevel == 1) {
-            rentUtil = ((RailRoadTile)property).getRent1();
+            rentUtil = ((PropertyTile)property).getRent();
         }
         else if(rentLevel == 2) {
-            rentUtil = ((RailRoadTile)property).getRent2();
+            rentUtil = ((PropertyTile)property).getRent();
         }
         else if(rentLevel == 3) {
-            rentUtil = ((RailRoadTile)property).getRent3();
+            rentUtil = ((PropertyTile)property).getRent();
         }
         else if(rentLevel == 4) {
-            rentUtil = ((RailRoadTile)property).getRent4();
+            rentUtil = ((PropertyTile)property).getRent();
         }
 
         return payRent(property, rentUtil);
@@ -543,7 +505,7 @@ public class Game {
      * If a player lands in a property owned by opposing player rent has to be paid
      * @param property the property for which the rent needs to be paid
      */
-    public String payRent(Property property, int rent){
+    public String payRent(PropertyTile property, int rent){
         String info = "";
 
         System.out.println("Player "+currentPlayer.getPlayerId() + " has $" + currentPlayer.getMoney()); //display how much the player owns
@@ -551,11 +513,10 @@ public class Game {
         boolean bankrupt = checkBankruptcy();
 
         if(bankrupt){
-            info = "Player " + currentPlayer.getPlayerId() + " didn't have enough money to pay rent to Player " + property.getOwner().getPlayerId()+ " at " + property.getPropertyName();
+            info = "Player " + currentPlayer.getPlayerId() + " didn't have enough money to pay rent to Player " + property.getOwner().getPlayerId()+ " at " + property.getTileName();
             info += "\n Player " + currentPlayer.getPlayerId() + "has gone bankrupt";
         }
 
-        //if the player is bankrupt then don't add money
         if (!bankrupt) {
             System.out.println("Player " + currentPlayer.getPlayerId() + " PAID rent: " + rent);// display how much the player paid for rent
             System.out.println("Player " + currentPlayer.getPlayerId() + " has $" + currentPlayer.getMoney());

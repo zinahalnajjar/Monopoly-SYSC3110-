@@ -11,7 +11,7 @@ public class GoCard extends JFrame implements MonopolyView, ActionListener{
 
     //reference to board and property
     private Board board;
-    private Property property;
+    private Tile property;
 
     //the panels for different sections of the deed card
     private JPanel titlePanel;
@@ -36,7 +36,7 @@ public class GoCard extends JFrame implements MonopolyView, ActionListener{
 
         this.mf = mf;
         System.out.println("property.getPropertyName(): " + pName);
-        property = board.getProperty(pName);
+        property = board.getTile(pName);
 
         this.mc = mc;
         this.model = model;
@@ -54,8 +54,9 @@ public class GoCard extends JFrame implements MonopolyView, ActionListener{
         //initialize the title section of the panel
         propertyName = new JLabel("GO");
         propertyName.setFont(new Font("SANS_SERIF", Font.BOLD, 20));
+        propertyName.setForeground(Color.white);
         titlePanel.add(propertyName);
-        titlePanel.setBackground(property.getColor());
+        titlePanel.setBackground(Color.BLACK);
         titlePanel.setBorder(new EmptyBorder(10,20,10,20));
 
 
@@ -117,7 +118,7 @@ public class GoCard extends JFrame implements MonopolyView, ActionListener{
     }
 
     @Override
-    public void handleMonopolyUtilityRailRoadBuy(boolean success, Property location) {
+    public void handleMonopolyUtilityRailRoadBuy(boolean success, Tile location) {
 
     }
 
@@ -127,22 +128,22 @@ public class GoCard extends JFrame implements MonopolyView, ActionListener{
     }
 
     @Override
-    public void handleMonopolyBuy(String info, Property location) {
+    public void handleMonopolyBuy(String info, PropertyTile location) {
 
     }
 
     @Override
-    public void handleMonopolySell(boolean success, Property location) {
+    public void handleMonopolySell(boolean success, Tile location) {
 
     }
 
     @Override
-    public void handleMonopolyRentResult(String result, Property location) {
+    public void handleMonopolyRentResult(String result, Tile location) {
 
     }
 
     @Override
-    public void handleMonopolyRentUtility(String result, Property location) {
+    public void handleMonopolyRentUtility(String result, Tile location) {
 
     }
 

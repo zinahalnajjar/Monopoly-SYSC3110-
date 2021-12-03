@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tiles>
+	<tile type= "cornertile">
+		<square>0</square>
+		<name>GO</name>
+	</tile>
+	<tile type= "property">
+		<square>1</square>
+		<name>Mediterranean Avenue</name>
+		<color>#8b4513</color>
+		<rent>2</rent>
+		<cost>60</cost>
+		<housecost>50</housecost>
+	</tile>	
+	<tile type= "property">
+		<square>2</square>
+		<name>Baltic Avenue</name>
+		<color>#8b4513</color>
+		<rent>4</rent>
+		<cost>60</cost>
+		<housecost>50</housecost>
+	</tile>			
+	<tile type="railroad">
+		<square>3</square>
+		<name>READING RAILROAD</name>
+		<rent>25</rent>
+		<cost>200</cost>
+	</tile>
+	<tile type="property">
+		<square>4</square>
+		<name>Oriental Avenue</name>
+		<color>#00FFFF</color>
+		<rent>6</rent>
+		<cost>100</cost>
+		<housecost>50</housecost>
+	</tile>	
+	<tile type="property">
+		<square>5</square>
+		<name>Vermont Avenue</name>
+		<color>#00FFFF</color>
+		<rent>6</rent>
+		<cost>100</cost>
+		<housecost>50</housecost>
+	</tile>	
+	<tile type= "property">
+		<square>6</square>
+		<name>Connecticut Avenue</name>
+		<color>#00FFFF</color>
+		<rent>8</rent>
+		<cost>120</cost>
+		<housecost>50</housecost>
+	</tile>	
+	<tile type="cornertile">
+		<square>7</square>		
+		<name>JAIL</name>
+	</tile>
+	<tile type="property">
+		<square>8</square>
+		<name>St. Charles Place</name>
+		<color>#8b4513</color>
+		<rent>10</rent>
+		<cost>140</cost>
+		<housecost>100</housecost>
+	</tile>	
+	<tile type="utility">
+		<square>9</square>
+		<name>ELECTRIC COMPANY</name>
+		<rent>25</rent>
+		<cost>150</cost>
+	</tile>
+	<tile type="property">
+		<square>10</square>
+		<name>States Avenue</name>
+		<color>#8b4513</color>
+		<rent>10</rent>
+		<cost>140</cost>
+		<housecost>100</housecost>
+	</tile>	
+	<tile type="property">
+		<square>11</square>
+		<name>Virginia Avenue</name>
+		<color>#8b4513</color>
+		<rent>12</rent>
+		<cost>160</cost>
+		<housecost>100</housecost>
+	</tile>	
+	<tile type="railroad">
+		<square>12</square>
+		<name>PENNSYLVANIA RAILROAD</name>
+		<rent>25</rent>
+		<cost>200</cost>
+	</tile>
+	<tile type="property">
+		<square>13</square>
+		<name>St. James Place</name>
+		<color>#8b4513</color>
+		<rent>14</rent>
+		<cost>180</cost>
+		<housecost>100</housecost>
+	</tile>	
+	<tile type="property">
+		<square>14</square>
+		<name>Tennessee Avenue</name>
+		<color>#8b4513</color>
+		<rent>14</rent>
+		<cost>180</cost>
+		<housecost>100</housecost>
+	</tile>	
+	<tile type="property">
+		<square>15</square>
+		<name>New York Avenue</name>
+		<color>#8b4513</color>
+		<rent>16</rent>
+		<cost>200</cost>
+		<housecost>100</housecost>
+	</tile>	
+	<tile type="cornertile">
+		<square>16</square>
+		<name>FREE PARKING</name>
+	</tile>
+	<tile type="property">
+		<square>17</square>
+		<name>Kentucky Avenue</name>
+		<color>#8b4513</color>
+		<rent>18</rent>
+		<cost>220</cost>
+		<housecost>150</housecost>
+	</tile>	
+	<tile type="property">
+		<square>18</square>
+		<name>Indiana Avenue</name>
+		<color>#8b4513</color>
+		<rent>18</rent>
+		<cost>220</cost>
+		<housecost>150</housecost>
+	</tile>	
+	<tile type="property">
+		<square>19</square>
+		<name>Illinois Avenue</name>
+		<color>#8b4513</color>
+		<rent>20</rent>
+		<cost>240</cost>
+		<housecost>150</housecost>
+	</tile>	
+	<tile type="railroad">
+		<square>20</square>
+		<name>B. &amp; O. RAILROAD</name>
+		<rent>25</rent>
+		<cost>200</cost>
+	</tile>	
+	<tile type="property">
+		<square>21</square>
+		<name>Atlantic Avenue</name>
+		<color>#8b4513</color>
+		<rent>22</rent>
+		<cost>260</cost>
+		<housecost>150</housecost>
+	</tile>	
+	<tile type="property">
+		<square>22</square>
+		<name>Ventnor Avenue</name>
+		<color>#8b4513</color>
+		<rent>22</rent>
+		<cost>260</cost>
+		<housecost>150</housecost>
+	</tile>			
+	<tile type="utility">
+		<square>23</square>
+		<name>WATER WORKS</name>
+		<rent>25</rent>
+		<cost>150</cost>
+	</tile>	
+	<tile type="property">
+		<square>24</square>
+		<name>Marvin Gardens</name>
+		<color>#8b4513</color>
+		<rent>24</rent>
+		<cost>280</cost>
+		<housecost>150</housecost>
+	</tile>	
+	<tile type="cornertile">
+		<square>25</square>
+		<name>GO TO JAIL</name>
+	</tile>
+	<tile type="property">
+		<square>26</square>
+		<name>Pacific Avenue</name>
+		<color>#00FF00</color>
+		<rent>26</rent>
+		<cost>300</cost>
+		<housecost>200</housecost>
+	</tile>	
+	<tile type="property">
+		<square>27</square>
+		<name>North Carolina Avenue</name>
+		<color>#00FF00</color>
+		<rent>26</rent>
+		<cost>300</cost>
+		<housecost>200</housecost>
+	</tile>	
+	<tile type="property">
+		<square>28</square>
+		<name>Pennsylvania Avenue</name>
+		<color>#00FF00</color>
+		<rent>28</rent>
+		<cost>320</cost>
+		<housecost>200</housecost>
+	</tile>	
+	<tile type="railroad">
+		<square>29</square>
+		<name>SHORT LINE</name>
+		<rent>25</rent>
+		<cost>200</cost>
+	</tile>		
+	<tile type="property">
+		<square>30</square>
+		<name>Park Place</name>
+		<color>#0000FF</color>
+		<rent>35</rent>
+		<cost>350</cost>
+		<housecost>200</housecost>
+	</tile>	
+	<tile type="property">
+		<square>31</square>
+		<name>Boardwalk</name>
+		<color>#0000FF</color>
+		<rent>50</rent>
+		<cost>400</cost>
+		<housecost>200</housecost>
+	</tile>	
+</tiles>
