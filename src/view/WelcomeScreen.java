@@ -1,11 +1,8 @@
-
-
 import javax.swing.*;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import java.awt.FlowLayout;
 import java.awt.Dialog.ModalityType;
-import java.io.IOException;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 /**
  * Welcome Screen
@@ -24,10 +21,9 @@ public class WelcomeScreen {
         final FlowLayout layout = new FlowLayout();
         layout.setVgap(10);
 
-        // creating instance of JFrame with name "first way"
         frame = new JFrame("Monopoly");
-        //frame.setLayout(new GridLayout(10, 1, 5, 5));
         frame.setLayout(layout);
+
         JLabel l = new JLabel("Enter the number of players:");
         JLabel err = new JLabel("Invalid Entry. Input must be an integer above 1.");
         err.setVisible(false);
@@ -45,11 +41,11 @@ public class WelcomeScreen {
                         numPlayers = Integer.parseInt(input);
                         if (numPlayers > 1) {
                             frame.dispose();
-                            new MainFrame(numPlayers, "Original.xml");
+                            new ChooseVersionScreen(numPlayers);
                         } else {
                             err.setVisible(true);
                         }
-                    } catch (NumberFormatException | IOException ex) {
+                    } catch (NumberFormatException ex) {
                         err.setVisible(true);
                     }
                 }
