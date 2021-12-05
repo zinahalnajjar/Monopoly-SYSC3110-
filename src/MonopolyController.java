@@ -1,12 +1,13 @@
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.Serializable;
 
 /**
  * Connects the model to the view
  *
  * @author Tooba
  */
-public class MonopolyController implements ActionListener {
+public class MonopolyController implements ActionListener, Serializable {
 
     final Game model;
     public MonopolyController(Game model){

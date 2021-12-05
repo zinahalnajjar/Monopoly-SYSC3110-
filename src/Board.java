@@ -1,4 +1,5 @@
 import java.awt.*;
+import java.io.Serializable;
 import java.util.Arrays;
 
 /**
@@ -9,7 +10,7 @@ import java.util.Arrays;
  * @author Kareem
  * @author Zinah
  */
-public class Board {
+public class Board implements Serializable {
 
     private Property tiles[];
     private Property newLocation;

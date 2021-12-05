@@ -1,4 +1,5 @@
 import java.awt.*;
+import java.io.Serializable;
 import java.util.*;
 import java.util.List;
 
@@ -14,7 +15,7 @@ import java.util.List;
  * @author Kareem
  */
 
-public class Player {
+public class Player implements Serializable {
 
     public final int playerId;
     private final List<Property> properties;

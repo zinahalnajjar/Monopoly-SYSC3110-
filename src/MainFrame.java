@@ -34,6 +34,7 @@ public class MainFrame extends JFrame implements MonopolyView  {
     private static JButton help = new JButton();
     private static JButton roll = new JButton();
     private static JButton playerInfo = new JButton();
+    private static JButton saveAndExit = new JButton();
 
     //To communicate with the model
     private MonopolyController mc;
@@ -61,17 +62,32 @@ public class MainFrame extends JFrame implements MonopolyView  {
     //The model
     private Game model;
 
+
     /**
      * Constructor
      *
      * @param playerCount
      */
     public MainFrame(int playerCount) throws IOException {
+        this(playerCount, null);
+    }
+    /**
+     * Constructor
+     *
+     * @param playerCount
+     */
+    public MainFrame(int playerCount, Game modelInput) throws IOException {
         super("Monopoly!!");
 
         cf = null;
-  
-        model = new Game(playerCount);
+
+        if(modelInput == null) {
+            //New game
+            model = new Game(playerCount);
+        }
+        else{
+            this.model = modelInput;
+        }
 
         model.addMonopolyView(this);
 
@@ -99,6 +115,25 @@ public class MainFrame extends JFrame implements MonopolyView  {
         //Display the window.
         this.pack();
         this.setVisible(true);
+    }
+
+    public static void reloadGame() {
+        try {
+            //Read game object from file.
+            Object object = FileUtil.readFromFile(Game.GAME_FILE_PATH);
+            //Cast to Game Object.
+            Game game = (Game) object;
+            System.out.println("Game loaded from file.");
+
+            new MainFrame(game.getPlayerCount());
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Could NOT read game from file: " + Game.GAME_FILE_PATH , "Error", JOptionPane.ERROR_MESSAGE);
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
     }
 
     /**
@@ -156,6 +191,7 @@ public class MainFrame extends JFrame implements MonopolyView  {
         addButton(help, "help", mc);
         addButton(quit, "quit", mc);
         addButton(playerInfo, "player info", mc);
+        addButton(saveAndExit, "Save And Exit", mc);
 
         pass.setEnabled(false);
 

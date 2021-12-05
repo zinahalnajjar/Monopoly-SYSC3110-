@@ -93,10 +93,19 @@ public class WelcomeScreen {
             }
         });
 
+        JButton restoreGame = new JButton("Reload Previous Game");
+        restoreGame.addActionListener(new ActionListener() {
+           public void actionPerformed(ActionEvent e) {
+               frame.dispose();
+               MainFrame.reloadGame();
+           }
+       });
+
         frame.add(l);
         frame.add(in);
         frame.add(button);
         frame.add(help);
+        frame.add(restoreGame);
         frame.add(err);
         frame.setSize(300, 200);
         // makes the frame visible

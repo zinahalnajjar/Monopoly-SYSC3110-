@@ -1,4 +1,7 @@
 
+import javax.swing.*;
+import java.io.IOException;
+import java.io.Serializable;
 import java.util.*;
 
 /**
@@ -10,11 +13,13 @@ import java.util.*;
  * @author Zinah
  * @author Kareem
  */
-public class Game {
+public class Game implements Serializable {
 
+    public static final String GAME_FILE_PATH = "monopoly-game";
 
     private static final int JAIL_FEE = 50;
     private static final int GO_AMOUNT = 200;
+
 //    private static boolean DEBUG_FIRST = true;
 
     //keeps track of rolls count for jail-player
@@ -157,6 +162,16 @@ public class Game {
     }
 
     public void run(String command) {
+        if("Save And Exit".equals(command)){
+            if(saveGame()){
+                System.out.println("Game Saved!");
+                System.exit(0);
+            }
+            else{
+                JOptionPane.showMessageDialog(null, "Could NOT save game", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+        }
         if (currentPlayer.getBankruptcy()) {
             nextPlayer();
         }
@@ -347,6 +362,18 @@ public class Game {
         if (win) {
             notifyView("win", checkWin());
         }
+    }
+
+    private boolean saveGame() {
+        try {
+            //Save the 'CURRENT OBJECT'
+            FileUtil.writeToFile(this, GAME_FILE_PATH);
+            return  true;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+
     }
 
     private Boolean hasCurrentPlayerPaidJailFee() {

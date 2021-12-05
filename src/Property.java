@@ -1,4 +1,5 @@
 import java.awt.*;
+import java.io.Serializable;
 
 /**
  * Property interface used to represent the squares of the board
@@ -7,7 +8,7 @@ import java.awt.*;
  * @author Tooba
  *
  */
-public interface Property {
+public interface Property extends Serializable {
 
     /**
      * @return the string name of the property

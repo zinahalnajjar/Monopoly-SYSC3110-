@@ -177,8 +177,7 @@ public class JailCard extends JFrame implements MonopolyView, ActionListener {
     /**
      * handles the buy update
      *
-     * @param success true if property bought successfully
-     * @param location to bought
+
      */
 
     @Override

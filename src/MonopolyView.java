@@ -1,9 +1,11 @@
+import java.io.Serializable;
+
 /**
  * Interface
  *
  * @author Tooba
  */
-public interface MonopolyView {
+public interface MonopolyView extends Serializable {
 
     void handleMonopolyUtilityRailRoadBuy(boolean success, Property location);
 

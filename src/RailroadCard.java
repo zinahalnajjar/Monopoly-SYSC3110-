@@ -238,6 +238,8 @@ public class RailroadCard extends JFrame implements MonopolyView, ActionListener
 
     }
 
+
+
     /**
      *
      * handles the sell update
