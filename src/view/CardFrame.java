@@ -28,24 +28,17 @@ public class CardFrame extends JFrame implements MonopolyView, ActionListener {
 //    private JButton pass = new JButton();
 
     private final Game model;
-    private final Object mf;
 
     /**
      *
      * initializes the card view depending on which property it is attached to
-     * @param pName property name
      * @param property holds the property that the view is showing
      * @param mc controller
      * @param model model
-     * @param mainFrame
      */
-    public CardFrame(String pName, PropertyTile property, MonopolyController mc, Game model, MainFrame mainFrame){
+    public CardFrame(PropertyTile property, MonopolyController mc, Game model){
         super("Monopoly!!");
 
-        //reference to board and property
-
-        this.mf = mainFrame;
-        System.out.println("property.getPropertyName(): " + pName);
         this.property = property;
 
         //reference to the model and controller
@@ -185,15 +178,6 @@ public class CardFrame extends JFrame implements MonopolyView, ActionListener {
 
         this.setVisible(true);
     }
-  
-    private void FreeParkingNotification(){
-        String info = "Press Pass to move to the next turn";
-        JOptionPane.showMessageDialog(this, info, "Help", JOptionPane.INFORMATION_MESSAGE);
-    }
-
-    public void handleMonopolyUtilityRailRoadBuy(boolean success, Tile location) {
-
-    }
 
     @Override
     public void handleMonopolyStatusUpdate(String command, String info) { }//updated with the parameter
@@ -204,7 +188,6 @@ public class CardFrame extends JFrame implements MonopolyView, ActionListener {
      *  @param info Holds info about whether the property was bought successfully
      * @param location to bought
      */
-    @Override
     public void handleMonopolyBuy(String info, PropertyTile location) {
         if(location == property){
             JOptionPane.showMessageDialog(this,info);
@@ -235,19 +218,6 @@ public class CardFrame extends JFrame implements MonopolyView, ActionListener {
         }
     }
 
-    /**
-     * Inherited methods
-     */
-
-    @Override
-    public void handleMonopolyRentResult(String result, Tile location) {
-
-    }
-
-    @Override
-    public void handleMonopolyRentUtility(String result, Tile location) {
-
-    }
 
     @Override
     public void handleMonopolyJailFeePaymentResult(boolean paymentSuccess) {
@@ -259,10 +229,4 @@ public class CardFrame extends JFrame implements MonopolyView, ActionListener {
         //DO NOTHING
 
     }
-
-    @Override
-    public void handleMonopolyGOResult() {
-
-    }
-
 }

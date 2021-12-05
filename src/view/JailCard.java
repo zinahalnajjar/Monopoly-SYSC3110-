@@ -160,26 +160,8 @@ public class JailCard extends JFrame implements MonopolyView, ActionListener {
         }
     }
 
-
-    @Override
-    public void handleMonopolyUtilityRailRoadBuy(boolean success, Tile location) {
-
-    }
-
-    /**
-     * handles the buy update
-     *
-     * @param success true if property bought successfully
-     * @param location to bought
-     */
-
     @Override
     public void handleMonopolyStatusUpdate(String command, String info) {
-
-    }
-
-    @Override
-    public void handleMonopolyBuy(String success, PropertyTile location) {
 
     }
 
@@ -192,16 +174,6 @@ public class JailCard extends JFrame implements MonopolyView, ActionListener {
     @Override
     public void handleMonopolySell(boolean success, Tile location) {
         //DO NOTHING
-    }
-
-    @Override
-    public void handleMonopolyRentResult(String result, Tile location) {
-        //DO NOTHING
-    }
-
-    @Override
-    public void handleMonopolyRentUtility(String result, Tile location) {
-
     }
 
     @Override
@@ -227,12 +199,6 @@ public class JailCard extends JFrame implements MonopolyView, ActionListener {
             infoLabel.setText("You MUST Pay Jail Fee, to move out.");
 //            roll button disable whould be handled by handleMonopolyJailPlayerRollResult() in MainFrame
         }
-    }
-
-    @Override
-    public void handleMonopolyGOResult() {
-        //DO NOTHING
-
     }
 
 }

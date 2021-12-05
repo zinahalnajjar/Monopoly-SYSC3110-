@@ -118,32 +118,12 @@ public class GoCard extends JFrame implements MonopolyView, ActionListener{
     }
 
     @Override
-    public void handleMonopolyUtilityRailRoadBuy(boolean success, Tile location) {
-
-    }
-
-    @Override
     public void handleMonopolyStatusUpdate(String command, String info) {
 
     }
 
     @Override
-    public void handleMonopolyBuy(String info, PropertyTile location) {
-
-    }
-
-    @Override
     public void handleMonopolySell(boolean success, Tile location) {
-
-    }
-
-    @Override
-    public void handleMonopolyRentResult(String result, Tile location) {
-
-    }
-
-    @Override
-    public void handleMonopolyRentUtility(String result, Tile location) {
 
     }
 
@@ -158,7 +138,6 @@ public class GoCard extends JFrame implements MonopolyView, ActionListener{
 
     }
 
-    @Override
     public void handleMonopolyGOResult() {
         String info = "You have received $200";
         JOptionPane.showMessageDialog(this, info, "Help", JOptionPane.INFORMATION_MESSAGE);

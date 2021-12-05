@@ -23,15 +23,6 @@ public class XmlFileHandler extends DefaultHandler {
         return tiles;
     }
 
-    @Override
-    public void startDocument()
-    {
-    }
-
-    @Override
-    public void endDocument()
-    {
-    }
 
     @Override
     public void startElement(String uri, String localName, String qName, Attributes attributes){

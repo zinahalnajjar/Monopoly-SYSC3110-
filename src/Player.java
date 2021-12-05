@@ -21,7 +21,8 @@ public class Player {
     private int money;
     private boolean isBankrupt;
     private Tile location;
-
+    private boolean inJail;
+    private int jailRollCounter;
 
     private final Map<Color, List<Tile>> colourPropertyMap = new HashMap<>();
 
@@ -41,7 +42,8 @@ public class Player {
         this.money = money;
         this.properties = new ArrayList<>();
         this.isBankrupt = false;
-
+        this.inJail = false;
+        this.jailRollCounter = 0;
     }
 
     /**
@@ -68,11 +70,6 @@ public class Player {
      */
     public void setBankruptcy(boolean status){
         isBankrupt = status;
-        if(!isBankrupt){ // if the player hasn't lost all of their money
-            isBankrupt = true;
-
-        }
-
     }
 
     /**
@@ -81,20 +78,6 @@ public class Player {
      */
     public void addProperty(PropertyTile property) {
         this.properties.add(property);
-
-        //checkSet(property);
-
-        //group properties based on Color
-        Color colour = property.getColor();
-        List<Tile> list = colourPropertyMap.get(colour);
-        if(list == null){
-            //first property for this colour
-            list = new ArrayList<>();
-            colourPropertyMap.put(colour,list);
-
-        }
-        // add property to the list for (current colour).
-        list.add(property);
     }
 
 
@@ -183,6 +166,22 @@ public class Player {
         return p;
     }
 
+    public boolean isInJail() {
+        return inJail;
+    }
+
+    public void setIsInJail(boolean b) {
+        inJail = b;
+    }
+
+    public int getJailRollCounter() {
+        return jailRollCounter;
+    }
+
+    public void setJailRollCounter(int jailRollCounter) {
+        this.jailRollCounter = jailRollCounter;
+    }
+
     /**
      *
      * @return the playerID, money, isBankrupt, location
@@ -195,5 +194,4 @@ public class Player {
         return "Player " + playerId + "\nMoney: " + money + ", Location: "
                 + location.getTileName() + "\nProperties owned: \n"+ getStringProperties();
     }
-
 }

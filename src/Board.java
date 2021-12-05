@@ -50,10 +50,6 @@ public class Board {
         }
 
         tiles = handler.getBoardTiles();
-
-        for(Tile t : tiles){
-            System.out.println(t.getTileName());
-        }
     }
 
 
