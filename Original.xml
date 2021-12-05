@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <board>
-	<startmoney>15000000</startmoney>
-	<gofee>2000000</gofee>
-	<jailfee>500000</jailfee>
+	<startmoney>1500</startmoney>
+	<gofee>200</gofee>
+	<jailfee>50</jailfee>
 	<tiles>
 		<tile type= "cornertile">
 			<square>0</square>

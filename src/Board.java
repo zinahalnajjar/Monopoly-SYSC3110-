@@ -20,6 +20,11 @@ public class Board {
     private Tile tiles[];
     private Tile newLocation;
 
+    private int goFee = 0;
+    private int jailFee = 0;
+
+    private int initialMoney = 0;
+
     /**
      * Initializes the array that will hold the properties.
      * And then calls a method to create properties to add.
@@ -50,8 +55,22 @@ public class Board {
         }
 
         tiles = handler.getBoardTiles();
+        goFee = handler.getGo();
+        jailFee = handler.getJail();
+        initialMoney = handler.getInit();
     }
 
+    public int getGoFee() {
+        return goFee;
+    }
+
+    public int getJailFee() {
+        return jailFee;
+    }
+
+    public int getInitialMoney() {
+        return initialMoney;
+    }
 
     /**
      *

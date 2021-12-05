@@ -13,8 +13,8 @@ import java.util.*;
 public class Game {
 
 
-    private static final int JAIL_FEE = 50;
-    private static final int GO_AMOUNT = 200;
+    private int JAIL_FEE;
+    private int GO_AMOUNT;
 
     private Board board;
     private ArrayList<Player> players;
@@ -43,7 +43,10 @@ public class Game {
         this.playerCount = playerCount;
         this.dice = new Dice();
 
-        start = board.getTile("GO");
+        JAIL_FEE = board.getJailFee();
+        GO_AMOUNT = board.getGoFee();
+
+        start = board.tilesList()[0];
 
         previousPlayer = new Player(0,-500, start);
 
@@ -51,15 +54,15 @@ public class Game {
 
         views = new ArrayList<>();
 
-        initPlayers();
+        initPlayers(board.getInitialMoney());
     }
 
     /**
      * Initializes the number of players and fills out the list of players
      */
-    private void initPlayers() {
+    private void initPlayers(int initMoney) {
         for (int i = 1; i <= playerCount; i++) {
-            players.add(new Player(1500, i, start)); //player id and rent
+            players.add(new Player(initMoney, i, start)); //player id and rent
         }
         currentPlayer = players.get(0);
     }
@@ -177,7 +180,7 @@ public class Game {
 
     private void notifyView(String command, String info) {
         for (MonopolyView view : views) {
-            ((MainFrame)view).handleMonopolyStatusUpdate(command, info);
+            view.handleMonopolyStatusUpdate(command, info);
         }
     }
 

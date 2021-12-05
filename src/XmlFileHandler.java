@@ -6,6 +6,7 @@ import java.awt.*;
 public class XmlFileHandler extends DefaultHandler {
 
 
+    //tiles properties
     private String type;
     private String name;
     private int square;
@@ -13,6 +14,11 @@ public class XmlFileHandler extends DefaultHandler {
     private int cost;
     private int houseCost;
     private Color color;
+
+    //tye other fees and currency in the game
+    private int go;
+    private int jail;
+    private int initMoney;
 
     private String currentElement = "";
 
@@ -74,8 +80,28 @@ public class XmlFileHandler extends DefaultHandler {
         if(currentElement.equals("housecost")){
             houseCost = Integer.parseInt(s);
         }
+        if(currentElement.equals("gofee")){
+            go = Integer.parseInt(s);
+        }
+        if(currentElement.equals("jailfee")){
+            jail = Integer.parseInt(s);
+        }
+        if(currentElement.equals("startmoney")){
+            initMoney = Integer.parseInt(s);
+        }
 
         currentElement = "";
     }
 
+    public int getGo() {
+        return go;
+    }
+
+    public int getJail() {
+        return jail;
+    }
+
+    public int getInit() {
+        return initMoney;
+    }
 }
