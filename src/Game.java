@@ -14,8 +14,8 @@ import java.util.*;
  * @author Kareem
  */
 public class Game implements Serializable {
-
-    public static final String GAME_FILE_PATH = "monopoly-game";
+//
+//    public static final String GAME_FILE_PATH = "monopoly-game";
 
     private static final int JAIL_FEE = 50;
     private static final int GO_AMOUNT = 200;
@@ -162,16 +162,6 @@ public class Game implements Serializable {
     }
 
     public void run(String command) {
-        if("Save And Exit".equals(command)){
-            if(saveGame()){
-                System.out.println("Game Saved!");
-                System.exit(0);
-            }
-            else{
-                JOptionPane.showMessageDialog(null, "Could NOT save game", "Error", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-        }
         if (currentPlayer.getBankruptcy()) {
             nextPlayer();
         }
@@ -363,18 +353,18 @@ public class Game implements Serializable {
             notifyView("win", checkWin());
         }
     }
-
-    private boolean saveGame() {
-        try {
-            //Save the 'CURRENT OBJECT'
-            FileUtil.writeToFile(this, GAME_FILE_PATH);
-            return  true;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
-        }
-
-    }
+//
+//    private boolean saveGame() {
+//        try {
+//            //Save the 'CURRENT OBJECT'
+//            FileUtil.writeToFile(this, GAME_FILE_PATH);
+//            return  true;
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//            return false;
+//        }
+//
+//    }
 
     private Boolean hasCurrentPlayerPaidJailFee() {
         Boolean paid = jailPlayerPaymentStatusMap.get(currentPlayer.getPlayerId());
