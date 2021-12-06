@@ -1,4 +1,4 @@
-
+import java.io.*;
 import java.util.*;
 
 /**
@@ -6,12 +6,8 @@ import java.util.*;
  * Starts going through a while loop, that goes till the game ends.
  * Game ends with when all but one player have quit or gone bankrupt.
  *
- * @author Tooba
- * @author Zinah
- * @author Kareem
- * @author Walid
  */
-public class Game {
+public class Game implements FileAble {
 
 
     private static final int JAIL_FEE = 50;
@@ -92,6 +88,63 @@ public class Game {
 
     public Player getCurrentPlayer() {
         return this.currentPlayer;
+    }
+
+    @Override
+    public void save(Game game) {
+
+        try {
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(FileAble.fileName));
+            objectOutputStream.writeObject(game);
+            objectOutputStream.close();
+
+        } catch (IOException e) {
+            System.out.println("IO Exception" + e.getMessage());
+        }
+
+    }
+
+    @Override
+    public void save() {
+
+        try {
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(FileAble.fileName));
+            objectOutputStream.writeObject(this);
+            objectOutputStream.close();
+
+        } catch (IOException e) {
+            System.out.println("IO Exception" + e.getMessage());
+        }
+    }
+
+    @Override
+    public Game load() {
+
+        Game game = null;
+        try {
+            FileInputStream fileInputStream = new FileInputStream(FileAble.fileName);
+            ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
+            game = (Game) objectInputStream.readObject();
+            this.jailPlayerRollCountMap = game.jailPlayerRollCountMap;
+            this.jailPlayerPaymentStatusMap = game.jailPlayerPaymentStatusMap;
+            this.playerDoubleRollCountMap = game.playerDoubleRollCountMap;
+            this.start = game.start;
+            this.currentPlayer = game.currentPlayer;
+            this.previousPlayer = game.previousPlayer;
+            this.newLocation = game.newLocation;
+            this.win = game.win;
+            this.passByJail = game.passByJail;
+            this.numAIPlayers = game.numAIPlayers;
+            this.ifAI = game.ifAI;
+            objectInputStream.close();
+            return (game);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        return game;
     }
 
 
