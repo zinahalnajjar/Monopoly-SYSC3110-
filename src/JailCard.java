@@ -177,8 +177,6 @@ public class JailCard extends JFrame implements MonopolyView, ActionListener {
     /**
      * handles the buy update
      *
-     * @param success true if property bought successfully
-     * @param location to bought
      */
 
     @Override
@@ -234,7 +232,7 @@ public class JailCard extends JFrame implements MonopolyView, ActionListener {
         if (forceJailFee) {
             titleLabel.setText("3 failed attempts to get doubles.");
             infoLabel.setText("You MUST Pay Jail Fee, to move out.");
-//            roll button disable whould be handled by handleMonopolyJailPlayerRollResult() in MainFrame
+//            roll button disable would be handled by handleMonopolyJailPlayerRollResult() in MainFrame
         }
     }
 

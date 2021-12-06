@@ -1,4 +1,11 @@
+
+
+import javax.swing.*;
+import java.io.IOException;
+import java.io.Serializable;
+
 import java.io.*;
+
 import java.util.*;
 
 /**
@@ -7,11 +14,12 @@ import java.util.*;
  * Game ends with when all but one player have quit or gone bankrupt.
  *
  */
-public class Game implements FileAble {
-
+public class Game implements Serializable {
+    public static final String GAME_FILE_PATH = "monopoly-game";
 
     private static final int JAIL_FEE = 50;
     private static final int GO_AMOUNT = 200;
+
 //    private static boolean DEBUG_FIRST = true;
 
     //keeps track of rolls count for jail-player
@@ -25,14 +33,14 @@ public class Game implements FileAble {
     private Map<Integer, Integer> playerDoubleRollCountMap = new HashMap<>();
 
 
-    private final Board board;
-    private final ArrayList<Player> players;
-    private final Dice dice;
+    private Board board;
+    private ArrayList<Player> players;
+    private Dice dice;
 
     private Property start;
 
     private Player currentPlayer;
-    private final int playerCount;
+    private int playerCount;
     private Player previousPlayer;
     private Property newLocation;
     boolean win = false;
@@ -90,64 +98,6 @@ public class Game implements FileAble {
         return this.currentPlayer;
     }
 
-    @Override
-    public void save(Game game) {
-
-        try {
-            ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(FileAble.fileName));
-            objectOutputStream.writeObject(game);
-            objectOutputStream.close();
-
-        } catch (IOException e) {
-            System.out.println("IO Exception" + e.getMessage());
-        }
-
-    }
-
-    @Override
-    public void save() {
-
-        try {
-            ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(FileAble.fileName));
-            objectOutputStream.writeObject(this);
-            objectOutputStream.close();
-
-        } catch (IOException e) {
-            System.out.println("IO Exception" + e.getMessage());
-        }
-    }
-
-    @Override
-    public Game load() {
-
-        Game game = null;
-        try {
-            FileInputStream fileInputStream = new FileInputStream(FileAble.fileName);
-            ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
-            game = (Game) objectInputStream.readObject();
-            this.jailPlayerRollCountMap = game.jailPlayerRollCountMap;
-            this.jailPlayerPaymentStatusMap = game.jailPlayerPaymentStatusMap;
-            this.playerDoubleRollCountMap = game.playerDoubleRollCountMap;
-            this.start = game.start;
-            this.currentPlayer = game.currentPlayer;
-            this.previousPlayer = game.previousPlayer;
-            this.newLocation = game.newLocation;
-            this.win = game.win;
-            this.passByJail = game.passByJail;
-            this.numAIPlayers = game.numAIPlayers;
-            this.ifAI = game.ifAI;
-            objectInputStream.close();
-            return (game);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-
-        return game;
-    }
-
-
     public enum Status {}
 
     private final List<MonopolyView> views;
@@ -166,7 +116,7 @@ public class Game implements FileAble {
 
         start = board.getProperty("GO");
 
-        previousPlayer = null;
+        previousPlayer = new Player(0,-500, start);
 
         newLocation = null;
 
@@ -210,11 +160,11 @@ public class Game implements FileAble {
      * location of the player is updated
      * next  is the turn of next player
      */
-    /*private void AITurn() {
-
+    private void AITurn() {
         dice.roll();
         int sum = dice.sumOfDice();
         Property newLocationOfThePlayer = board.move(sum, AILand());
+        int currentPlayerIndex = 0;
         currentPlayer = players.get(currentPlayerIndex);
         currentPlayerIndex += 1;
         currentPlayer.setLocation(newLocationOfThePlayer);
@@ -223,12 +173,46 @@ public class Game implements FileAble {
         }
 
     }//AI-Turn
-*/
+
     private void notifyViewJailPlayerRoll(String result, boolean forceJailFee) {
         for (MonopolyView view : views) {
             view.handleMonopolyJailPlayerRollResult(result, forceJailFee);
         }
 
+    }
+
+    /**
+     * @return
+     */
+    public void payJailFee() {
+        String info = "";
+        System.out.println("Player " + currentPlayer.getPlayerId() + " has $" + currentPlayer.getMoney()); //dispay how much the player owns
+        currentPlayer.removeMoney(JAIL_FEE);// remove money from player based on what they paid
+        boolean bankrupt = checkBankruptcy();
+
+        boolean paymentSuccess;
+        if (bankrupt) {
+            paymentSuccess = false;
+        } else {
+            info = "Player " + currentPlayer.getPlayerId() + " PAID JAIL FEE: " + JAIL_FEE +
+                    "\nPlayer" + currentPlayer.getPlayerId() + " has $" + currentPlayer.getMoney();
+            System.out.println(info);
+            paymentSuccess = true;
+            jailPlayerPaymentStatusMap.put(currentPlayer.getPlayerId(), true);
+
+        }
+
+        for (MonopolyView view : views) {
+            view.handleMonopolyJailFeePaymentResult(paymentSuccess);
+        }
+
+    }
+
+    public void collect() {
+        currentPlayer.addMoney(GO_AMOUNT);
+        for (MonopolyView view : views) {
+            view.handleMonopolyGOResult();
+        }
     }
 
     public void run(String command) {
@@ -423,6 +407,18 @@ public class Game implements FileAble {
             notifyView("win", checkWin());
         }
     }
+//
+//    private boolean saveGame() {
+//        try {
+//            //Save the 'CURRENT OBJECT'
+//            FileUtil.writeToFile(this, GAME_FILE_PATH);
+//            return  true;
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//            return false;
+//        }
+//
+//    }
 
     private Boolean hasCurrentPlayerPaidJailFee() {
         Boolean paid = jailPlayerPaymentStatusMap.get(currentPlayer.getPlayerId());
@@ -723,6 +719,22 @@ public class Game implements FileAble {
                 "- help: can be used to view the instructions again\n";
     }
 
+    public boolean isPlayerInJail() {
+        return board.getJailProperty().equals(currentPlayer.getLocation());
+    }
+
+    public Board getBoard() {
+        return this.board;
+    }
+
+    public Dice getDice() {
+        return this.dice;
+    }
+
+    public Player getCurrentPlayer() {
+        return this.currentPlayer;
+    }
+
     public int getPlayerCount() {
         return playerCount;
     }
@@ -730,7 +742,6 @@ public class Game implements FileAble {
     public void addMonopolyView(MonopolyView view) {
         views.add(view);
     }
-
 
     public void removeMonopolyView(MonopolyView view){
         views.remove(view);

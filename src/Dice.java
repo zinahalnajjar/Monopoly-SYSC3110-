@@ -1,4 +1,4 @@
-
+import java.io.Serializable;
 
 /**
  * Class Dice- a pair of Dice in monopoly game
@@ -11,7 +11,7 @@
  *
  * @author Zinah
  */
-public class Dice {
+public class Dice implements Serializable {
     public int die1;
     public int die2;
 

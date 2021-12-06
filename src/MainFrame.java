@@ -1,6 +1,8 @@
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Objects;
@@ -14,7 +16,10 @@ import java.util.Objects;
  * @author Tooba
  * @author Zinah
  */
-public class MainFrame extends JFrame implements MonopolyView  {
+public class MainFrame extends JFrame implements MonopolyView, ActionListener {
+
+    public static final String GAME_FILE_PATH = "monopoly-game";
+
     final static boolean shouldFill = true;
     final static boolean shouldWeightX = true;
     final static boolean RIGHT_TO_LEFT = false;
@@ -29,37 +34,41 @@ public class MainFrame extends JFrame implements MonopolyView  {
     private ArrayList<JLabel> players;
 
     //for the functionality buttons
-    private static JButton pass = new JButton();
-    private static JButton quit = new JButton();
-    private static JButton help = new JButton();
-    private static JButton roll = new JButton();
-    private static JButton playerInfo = new JButton();
+
+    //removed 'static' as the 'save and reload' didn't work with 'static'.
+    private  JButton pass = new JButton();
+    private  JButton quit = new JButton();
+    private  JButton help = new JButton();
+    private  JButton roll = new JButton();
+    private  JButton playerInfo = new JButton();
 
     //To communicate with the model
     private MonopolyController mc;
 
     //Each spot on the board
-    private static ArrayList<JButton> properties;
-    private static ArrayList<JButton> railroads;
-    private static ArrayList<JButton> utilities;
-    private static JButton Property;
-    private static JLabel Chance;
-    private static JButton RailRoad;
-    private static JLabel Monopoly;
-    private static JButton WaterWorks;
-    private static JLabel GoToJail;
-    private static JButton ElectricCompany;
-    private static JButton Jail;
-    private static JButton Go;
+    private  ArrayList<JButton> properties;
+    private  ArrayList<JButton> railroads;
+    private  ArrayList<JButton> utilities;
+    private  JButton Property;
+    private  JLabel Chance;
+    private  JButton RailRoad;
+    private  JLabel Monopoly;
+    private  JButton WaterWorks;
+    private  JLabel GoToJail;
+    private  JButton ElectricCompany;
+    private  JButton Jail;
+    private  JButton Go;
 
-    private static JLabel empty;
-    private static JPanel mainPanel;
+    private  JLabel empty;
+    private  JPanel mainPanel;
 
     private static int NORTH_HEIGHT = 100;
     private static int SOUTH_HEIGHT = 100;
   
     //The model
     private Game model;
+
+
 
     /**
      * Constructor
@@ -70,9 +79,8 @@ public class MainFrame extends JFrame implements MonopolyView  {
         super("Monopoly!!");
 
         cf = null;
-  
-        model = new Game(playerCount);
 
+        model = new Game(playerCount);
         model.addMonopolyView(this);
 
         //To communicate with the model
@@ -94,11 +102,38 @@ public class MainFrame extends JFrame implements MonopolyView  {
         //Set up the content pane.
         addComponentsToPane(this.getContentPane(), mc);
 
+
+        //Add Save And Exit Button
+        JButton saveAndExit = new JButton("Save And Exit");
+        sidePanel.add(saveAndExit);
+        saveAndExit.addActionListener(this);
+
+
         addListeners(model, mc);
 
         //Display the window.
         this.pack();
         this.setVisible(true);
+    }
+
+    // method to relaod the saved version of the game
+    public static void reloadGame() {
+        try {
+            //Read game object from file.
+            Object object = FileUtil.readFromFile(GAME_FILE_PATH);
+
+            //Cast to MainFrame Object.
+            MainFrame mainFrame = (MainFrame) object;
+            System.out.println("Game loaded from file.");
+            mainFrame.setVisible(true);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Could NOT read game from file: " + GAME_FILE_PATH , "Error", JOptionPane.ERROR_MESSAGE);
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
     }
 
     /**
@@ -143,7 +178,7 @@ public class MainFrame extends JFrame implements MonopolyView  {
      * @param pane the content pane
      * @param mc the controller
      */
-    public static void addComponentsToPane(Container pane, MonopolyController mc) {
+    public  void addComponentsToPane(Container pane, MonopolyController mc) {
 
         //Create Side Panel
         sidePanel = new JPanel();
@@ -227,7 +262,7 @@ public class MainFrame extends JFrame implements MonopolyView  {
     /**
      * @return the east panel holding all the properties to the right
      */
-    private static JPanel createEastPanel() {
+    private  JPanel createEastPanel() {
         JPanel eastPanel = new JPanel(new GridLayout(10, 1));
         eastPanel.setBackground(BG_COLOR);
 
@@ -271,7 +306,7 @@ public class MainFrame extends JFrame implements MonopolyView  {
     /**
      * @return the west panel holding all the properties to the left of the board
      */
-    private static JPanel createWestPanel() {
+    private  JPanel createWestPanel() {
         JPanel westPanel = new JPanel(new GridLayout(11, 1));
         westPanel.setBackground(BG_COLOR);
 
@@ -317,7 +352,7 @@ public class MainFrame extends JFrame implements MonopolyView  {
     /**
      * @return the east panel holding all the properties to the bottom of the board
      */
-    private static JPanel createSouthPanel() {
+    private  JPanel createSouthPanel() {
         JPanel southPanel = new JPanel();
         southPanel.setBackground(BG_COLOR);
 
@@ -378,7 +413,7 @@ public class MainFrame extends JFrame implements MonopolyView  {
     /**
      * @return the North panel holding all the properties to the top of the board
      */
-    private static JPanel createNorthPanel() {
+    private  JPanel createNorthPanel() {
         JPanel northPanel = new JPanel();
         northPanel.setBackground(BG_COLOR);
 
@@ -443,7 +478,7 @@ public class MainFrame extends JFrame implements MonopolyView  {
      * @param text the text on the button
      * @param mc the controller
      */
-    public static void addButton(JButton button, String text, MonopolyController mc){
+    public  void addButton(JButton button, String text, MonopolyController mc){
         button.setText(text);
         button.setActionCommand(button.getText());
         button.addActionListener(mc);
@@ -581,7 +616,9 @@ public class MainFrame extends JFrame implements MonopolyView  {
     private void passNotification(String info) {
         JOptionPane.showMessageDialog(this, info, "Pass result", JOptionPane.INFORMATION_MESSAGE);
 
+        System.out.println("roll enabled: " + roll.isEnabled());
         roll.setEnabled(true);
+        System.out.println("roll enabled: " + roll.isEnabled());
         pass.setEnabled(false);
     }
 
@@ -621,7 +658,7 @@ public class MainFrame extends JFrame implements MonopolyView  {
             }
         }
 
-        if(!payRentInfo.equals("")){
+        if(!payRentInfo.isBlank()){
             JOptionPane.showMessageDialog(this, payRentInfo, "Payed Rent", JOptionPane.INFORMATION_MESSAGE);
         }
 
@@ -642,6 +679,25 @@ public class MainFrame extends JFrame implements MonopolyView  {
     public void enableRollButton() {
         roll.setEnabled(true);
 
+    }
+
+
+    private void saveGame() {
+        try {
+            //Save the 'CURRENT OBJECT'
+            FileUtil.writeToFile(this, GAME_FILE_PATH);
+            System.out.println("Game Saved!");
+            System.exit(0);
+        } catch (IOException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Could NOT save game", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        saveGame();
     }
 }
 

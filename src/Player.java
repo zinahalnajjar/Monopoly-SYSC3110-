@@ -1,4 +1,5 @@
 import java.awt.*;
+import java.io.Serializable;
 import java.util.*;
 import java.util.List;
 
@@ -15,7 +16,7 @@ import java.util.List;
  * @author Walid
  */
 
-public class Player {
+public class Player implements Serializable {
 
     public final int playerId;
     private final List<Property> properties;
@@ -31,9 +32,9 @@ public class Player {
 
     /**
      * creates a player on the board
-     * @param money
-     * @param aPlayerID
-     * @param start
+     * @param money the initial amount of money the player has
+     * @param aPlayerID players id
+     * @param start the start location of the player
      */
     public Player(int money, int aPlayerID, Property start) {
 
@@ -69,7 +70,7 @@ public class Player {
     }
 
     /**
-     * @param status
+     * @param status the bankruptcy status of the player
      */
     public void setBankruptcy(boolean status){
         isBankrupt = status;
@@ -82,7 +83,7 @@ public class Player {
 
     /**
      * adds a property to the list of properties for each player
-     * @param property
+     * @param property the property to be added to the list
      */
     public void addProperty(Property property) {
         this.properties.add(property);
@@ -107,7 +108,7 @@ public class Player {
      * check if the property is part of a "set" of 3 properties of the same colour
      * one list  contains 3 properties of the same colour, and it must be owned by the same owner
      *
-     * @param property
+     * @param property the property to be checked for in the set
      * @return true if the set is owned
      */
 
@@ -121,7 +122,7 @@ public class Player {
 
     /**
      * removes a property from the list of properties for each player
-     * @param property
+     * @param property the property to be removed
      */
 
     public boolean removeProperty(Property property) {
@@ -129,8 +130,9 @@ public class Player {
     }
 
     /**
+     * Sets the locations
      *
-     * @param location
+     * @param location the location of the player
      */
 
     public void setLocation(Property location) {
@@ -140,7 +142,7 @@ public class Player {
 
     /**
      *
-     * @return location
+     * @return location the location of the player on the board
      */
     public Property getLocation(){
         return location;
@@ -148,7 +150,7 @@ public class Player {
 
     /**
      * the player will get money when they sell a property
-     * @param propertySellCost
+     * @param propertySellCost money to be added to the players bank
      */
     public void addMoney(int propertySellCost){
         if(propertySellCost>= 0){
@@ -160,7 +162,7 @@ public class Player {
     /**
      *
      * when the player buys a property the amount of money they own gets reduced based on the cost of the property they bought
-     * @param propertyBuyCost
+     * @param propertyBuyCost cost of the property being bought
      */
     public void removeMoney(int propertyBuyCost){
         if (propertyBuyCost >= 0) { // make sure that the property has a valid price
