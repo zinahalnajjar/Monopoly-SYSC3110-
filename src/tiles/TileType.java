@@ -4,11 +4,9 @@
  *
  * @author Tooba
  */
-public enum PropertyType {
+public enum TileType {
     RAILROAD,
     UTILITY,
-    JAIL,
     PROPERTY,
-    GO,
-    PASSING_TILE,
+    CORNERTILE,
 }

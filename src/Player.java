@@ -1,5 +1,4 @@
 import java.awt.*;
-import java.io.Serializable;
 import java.util.*;
 import java.util.List;
 
@@ -13,20 +12,19 @@ import java.util.List;
  *
  * @author Zinah
  * @author Kareem
- * @author Walid
  */
 
-public class Player implements Serializable {
+public class Player {
 
     public final int playerId;
-    private final List<Property> properties;
+    private final ArrayList<Tile> properties;
     private int money;
     private boolean isBankrupt;
-    private Property location;
-    private boolean isAI;
-    private int jailCounter;
+    private Tile location;
+    private boolean inJail;
+    private int jailRollCounter;
 
-    private final Map<Color, List<Property>> colourPropertyMap = new HashMap<>();
+    private final Map<Color, List<Tile>> colourPropertyMap = new HashMap<>();
 
     //private Map<String, Boolean> colourPropertyMap = new HashMap<>();
 
@@ -36,7 +34,7 @@ public class Player implements Serializable {
      * @param aPlayerID players id
      * @param start the start location of the player
      */
-    public Player(int money, int aPlayerID, Property start) {
+    public Player(int money, int aPlayerID, Tile start) {
 
         this.location = start;
 
@@ -44,10 +42,8 @@ public class Player implements Serializable {
         this.money = money;
         this.properties = new ArrayList<>();
         this.isBankrupt = false;
-        this.isAI = false;
-        this.jailCounter = 0;
-
-
+        this.inJail = false;
+        this.jailRollCounter = 0;
     }
 
     /**
@@ -74,33 +70,14 @@ public class Player implements Serializable {
      */
     public void setBankruptcy(boolean status){
         isBankrupt = status;
-        if(!isBankrupt){ // if the player hasn't lost all of their money
-            isBankrupt = true;
-
-        }
-
     }
 
     /**
      * adds a property to the list of properties for each player
      * @param property the property to be added to the list
      */
-    public void addProperty(Property property) {
+    public void addProperty(PropertyTile property) {
         this.properties.add(property);
-
-        //checkSet(property);
-
-        //group properties based on Color
-        Color colour = property.getColor();
-        List<Property> list = colourPropertyMap.get(colour);
-        if(list == null){
-            //first property for this colour
-            list = new ArrayList<>();
-            colourPropertyMap.put(colour,list);
-
-        }
-        // add property to the list for (current colour).
-        list.add(property);
     }
 
 
@@ -112,9 +89,9 @@ public class Player implements Serializable {
      * @return true if the set is owned
      */
 
-    public boolean isSetOwned(Property property){
+    public boolean isSetOwned(PropertyTile property){
         Color colour = property.getColor();
-        List<Property> list = colourPropertyMap.get(colour);
+        List<Tile> list = colourPropertyMap.get(colour);
         return (list != null) && (list.size() == 3);
         //for the purpose of testing fast we will make the list size 2 instead of 3
 
@@ -125,7 +102,7 @@ public class Player implements Serializable {
      * @param property the property to be removed
      */
 
-    public boolean removeProperty(Property property) {
+    public boolean removeProperty(Tile property) {
         return this.properties.remove(property);
     }
 
@@ -135,7 +112,7 @@ public class Player implements Serializable {
      * @param location the location of the player
      */
 
-    public void setLocation(Property location) {
+    public void setLocation(Tile location) {
         this.location = location;
 
     }
@@ -144,7 +121,7 @@ public class Player implements Serializable {
      *
      * @return location the location of the player on the board
      */
-    public Property getLocation(){
+    public Tile getLocation(){
         return location;
     }
 
@@ -179,14 +156,41 @@ public class Player implements Serializable {
     /**
      * @return the list of properties in string version
      */
+    public ArrayList<Tile> getOwnedProperties() {
+        return properties;
+    }
+
+    /**
+     * @return the list of properties in string version
+     */
     public String getStringProperties() {
         String p = "";
 
-        for(Property property : properties){
-            p += property.getPropertyName() + "\n";
+        for(Tile property : properties){
+            p += property.getTileName() + "\n";
         }
 
         return p;
+    }
+
+    public boolean isInJail() {
+        return inJail;
+    }
+
+    public void setIsInJail(boolean b) {
+        inJail = b;
+    }
+
+    public int getJailRollCounter() {
+        return jailRollCounter;
+    }
+
+    public void resetJailRollCounter() {
+        this.jailRollCounter = 0;
+    }
+
+    public void incrementJailRollCounter() {
+        this.jailRollCounter++;
     }
 
     /**
@@ -199,58 +203,6 @@ public class Player implements Serializable {
             return "Player " + playerId + " is bankrupt.\n";
         }
         return "Player " + playerId + "\nMoney: " + money + ", Location: "
-                + location.getPropertyName() + "\nProperties owned: \n"+ getStringProperties();
-    }
-
-    /**
-     * Sets a player as AI
-     */
-    public void setAI() {
-        this.isAI = true;
-    }
-
-    /**
-     *  Unsets a player from AI to not an AI
-     */
-    public void unsetAI(){
-        this.isAI = false;
-    }
-
-    /**
-     * returns the status of a player if it is an AI or not
-     * @return
-     */
-    public boolean getAIStatus(){
-        return isAI;
-    }
-
-    /**
-     * Increments the Jail Counter
-     */
-    public void addJailCounter() {
-        jailCounter++;
-    }
-
-    /**
-     * resets the jail counter for the AI player
-     */
-    public void resetJailCounter() {
-        jailCounter = 0;
-    }
-
-    /**
-     * Returns the amount of the jail counter
-     * @return
-     */
-    public int getJailCounter() {
-        return jailCounter;
-    }
-
-    /**
-     * Pays for whatever needs to be paid
-     * @param cost
-     */
-    public void pay(int cost) {
-        money -= cost;
+                + location.getTileName() + "\nProperties owned: \n"+ getStringProperties();
     }
 }

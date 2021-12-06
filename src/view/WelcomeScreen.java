@@ -1,17 +1,13 @@
-
-
 import javax.swing.*;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import java.awt.FlowLayout;
 import java.awt.Dialog.ModalityType;
-import java.io.IOException;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 /**
  * Welcome Screen
  *
  * @author Kareem
- * @author Walid
  */
 public class WelcomeScreen {
     final JFrame frame;
@@ -30,12 +26,13 @@ public class WelcomeScreen {
         frame = new JFrame("Monopoly");
         //frame.setLayout(new GridLayout(10, 1, 5, 5));
         frame.setLayout(layout);
-        JLabel l = new JLabel("Enter the total number of players:");
+
+        JLabel l = new JLabel("Enter the number of players:");
         JLabel l2 = new JLabel("Enter the desired number of AI players:");
         JLabel err = new JLabel("Invalid Entry. Input must be an integer above 1, and AI players must be less than or equal to total number of players.");
         err.setVisible(false);
-        JTextField in = new JTextField("Enter total players here:",20);
-        JTextField in2 = new JTextField("Enter number of AI players here:", 20);
+        JTextField in = new JTextField(20);
+        JTextField in2 = new JTextField(20);
         // creates instance of JButton
         JButton button = new JButton("Play");
         button.addActionListener(new ActionListener() {
@@ -51,11 +48,11 @@ public class WelcomeScreen {
                         numAIPlayers = Integer.parseInt(inputAI);
                         if (numPlayers > 1) {
                             frame.dispose();
-                            new MainFrame(numPlayers);
+                            new ChooseVersionScreen(numPlayers, numAIPlayers);
                         } else {
                             err.setVisible(true);
                         }
-                    } catch (NumberFormatException | IOException ex) {
+                    } catch (NumberFormatException ex) {
                         err.setVisible(true);
                     }
                 }
@@ -99,42 +96,20 @@ public class WelcomeScreen {
             }
         });
 
-        JButton restoreGame = new JButton("Reload Previous Game");
-        restoreGame.addActionListener(new ActionListener() {
-           public void actionPerformed(ActionEvent e) {
-               frame.dispose();
-               MainFrame.reloadGame();
-           }
-       });
-
         frame.add(l);
-        frame.add(l2);
         frame.add(in);
+
+        frame.add(l2);
         frame.add(in2);
+
         frame.add(button);
         frame.add(help);
-        frame.add(restoreGame);
         frame.add(err);
-        frame.setSize(300, 200);
+        frame.setSize(500, 200);
         // makes the frame visible
         frame.setVisible(true);
 
 
-    }
-
-    public void setNumPlayers(int players) {
-        numPlayers = players;
-    }
-
-    public int getNumPlayers() {
-        return this.numPlayers;
-    }
-
-    public void setNumAIPlayers() {
-        numAIPlayers = numAIPlayers;
-    }
-    public int getNumAIPlayers(){
-        return this.numAIPlayers;
     }
 
     public static void main(String[] args) {

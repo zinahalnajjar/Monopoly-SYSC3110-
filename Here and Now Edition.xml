@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<board>
+	<startmoney>15000000</startmoney>
+	<gofee>2000000</gofee>
+	<jailfee>500000</jailfee>
+	<tiles>
+		<tile type= "cornertile">
+			<square>0</square>
+			<name>GO</name>
+			<description>Collect 2,000,000$</description>
+		</tile>
+		<tile type= "property">
+			<square>1</square>
+			<name>Portobello Road Market</name>
+			<color>#8b4513</color>
+			<rent>20000</rent>
+			<cost>600000</cost>
+			<housecost>500000</housecost>
+		</tile>	
+		<tile type= "property">
+			<square>2</square>
+			<name>Camden Market</name>
+			<color>#8b4513</color>
+			<rent>40000</rent>
+			<cost>600000</cost>
+			<housecost>500000</housecost>
+		</tile>			
+		<tile type="railroad">
+			<square>3</square>
+			<name>London City Airport</name>
+			<rent>250000</rent>
+			<cost>2000000</cost>
+		</tile>
+		<tile type="property">
+			<square>4</square>
+			<name>Hammersmith Apollo</name>
+			<color>#00FFFF</color>
+			<rent>60000</rent>
+			<cost>1000000</cost>
+			<housecost>500000</housecost>
+		</tile>	
+		<tile type="property">
+			<square>5</square>
+			<name>Wembley Arena</name>
+			<color>#00FFFF</color>
+			<rent>60000</rent>
+			<cost>1000000</cost>
+			<housecost>500000</housecost>
+		</tile>	
+		<tile type= "property">
+			<square>6</square>
+			<name>GMTV Studios</name>
+			<color>#00FFFF</color>
+			<rent>80000</rent>
+			<cost>1200000</cost>
+			<housecost>500000</housecost>
+		</tile>	
+		<tile type="cornertile">
+			<square>7</square>		
+			<name>JAIL</name>
+			<description>In Jail</description>
+		</tile>
+		<tile type="property">
+			<square>8</square>
+			<name>The Oval</name>
+			<color>#FFC0CB</color>
+			<rent>100000</rent>
+			<cost>1400000</cost>
+			<housecost>1000000</housecost>
+		</tile>	
+		<tile type="utility">
+			<square>9</square>
+			<name>Telecoms</name>
+			<rent>250000</rent>
+			<cost>1500000</cost>
+		</tile>
+		<tile type="property">
+			<square>10</square>
+			<name>Wimbledon</name>
+			<color>#FFC0CB</color>
+			<rent>100000</rent>
+			<cost>1400000</cost>
+			<housecost>100</housecost>
+		</tile>	
+		<tile type="property">
+			<square>11</square>
+			<name>Wembley Stadium</name>
+			<color>#FFC0CB</color>
+			<rent>120000</rent>
+			<cost>1600000</cost>
+			<housecost>1000000</housecost>
+		</tile>	
+		<tile type="railroad">
+			<square>12</square>
+			<name>Stansted Airport</name>
+			<rent>250000</rent>
+			<cost>2000000</cost>
+		</tile>
+		<tile type="property">
+			<square>13</square>
+			<name>Science Museum</name>
+			<color>#FFA500</color>
+			<rent>140000</rent>
+			<cost>1800000</cost>
+			<housecost>1000000</housecost>
+		</tile>	
+		<tile type="property">
+			<square>14</square>
+			<name>Natural History Museum</name>
+			<color>#FFA500</color>
+			<rent>140000</rent>
+			<cost>1800000</cost>
+			<housecost>1000000</housecost>
+		</tile>	
+		<tile type="property">
+			<square>15</square>
+			<name>Tate Modern</name>
+			<color>#FFA500</color>
+			<rent>160000</rent>
+			<cost>2000000</cost>
+			<housecost>1000000</housecost>
+		</tile>	
+		<tile type="cornertile">
+			<square>16</square>
+			<name>FREE PARKING</name>
+			<description>Nothing happens, just passing by.</description>
+		</tile>
+		<tile type="property">
+			<square>17</square>
+			<name>London Eye</name>
+			<color>#FF0000</color>
+			<rent>180000</rent>
+			<cost>2200000</cost>
+			<housecost>1500000</housecost>
+		</tile>	
+		<tile type="property">
+			<square>18</square>
+			<name>Hyde Park</name>
+			<color>#FF0000</color>
+			<rent>180000</rent>
+			<cost>2200000</cost>
+			<housecost>1500000</housecost>
+		</tile>	
+		<tile type="property">
+			<square>19</square>
+			<name>Trafalgar Square</name>
+			<color>#FF0000</color>
+			<rent>200000</rent>
+			<cost>2400000</cost>
+			<housecost>1500000</housecost>
+		</tile>	
+		<tile type="railroad">
+			<square>20</square>
+			<name>Gatwick Airport</name>
+			<rent>250000</rent>
+			<cost>2000000</cost>
+		</tile>	
+		<tile type="property">
+			<square>21</square>
+			<name>Tottenham Court Road</name>
+			<color>#FFFF00</color>
+			<rent>220000</rent>
+			<cost>2600000</cost>
+			<housecost>1500000</housecost>
+		</tile>	
+		<tile type="property">
+			<square>22</square>
+			<name>Covent Garden</name>
+			<color>#FFFF00</color>
+			<rent>220000</rent>
+			<cost>2600000</cost>
+			<housecost>1500000</housecost>
+		</tile>			
+		<tile type="utility">
+			<square>23</square>
+			<name>The Sun</name>
+			<rent>250000</rent>
+			<cost>1500000</cost>
+		</tile>	
+		<tile type="property">
+			<square>24</square>
+			<name>Regent Street</name>
+			<color>#FFFF00</color>
+			<rent>240000</rent>
+			<cost>2800000</cost>
+			<housecost>1500000</housecost>
+		</tile>	
+		<tile type="cornertile">
+			<square>25</square>
+			<name>GO TO JAIL</name>
+			<description> Oh no! You are in Jail! </description>
+		</tile>
+		<tile type="property">
+			<square>26</square>
+			<name>Notting Hill</name>
+			<color>#00FF00</color>
+			<rent>260000</rent>
+			<cost>3000000</cost>
+			<housecost>2000000</housecost>
+		</tile>	
+		<tile type="property">
+			<square>27</square>
+			<name>Soho</name>
+			<color>#00FF00</color>
+			<rent>260000</rent>
+			<cost>3000000</cost>
+			<housecost>2000000</housecost>
+		</tile>	
+		<tile type="property">
+			<square>28</square>
+			<name>Kings Road</name>
+			<color>#00FF00</color>
+			<rent>280000</rent>
+			<cost>3200000</cost>
+			<housecost>2000000</housecost>
+		</tile>	
+		<tile type="railroad">
+			<square>29</square>
+			<name>Heathrow Airport</name>
+			<rent>250000</rent>
+			<cost>2000000</cost>
+		</tile>		
+		<tile type="property">
+			<square>30</square>
+			<name>Canary Wharf</name>
+			<color>#0000FF</color>
+			<rent>350000</rent>
+			<cost>3500000</cost>
+			<housecost>2000000</housecost>
+		</tile>	
+		<tile type="property">
+			<square>31</square>
+			<name>The City</name>
+			<color>#0000FF</color>
+			<rent>500000</rent>
+			<cost>4000000</cost>
+			<housecost>2000000</housecost>
+		</tile>	
+	</tiles>
+</board>

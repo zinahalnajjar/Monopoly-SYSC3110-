@@ -13,7 +13,7 @@ import static org.junit.Assert.*;
 /*
 public class GameTest {
 
-    final Game g = new Game(3);
+    final Game g = new Game(3, "Original.xml");
 
     @Test
     public void buyIfHasEnoughMoney() {
@@ -31,9 +31,6 @@ public class GameTest {
 
     @Test
     public void sell() {
-        g.getCurrentPlayer().setLocation(g.getBoard().move(1,g.getCurrentPlayer().getLocation()));
-        g.buy(g.getCurrentPlayer().getLocation());
-        assertTrue(g.sell(g.getCurrentPlayer().getLocation()));
     }
 
     @Test
@@ -56,14 +53,6 @@ public class GameTest {
 
     @Test
     public void payRentIfHasEnoughMoney() {
-        g.getBoard().getProperty("Oriental Avenue").setOwner(g.getCurrentPlayer());
-        g.nextPlayer();
-        String info = "Player " + g.getCurrentPlayer().getPlayerId() + " PAID rent: " + g.getBoard().getProperty("Oriental Avenue").getRent() +
-                "\nPlayer" +g.getCurrentPlayer().getPlayerId() + " has $" + g.getCurrentPlayer().getMoney();
-        String actualInfo = "Player " + g.getCurrentPlayer().getPlayerId() + " PAID rent: " + g.getBoard().getProperty("Oriental Avenue").getRent() +
-                "\nPlayer" +g.getCurrentPlayer().getPlayerId() + " has $" + g.getCurrentPlayer().getMoney();
-
-        assertEquals(info, actualInfo);
     }
 
     @Test
