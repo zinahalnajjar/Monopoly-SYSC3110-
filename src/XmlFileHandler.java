@@ -57,6 +57,9 @@ public class XmlFileHandler extends DefaultHandler {
                 if(square == 7){
                     ((CornerTile)tiles[square]).setJail(true);
                 }
+                if(square == 25){
+                    ((CornerTile)tiles[square]).setIsGoToJail(true);
+                }
             }
         }
     }

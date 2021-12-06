@@ -178,8 +178,12 @@ public class Player {
         return jailRollCounter;
     }
 
-    public void setJailRollCounter(int jailRollCounter) {
-        this.jailRollCounter = jailRollCounter;
+    public void resetJailRollCounter() {
+        this.jailRollCounter = 0;
+    }
+
+    public void incrementJailRollCounter() {
+        this.jailRollCounter++;
     }
 
     /**

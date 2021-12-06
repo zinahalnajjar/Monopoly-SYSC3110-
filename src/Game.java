@@ -13,6 +13,17 @@ import java.util.*;
 public class Game {
 
 
+    private final String BUY = "buy";
+    private final String SELL = "sell";
+    private final String PASS = "pass";
+    private final String QUIT = "quit";
+    private final String HELP = "help";
+    private final String ROLL = "roll";
+    private final String FEE = "pay fee";
+    private final String INFO = "player info";
+
+    private int MAX_JAIL_COUNTER = 3;
+
     private int JAIL_FEE;
     private int GO_AMOUNT;
 
@@ -27,7 +38,7 @@ public class Game {
     private Player previousPlayer;
     private Tile newLocation;
     boolean win = false;
-    private boolean passByJail = false;
+
 
     private List<MonopolyView> views;
 
@@ -67,106 +78,50 @@ public class Game {
         currentPlayer = players.get(0);
     }
 
-    private void notifyViewJailPlayerRoll(String result, boolean forceJailFee) {
-        for (MonopolyView view : views) {
-            view.handleMonopolyJailPlayerRollResult(result, forceJailFee);
-        }
-
-    }
-
-    /**
-     * @return
-     */
-    public void payJailFee() {
-        String info = "";
-        System.out.println("Player " + currentPlayer.getPlayerId() + " has $" + currentPlayer.getMoney()); //dispay how much the player owns
-        currentPlayer.removeMoney(JAIL_FEE);// remove money from player based on what they paid
-        boolean bankrupt = checkBankruptcy();
-
-        boolean paymentSuccess;
-        if (bankrupt) {
-            paymentSuccess = false;
-        } else {
-            info = "Player " + currentPlayer.getPlayerId() + " PAID JAIL FEE: " + JAIL_FEE +
-                    "\nPlayer" + currentPlayer.getPlayerId() + " has $" + currentPlayer.getMoney();
-            System.out.println(info);
-            paymentSuccess = true;
-
-        }
-
-        for (MonopolyView view : views) {
-            view.handleMonopolyJailFeePaymentResult(paymentSuccess);
-        }
-
-    }
-
-    public void collect() {
-        currentPlayer.addMoney(GO_AMOUNT);
-    }
-
     public void run(String command) {
         if (currentPlayer.getBankruptcy()) {
             nextPlayer();
         }
 
-        if ("roll".equals(command)) {
-            //check if player is in Jail
-
-            System.out.println("Rolling the dice...");
-            // calling the roll method from Dice class.
-
-            String info = "";
-
-            dice.roll();
-            System.out.println("Die 1: " + dice.getDie1());
-            System.out.println("Die 2: " + dice.getDie2());
-
-            newLocation = null;
-
-            if (board.getValidLocation(newLocation) == true) {
-                newLocation = board.move(dice.sumOfDice(), currentPlayer.getLocation());
-                if (board.getValidLocation(newLocation)) {
-                    currentPlayer.setLocation(newLocation);
-                    if(newLocation.getTYPE().equals(TileType.PROPERTY)){
-                        if (((PropertyTile) newLocation).getOwner() != null) {
-                            if (((PropertyTile) newLocation).getOwner() != currentPlayer) {
-                                info = payRent((PropertyTile)newLocation);
-                            }
-                        }
-                    }
-                }
-                notifyView(command, info);
-            }
-        }
-
-        if ("buy".equals(command)) {
-            String info1 = "";
-            info1 = buy((PropertyTile)newLocation);
+        if (ROLL.equals(command)) {
+            String info = rollCommand();
             for (MonopolyView view : views) {
-                ((CardFrame)view).handleMonopolyBuy(info1, (PropertyTile)newLocation);
+                ((MainFrame)view).handleMonopolyRoll(info);
             }
         }
 
-        if ("sell".equals(command)) {
+        if (BUY.equals(command)) {
+            String info = "";
+            info = buy((PropertyTile)newLocation);
+            for (MonopolyView view : views) {
+                ((CardFrame)view).handleMonopolyBuy(info, (PropertyTile)newLocation);
+            }
+        }
+
+        if (SELL.equals(command)) {
             boolean success = sell((PropertyTile)newLocation);
             for (MonopolyView view : views) {
-                view.handleMonopolySell(success, newLocation);
+                ((CardFrame)view).handleMonopolySell(success, newLocation);
             }
         }
 
-        if ("Collect".equals(command)) {
+        if (FEE.equals(command)) {
+            String info = payJailFee();
+            for (MonopolyView view : views) {
+                ((JailFrame)view).handleMonopolyJailFeePaymentResult(info);
+            }
         }
 
-        if ("pass".equals(command)) {
+        if (PASS.equals(command)) {
             notifyView(command, pass());
         }
-        if ("quit".equals(command)) {
+        if (QUIT.equals(command)) {
             notifyView(command, quit());
         }
-        if ("help".equals(command)) {
+        if (HELP.equals(command)) {
             notifyView(command, help());
         }
-        if ("player info".equals(command)) {
+        if (INFO.equals(command)) {
             notifyView(command, displayPlayerInfo());
         }
         if (win) {
@@ -182,6 +137,93 @@ public class Game {
         for (MonopolyView view : views) {
             view.handleMonopolyStatusUpdate(command, info);
         }
+    }
+
+    public String rollCommand(){
+        System.out.println("Rolling the dice...");
+        // calling the roll method from Dice class.
+
+        String info = "";
+
+        dice.roll();
+        System.out.println("Die 1: " + dice.getDie1());
+        System.out.println("Die 2: " + dice.getDie2());
+
+        if(currentPlayer.isInJail()){ //if player in jail
+            if(dice.isDouble()){
+                currentPlayer.resetJailRollCounter();
+                currentPlayer.setIsInJail(false);
+                info = "You are free from " + currentPlayer.getLocation().getTileName();
+            }else{
+                if(currentPlayer.getJailRollCounter() == MAX_JAIL_COUNTER){
+                    info = "You have made 3 failed attempts to get doubles.\n" +
+                            "You MUST Pay Fee, to move out.\n Attempting To Pay Fee:\n";
+                    info += payJailFee();
+                }else{
+                    currentPlayer.incrementJailRollCounter();
+                    info = "You have made " + currentPlayer.getJailRollCounter() + " failed attempts to roll doubles";
+                }
+            }
+        }else{ //if player not in jail
+            newLocation = board.move(dice.sumOfDice(), currentPlayer.getLocation());
+            currentPlayer.setLocation(newLocation);
+
+            //if passed by go
+            if(board.getPassedGo()){
+                collect();
+                info = "You have passed GO and collected: " + GO_AMOUNT +"$\n\n";
+            }
+
+            //if landed on a property owned by another player
+            if(newLocation.getTYPE().equals(TileType.PROPERTY)){
+                if (((PropertyTile) newLocation).getOwner() != null) {
+                    if (((PropertyTile) newLocation).getOwner() != currentPlayer) {
+                        info += payRent((PropertyTile)newLocation);
+                    }
+                }
+            }
+
+            //if landed on go to jail
+            if(newLocation.getTYPE().equals(TileType.CORNERTILE)){
+                if (((CornerTile) newLocation).isGoToJail()) {
+                    currentPlayer.setLocation(board.moveToJail());
+                    info += "Oh no! You have ended up in " + newLocation.getTileName() + "\n";
+                    info += "You need to pay the fee or roll doubles to get free";
+                }
+            }
+
+        }
+
+        return info;
+    }
+
+    /**
+     * @return
+     */
+    public String payJailFee() {
+        String info = "";
+        currentPlayer.removeMoney(JAIL_FEE);// remove money from player based on what they paid
+        boolean bankrupt = checkBankruptcy();
+
+        if (!bankrupt) {
+            info = "Player " + currentPlayer.getPlayerId() + " PAID FEE: " + JAIL_FEE +
+                    "\nPlayer" + currentPlayer.getPlayerId() + " has $" + currentPlayer.getMoney();
+            System.out.println(info);
+            currentPlayer.setIsInJail(false);
+            currentPlayer.resetJailRollCounter();
+        } else{
+            info = "Player " + currentPlayer.getPlayerId() + " didn't have enough money to pay the fee";
+            info += "\n Player " + currentPlayer.getPlayerId() + "has gone bankrupt";
+        }
+
+        checkWin();
+
+        return info;
+    }
+
+    public void collect() {
+        currentPlayer.addMoney(GO_AMOUNT);
+        board.setPassedGo(false);
     }
 
     public String buy(PropertyTile property){
@@ -245,7 +287,6 @@ public class Game {
         if (currentPlayer == property.getOwner()){
             currentPlayer.addMoney(property.getCost());
             currentPlayer.removeProperty(property);
-            
             property.setState(PropertyState.UNOWNED);
             property.setOwner(null);
             return true;
@@ -314,9 +355,10 @@ public class Game {
      * player has quit the game/bankrupt
      */
     public String quit(){
+        currentPlayer.setBankruptcy(true);
+        nextPlayer();
         String info = "Player "+ previousPlayer.getPlayerId()+" has quit\n" +
                 "It is now Player " +currentPlayer.getPlayerId()+ "'s turn";
-        nextPlayer();
         checkWin();
         return info;
     }
@@ -424,10 +466,6 @@ public class Game {
 
     public Player getPreviousPlayer(){
         return previousPlayer;
-    }
-
-    public boolean isPassByJail(){
-        return passByJail;
     }
 
 }

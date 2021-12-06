@@ -20,14 +20,12 @@ public class JailFrame extends JFrame implements MonopolyView, ActionListener {
     private JPanel infoPanel;
     private JPanel buttonPanel;
 
-    //deed card values
+    //jail card values
     private JLabel propertyName;
-    private JLabel titleLabel = new JLabel();
     private JLabel infoLabel = new JLabel();
 
-    //buttons on the deed card
-    private JButton payJailFee = new JButton("Pay Jail Fee");
-    private JButton rollDice = new JButton("Roll Dice");
+    //buttons on the jail tile
+    private JButton payJailFee = new JButton("pay fee");
 
     //reference to the model and controller
     private MonopolyController mc;
@@ -49,19 +47,19 @@ public class JailFrame extends JFrame implements MonopolyView, ActionListener {
         this.model = model;
         model.addMonopolyView(this);
 
-        this.setLayout(new FlowLayout(FlowLayout.CENTER));
+        this.setLayout(new BoxLayout(getContentPane(),BoxLayout.Y_AXIS));
 
-        this.setSize(490, 390);
+        this.setSize(320, 300);
 
         //set layout for the each panel
         titlePanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        infoPanel = new JPanel(new GridLayout(3,1));
+        infoPanel = new JPanel(new GridLayout(4,1));
         buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
 
         //initialize the title section of the panel
 
 
-        propertyName = new JLabel("JAIL");
+        propertyName = new JLabel(property.getTileName());
         propertyName.setFont(new Font("SANS_SERIF", Font.BOLD, 20));
         propertyName.setForeground(Color.white);
         titlePanel.add(propertyName);
@@ -69,20 +67,18 @@ public class JailFrame extends JFrame implements MonopolyView, ActionListener {
         titlePanel.setBorder(new EmptyBorder(10,20,10,20));
 
 
-        String how = "You can either pay $50 \n OR \n" +
-                "You need to roll dice and get doubles.";
-
-
         //initialize the information on the card
-        initInfoPanel("How to Get Out of Jail?", titleLabel);
-        initInfoPanel(how, infoLabel);
+        initInfoPanel(new JLabel("How to Get Out of Jail?"));
+        initInfoPanel(new JLabel("You can either pay $50"));
+        initInfoPanel(new JLabel("OR"));
+        initInfoPanel(new JLabel("You need to roll dice and get doubles."));
 
         //initialize the buy and sell button the card
-        initButtonPanel("Pay Jail Fee", payJailFee, mc);
-        initButtonPanel("Roll Dice", rollDice, mc);
+        initButtonPanel(payJailFee, mc);
 
         //add all the panels to the deed card view
         this.add(titlePanel);
+        this.add(Box.createRigidArea(new Dimension(5, 10)));
         this.add(infoPanel);
         this.add(buttonPanel);
     }
@@ -91,11 +87,9 @@ public class JailFrame extends JFrame implements MonopolyView, ActionListener {
      *
      * initializes the info panel
      *
-     * @param labelText text that goes on the panel
      * @param label the panel that hold the info
      */
-    private void initInfoPanel(String labelText, JLabel label){
-        label.setText(labelText);
+    private void initInfoPanel(JLabel label){
         label.setFont(new Font("SANS_SERIF", Font.BOLD, 15));
         label.setBorder(new EmptyBorder(5,5,5,5));
         label.setHorizontalAlignment(SwingConstants.CENTER);
@@ -107,13 +101,12 @@ public class JailFrame extends JFrame implements MonopolyView, ActionListener {
      * initializes the button panel
      *
      * @param bttn reference to the button being initialized
-     * @param bttnLabel the text that goes on the bttn
      * @param mc controller
      */
-    private void initButtonPanel(String bttnLabel, JButton bttn, MonopolyController mc){
-        bttn.setText(bttnLabel);
+    private void initButtonPanel(JButton bttn, MonopolyController mc){
         bttn.setActionCommand(bttn.getText());
         bttn.addActionListener(this);
+        bttn.setEnabled(false);
         buttonPanel.setBorder(new EmptyBorder(15,20,10,20));
         buttonPanel.add(bttn);
     }
@@ -125,32 +118,12 @@ public class JailFrame extends JFrame implements MonopolyView, ActionListener {
     @Override
 
     public void actionPerformed(ActionEvent e) {
-        if ("JAIL".equals(e.getActionCommand())) {
-            //current player is on the property that was clicked
-
-            //CHECK IF pass by jail
-            if(!model.isPassByJail()) {
-                if (model.getCurrentPlayer().getLocation().equals(property)) {
-                    this.setVisible(true);
-                }
-            }
+        if (model.getCurrentPlayer().getLocation().equals(property) && model.getCurrentPlayer().isInJail()) {
+            payJailFee.setEnabled(true);
+        } else{
+            payJailFee.setEnabled(false);
         }
-        else if ("Pay Jail Fee".equals(e.getActionCommand())) {
-            //current player is on the property that was clicked
-            if (model.getCurrentPlayer().getLocation().equals(property)) {
-                model.payJailFee();
-                //The RESULT will be handled by handleMonopolyJailFeePaymentResult()
-            }
-        }
-        else if ("Roll Dice".equals(e.getActionCommand())) {
-            //Roll Dice is choice by the player as an option not to pay jail fee
-            //this will enable roll button on the main frame.
-            mf.enableRollButton();
-//            this.rollDice.setEnabled(false);
-//            this.payJailFee.setEnabled(false);
-            String info = "You need to click Roll dice, to move out of Jail.";
-            JOptionPane.showMessageDialog(this, info, "Help", JOptionPane.INFORMATION_MESSAGE);
-        }
+        this.setVisible(true);
     }
 
     @Override
@@ -158,40 +131,8 @@ public class JailFrame extends JFrame implements MonopolyView, ActionListener {
 
     }
 
-    /**
-     *
-     * handles the sell update
-     *  @param success true if property sold successfully
-     * @param location to be sold
-     */
-    @Override
-    public void handleMonopolySell(boolean success, Tile location) {
-        //DO NOTHING
+    public void handleMonopolyJailFeePaymentResult(String info) {
+        payJailFee.setEnabled(false);
+        JOptionPane.showMessageDialog(this, info, "Fee Payment Result", JOptionPane.INFORMATION_MESSAGE);
     }
-
-    @Override
-    public void handleMonopolyJailFeePaymentResult(boolean paymentSuccess) {
-        if(paymentSuccess){
-            payJailFee.setEnabled(false);
-            rollDice.setEnabled(false);
-            mf.enableRollButton();
-            titleLabel.setText("Payment Success!");
-            infoLabel.setText("You're Free to roll dice to move out.");
-
-
-        }
-        else{
-
-        }
-    }
-
-    @Override
-    public void handleMonopolyJailPlayerRollResult(String result, boolean forceJailFee) {
-        if (forceJailFee) {
-            titleLabel.setText("3 failed attempts to get doubles.");
-            infoLabel.setText("You MUST Pay Jail Fee, to move out.");
-//            roll button disable whould be handled by handleMonopolyJailPlayerRollResult() in MainFrame
-        }
-    }
-
 }

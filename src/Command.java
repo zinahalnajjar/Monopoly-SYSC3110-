@@ -21,7 +21,7 @@ import java.util.List;
 public class Command {
 
     private final String userCommand; // the command that is issued by the user
-    private static final List <String> gameCommandsList  = Arrays.asList("buy", "pass", "help", "roll", "quit", "status", "sell");
+    private static final List <String> gameCommandsList  = Arrays.asList("buy", "pass", "help", "roll", "quit", "player info", "sell", "pay fee");
 
     /**
      * constructor

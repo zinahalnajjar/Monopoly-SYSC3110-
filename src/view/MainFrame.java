@@ -289,70 +289,10 @@ public class MainFrame extends JFrame implements MonopolyView  {
         sidePanel.add(button);
     }
 
-
-    @Override
-    public void handleMonopolySell(boolean success, Tile location) {
-
-    }
-
-    @Override
-    public void handleMonopolyJailFeePaymentResult(boolean paymentSuccess) {
-        if(paymentSuccess){
-            String info = "You're free to move out of Jail.\n\nYou can Roll dice, to move out of Jail.";
-            JOptionPane.showMessageDialog(this, info, "Help", JOptionPane.INFORMATION_MESSAGE);
-            roll.setEnabled(true);
-            pass.setEnabled(false);
-        }
-        else{
-            String info = "Your payment failed. You're bankrupt!\nYOU'RE OUT OF THE GAME!\n\n" +
-                    "You must pass turn to the next player!";
-            JOptionPane.showMessageDialog(this, info, "Help", JOptionPane.INFORMATION_MESSAGE);
-            roll.setEnabled(false);
-            pass.setEnabled(true);
-        }
-    }
-
-    @Override
-    public void handleMonopolyJailPlayerRollResult(String result, boolean forceJailFee) {
-        JOptionPane.showMessageDialog(this, result, "Jail Player roll result.", JOptionPane.INFORMATION_MESSAGE);
-        if (forceJailFee) {
-            roll.setEnabled(false);
-            pass.setEnabled(false);
-        }
-        else{
-            String info =  "You must pass turn to the next player!";
-            JOptionPane.showMessageDialog(this, info, "Help", JOptionPane.INFORMATION_MESSAGE);
-            roll.setEnabled(false);
-            pass.setEnabled(true);
-        }
-    }
-
-
     @Override
     public void handleMonopolyStatusUpdate(String command, String info) {
         System.out.println("...Notified of command: " + command);
-        switch (command) {
-            case "roll":
-                rollNotification(info);
-                break;
-            case "pass":
-                commandNotifications(info, "Pass");
-                break;
-            case "help":
-                commandNotifications(info, "Help");
-                break;
-            case "player info":
-                commandNotifications(info, "Player info");
-                break;
-            case "quit":
-                commandNotifications(info, "Quit");
-                break;
-            case "win":
-                commandNotifications(info, "Win");
-                break;
-            default:
-                break;
-        }
+        commandNotifications(info, command);
     }
 
     /**
@@ -361,9 +301,9 @@ public class MainFrame extends JFrame implements MonopolyView  {
     private void commandNotifications(String info, String title) {
         JOptionPane.showMessageDialog(this, info, title, JOptionPane.INFORMATION_MESSAGE);
 
-        if(title.equals("Win")){
+        if(title.equals("win")){
             System.exit(0);
-        } else if(title.equals("Pass")){
+        } else if(title.equals("pass")){
             roll.setEnabled(true);
             pass.setEnabled(false);
         }
@@ -372,7 +312,7 @@ public class MainFrame extends JFrame implements MonopolyView  {
     /**
      * Updates the user on what happens after rolling the dice, plus checks for double rolls
      */
-    private void rollNotification(String payRentInfo){
+    public void handleMonopolyRoll(String JailRentInfo){
         Dice dice = model.getDice(); // get the dice from model- also need to add the getter in Game class to return the dice
         Player currentPlayer = model.getCurrentPlayer(); // get the current player
         Tile location = currentPlayer.getLocation(); // get the location of the current player on the board
@@ -382,6 +322,7 @@ public class MainFrame extends JFrame implements MonopolyView  {
         info += "   " + dice.getDie2() + "\n\n";
         info += "Player location:\n";
         info += "   " + location.getTileName() + "\n";
+        info += JailRentInfo;
         JOptionPane.showMessageDialog(this, info, "Roll result", JOptionPane.INFORMATION_MESSAGE);
 
         //pops open the property landed on
@@ -391,26 +332,20 @@ public class MainFrame extends JFrame implements MonopolyView  {
             }
         }
 
-        if(!payRentInfo.isBlank()){
-            JOptionPane.showMessageDialog(this, payRentInfo, "Payed Rent", JOptionPane.INFORMATION_MESSAGE);
+        //pops open the property landed on
+        for(JButton bttn : cornerTiles){
+            if(bttn.getText().equals(location.getTileName())){
+                bttn.doClick();
+            }
         }
 
         //double rolls
-        if(dice.getDie1() == dice.getDie2()){
+        if(dice.isDouble()){
             JOptionPane.showMessageDialog(this, "You rolled doubles, you can roll again", "Roll result", JOptionPane.INFORMATION_MESSAGE);
         }else{
             roll.setEnabled(false);
             pass.setEnabled(true);
         }
-
-        if(model.isPassByJail()){
-            pass.setEnabled(true);
-        }
-
-    }
-
-    public void enableRollButton() {
-        roll.setEnabled(true);
 
     }
 }

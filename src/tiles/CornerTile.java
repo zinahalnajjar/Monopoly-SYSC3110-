@@ -6,6 +6,7 @@
 public class CornerTile extends Tile {
 
     private boolean isJail;
+    private boolean isGoToJail;
     private String description;
 
     /**
@@ -16,6 +17,7 @@ public class CornerTile extends Tile {
     public CornerTile(String name, String description) {
         super(name, TileType.CORNERTILE);
         isJail = false;
+        isGoToJail = false;
         this.description = description;
     }
 
@@ -29,5 +31,13 @@ public class CornerTile extends Tile {
 
     public String getDescription() {
         return description;
+    }
+
+    public boolean isGoToJail() {
+        return isGoToJail;
+    }
+
+    public void setIsGoToJail(boolean goToJail) {
+        isGoToJail = goToJail;
     }
 }

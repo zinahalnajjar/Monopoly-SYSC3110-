@@ -45,7 +45,7 @@ public class CornerFrame extends JFrame implements ActionListener{
 
         //add all the panels to the deed card view
         this.add(titlePanel);
-       this.add(Box.createRigidArea(new Dimension(5, 10)));
+        this.add(Box.createRigidArea(new Dimension(5, 10)));
         this.add(infoPanel);
 
     }

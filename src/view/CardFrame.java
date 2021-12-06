@@ -45,9 +45,9 @@ public class CardFrame extends JFrame implements MonopolyView, ActionListener {
         this.model = model;
         model.addMonopolyView(this);
 
-        this.setLayout(new FlowLayout(FlowLayout.CENTER));
+        this.setLayout(new BoxLayout(getContentPane(),BoxLayout.Y_AXIS));
 
-        this.setSize(250, 320);
+        this.setSize(300, 320);
 
         //set layout for each panel
         //the panels for different sections of the deed card
@@ -76,6 +76,9 @@ public class CardFrame extends JFrame implements MonopolyView, ActionListener {
 
         if(property.getTYPE() == TileType.PROPERTY) {
             initInfoPanel("Houses Owned: None", propertyHouses);
+        }
+        else {
+            initInfoPanel("Rent Level: 1", propertyHouses);
         }
 
         //initialize the buy and sell button the card
@@ -130,10 +133,17 @@ public class CardFrame extends JFrame implements MonopolyView, ActionListener {
             propertyOwner.setText("Owner: Player " + location.getOwner().getPlayerId());
         }
         sell.setEnabled(true);
-        propertyHouses.setText("Houses Owned: " + property.getState().getHouseNum());
-        if(property.getState() == PropertyState.HOTEL){
-            propertyHouses.setText("Hotel Owned");
-            buy.setEnabled(false);
+
+
+        if(property.getTYPE() == TileType.PROPERTY) {
+            propertyHouses.setText("Houses Owned: " + property.getState().getHouseNum());
+            if(property.getState() == PropertyState.HOTEL){
+                propertyHouses.setText("Hotel Owned");
+                buy.setEnabled(false);
+            }
+        }
+        else {
+            propertyHouses.setText("Rent Level: " + property.getState().getHouseNum());
         }
     }
 
@@ -202,7 +212,6 @@ public class CardFrame extends JFrame implements MonopolyView, ActionListener {
      *  @param success true if property sold successfully
      * @param location to be sold
      */
-    @Override
     public void handleMonopolySell(boolean success, Tile location) {
         if(property == location && !success){
             if(model.getCurrentPlayer() != property.getOwner()){
@@ -216,17 +225,5 @@ public class CardFrame extends JFrame implements MonopolyView, ActionListener {
             sell.setEnabled(false);
             this.setVisible(true);
         }
-    }
-
-
-    @Override
-    public void handleMonopolyJailFeePaymentResult(boolean paymentSuccess) {
-        //DO NOTHING
-    }
-
-    @Override
-    public void handleMonopolyJailPlayerRollResult(String result, boolean forceJailFee) {
-        //DO NOTHING
-
     }
 }

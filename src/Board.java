@@ -17,6 +17,8 @@ import java.util.Arrays;
  */
 public class Board {
 
+    private boolean passedGo = false;
+
     private Tile tiles[];
     private Tile newLocation;
 
@@ -86,9 +88,18 @@ public class Board {
 
         if(i >= tiles.length){
             i = i - tiles.length;
+            passedGo = true;
         }
         newLocation = tiles[i];
         return newLocation;
+    }
+
+    public void setPassedGo(boolean b) {
+        passedGo = b;
+    }
+
+    public boolean getPassedGo() {
+        return passedGo;
     }
 
     /**

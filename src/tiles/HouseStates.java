@@ -12,9 +12,10 @@ enum PropertyState {
     H3(3000, 3),
     H4(4000, 4),
     HOTEL(5000, 5),
-    RENT2(2, 0),
-    RENT3(4, 0),
-    RENT4(8, 0);
+    RENT1(1, 1),
+    RENT2(2, 2),
+    RENT3(4, 3),
+    RENT4(8, 4);
 
     private final int rentMultiplier;
     private final int houseNum;
