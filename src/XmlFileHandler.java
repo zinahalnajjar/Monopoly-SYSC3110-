@@ -14,6 +14,7 @@ public class XmlFileHandler extends DefaultHandler {
     private int cost;
     private int houseCost;
     private Color color;
+    private String description;
 
     //tye other fees and currency in the game
     private int go;
@@ -52,7 +53,10 @@ public class XmlFileHandler extends DefaultHandler {
             } else if (type.equals("railroad")){
                 tiles[square] = new PropertyTile(name, TileType.RAILROAD, Color.LIGHT_GRAY, rent, cost, 0);
             } else if (type.equals("cornertile")){
-                tiles[square] = new CornerTile(name);
+                tiles[square] = new CornerTile(name, description);
+                if(square == 7){
+                    ((CornerTile)tiles[square]).setJail(true);
+                }
             }
         }
     }
@@ -88,6 +92,9 @@ public class XmlFileHandler extends DefaultHandler {
         }
         if(currentElement.equals("startmoney")){
             initMoney = Integer.parseInt(s);
+        }
+        if(currentElement.equals("description")){
+            description = s;
         }
 
         currentElement = "";

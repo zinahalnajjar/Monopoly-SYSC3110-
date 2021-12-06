@@ -7,6 +7,7 @@
 		<tile type= "cornertile">
 			<square>0</square>
 			<name>GO</name>
+			<description>Collect 200$</description>
 		</tile>
 		<tile type= "property">
 			<square>1</square>
@@ -57,6 +58,7 @@
 		<tile type="cornertile">
 			<square>7</square>		
 			<name>JAIL</name>
+			<description>In Jail</description>
 		</tile>
 		<tile type="property">
 			<square>8</square>
@@ -121,6 +123,7 @@
 		<tile type="cornertile">
 			<square>16</square>
 			<name>FREE PARKING</name>
+			<description>Nothing happens, just passing by.</description>
 		</tile>
 		<tile type="property">
 			<square>17</square>
@@ -185,6 +188,7 @@
 		<tile type="cornertile">
 			<square>25</square>
 			<name>GO TO JAIL</name>
+			<description> Oh no! You are in Jail! </description>
 		</tile>
 		<tile type="property">
 			<square>26</square>

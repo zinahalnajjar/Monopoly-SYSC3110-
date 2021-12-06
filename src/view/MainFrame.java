@@ -98,12 +98,18 @@ public class MainFrame extends JFrame implements MonopolyView  {
             bttn.addActionListener(cf);
         }
 
-        /*
         for(JButton bttn : cornerTiles) {
+
             System.out.println(bttn.getText());
-            CardFrame cf = new CardFrame((PropertyTile)m.getBoard().getTile(bttn.getText()), mc, m);
-            bttn.addActionListener(cf);
-        }*/
+
+            if(((CornerTile)m.getBoard().getTile(bttn.getText())).isJail()){
+                JailFrame jf = new JailFrame((CornerTile)m.getBoard().getTile(bttn.getText()), mc, m);
+                bttn.addActionListener(jf);
+            } else{
+                CornerFrame cf = new CornerFrame((CornerTile)m.getBoard().getTile(bttn.getText()));
+                bttn.addActionListener(cf);
+            }
+        }
     }
 
     /**
