@@ -141,11 +141,6 @@ public class JailFrame extends JFrame implements MonopolyView, ActionListener {
 
     }
 
-    @Override
-    public void handleMonopolyRoll(String info) {
-
-    }
-
     public void handleMonopolyJailFeePaymentResult(String info) {
         payJailFee.setEnabled(false);
         JOptionPane.showMessageDialog(this, info, "Fee Payment Result", JOptionPane.INFORMATION_MESSAGE);

@@ -321,7 +321,11 @@ public class MainFrame extends JFrame implements MonopolyView, ActionListener {
     @Override
     public void handleMonopolyStatusUpdate(String command, String info) {
         System.out.println("...Notified of command: " + command);
-        commandNotifications(info, command);
+        if(command.equals("roll")){
+            handleMonopolyRoll(info);
+        } else {
+            commandNotifications(info, command);
+        }
     }
 
     @Override
