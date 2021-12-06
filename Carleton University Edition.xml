@@ -27,7 +27,7 @@
 		</tile>			
 		<tile type="railroad">
 			<square>3</square>
-			<name>The caf</name>
+			<name>The cafe carleton residence</name>
 			<rent>25</rent>
 			<cost>200</cost>
 		</tile>
