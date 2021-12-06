@@ -1,4 +1,5 @@
 import java.awt.*;
+import java.io.Serializable;
 import java.util.*;
 import java.util.List;
 
@@ -14,7 +15,7 @@ import java.util.List;
  * @author Kareem
  */
 
-public class Player {
+public class Player implements Serializable {
 
     public final int playerId;
     private final ArrayList<Tile> properties;
@@ -24,9 +25,9 @@ public class Player {
     private boolean inJail;
     private int jailRollCounter;
 
-    private final Map<Color, List<Tile>> colourPropertyMap = new HashMap<>();
+    private boolean isAI;
 
-    //private Map<String, Boolean> colourPropertyMap = new HashMap<>();
+    private final Map<Color, List<Tile>> colourPropertyMap = new HashMap<>();
 
     /**
      * creates a player on the board
@@ -44,6 +45,8 @@ public class Player {
         this.isBankrupt = false;
         this.inJail = false;
         this.jailRollCounter = 0;
+
+        this.isAI = false;
     }
 
     /**
@@ -199,10 +202,33 @@ public class Player {
      */
     @Override
     public String toString() {
-        if(isBankrupt){
-            return "Player " + playerId + " is bankrupt.\n";
+        String info = "Player " + playerId;
+
+        if(isAI){
+            info += " - AI";
         }
-        return "Player " + playerId + "\nMoney: " + money + ", Location: "
+
+        if(isBankrupt){
+            return info +" is bankrupt.\n";
+        }
+        return info + "\nMoney: " + money + ", Location: "
                 + location.getTileName() + "\nProperties owned: \n"+ getStringProperties();
+
     }
+
+    /**
+     * Sets a player as AI
+     */
+    public void setAI() {
+        this.isAI = true;
+    }
+
+    /**
+     * returns the status of a player if it is an AI or not
+     * @return
+     */
+    public boolean getAIStatus(){
+        return isAI;
+    }
+
 }

@@ -40,7 +40,7 @@ public class WelcomeScreen {
                 String input = in.getText();
                 String inputAI = in2.getText();
 
-                if (input.length() == 0 || Integer.parseInt(inputAI) > Integer.parseInt(input)) {
+                if (input.length() == 0 || Integer.parseInt(inputAI) >= Integer.parseInt(input)) {
                     err.setVisible(true);
                 } else {
                     try {
@@ -96,6 +96,14 @@ public class WelcomeScreen {
             }
         });
 
+        JButton restoreGame = new JButton("Reload Previous Game");
+        restoreGame.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                frame.dispose();
+                MainFrame.reloadGame();
+            }
+        });
+
         frame.add(l);
         frame.add(in);
 
@@ -104,12 +112,12 @@ public class WelcomeScreen {
 
         frame.add(button);
         frame.add(help);
+        frame.add(restoreGame);
         frame.add(err);
         frame.setSize(500, 200);
+
         // makes the frame visible
         frame.setVisible(true);
-
-
     }
 
     public static void main(String[] args) {

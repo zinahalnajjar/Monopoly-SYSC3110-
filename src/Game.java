@@ -11,7 +11,6 @@ import java.util.List;
  *
  */
 public class Game implements Serializable {
-    public static final String GAME_FILE_PATH = "monopoly-game";
 
     private final String BUY = "buy";
     private final String SELL = "sell";
@@ -39,12 +38,7 @@ public class Game implements Serializable {
     private Tile newLocation;
     boolean win = false;
 
-    private boolean passByJail = false;
     private int numAIPlayers;
-    private boolean ifAI;
-
-
-
 
     private final List<MonopolyView> views;
 
@@ -73,6 +67,7 @@ public class Game implements Serializable {
         views = new ArrayList<>();
 
         initPlayers(board.getInitialMoney());
+        setAIPlayers(numAIPlayers);
     }
 
     /**
@@ -434,6 +429,10 @@ public class Game implements Serializable {
         } else {
             currentPlayer = players.get(players.indexOf(currentPlayer) + 1);
         }
+
+        if (currentPlayer.getAIStatus()){
+            AITurn();
+        }
     }
 
     /**
@@ -521,38 +520,23 @@ public class Game implements Serializable {
         views.remove(view);
     }
 
-/*    *//**
-     * sets the AI players in the game
-     *
-     * @param numberOfAIPlayers number of AI players in the game
-     *//*
-    public void setNumberOfAIPlayers(int numberOfAIPlayers) {
-        numAIPlayers = numberOfAIPlayers;
-
-        if (numberOfAIPlayers != 0) {
-            ifAI = true;
-        } else {
-            ifAI = false;
-        }
-    }
-
-    *//**
+    /**
      * sets the AI players in the game
      * by changing the AI field in the player class to true
      *
      * @param numAIPlayers number of AI players in the game
-     *//*
+     */
     private void setAIPlayers(int numAIPlayers) {
         if (!(numAIPlayers == 0)) {
             for (int i = 0; i < numAIPlayers; i++) {
-                players.get(i).setAI();
+                players.get(playerCount - i - 1).setAI();
             }
         }
     }
 
-    *//**
+    /**
      * Processes the entirety of the AITurn
-     *//*
+     */
     public void AITurn() {
         aiRollDice();
         if (currentPlayer.getLocation().getTileName().equals("JAIL")) {
@@ -569,16 +553,16 @@ public class Game implements Serializable {
         }
     }
 
-    *//**
+    /**
      * Method to roll dice for the AI player
-     *//*
+     */
     public void aiRollDice() {
         dice.roll();
     }
 
-    *//**
+    /**
      * Moves the AI to the rolled on location
-     *//*
+     */
     public void aiMove() {
         int diceRoll = dice.sumOfDice();
         Tile currentPosition = currentPlayer.getLocation();
@@ -586,14 +570,14 @@ public class Game implements Serializable {
         currentPlayer.setLocation(newLocation);
     }
 
-    *//**
+    /**
      * Determines what the AI does after it lands
-     *//*
+     */
     public void aiLand() {
-        if (newLocation.getTileName().equals("JAIL") && newLocation.getTileName().equals("FREE PARKING") && ((PropertyTile)newLocation).getOwner() == currentPlayer && newLocation.getTileName().equals("GO")) {
+        if (newLocation.getTYPE() == TileType.CORNERTILE) {
             pass();
         } else {
-            if (((PropertyTile)newLocation) == null && ((PropertyTile)newLocation).getCost() < currentPlayer.getMoney()) {
+            if (((PropertyTile)newLocation).getOwner() == null && ((PropertyTile)newLocation).getCost() < currentPlayer.getMoney()) {
                 aiBuy();
             } else {
                 if (((PropertyTile)newLocation).getRent() < currentPlayer.getMoney()) {
@@ -606,29 +590,22 @@ public class Game implements Serializable {
         }
     }
 
-    *//**
+    /**
      * Buys property for AI player
-     *//*
+     */
     public void aiBuy () {
-        currentPlayer.pay(((PropertyTile)newLocation).getCost());
-        newLocation.setOwner(currentPlayer);
+        currentPlayer.removeMoney(((PropertyTile)newLocation).getCost());
+        ((PropertyTile)newLocation).setOwner(currentPlayer);
         currentPlayer.addProperty(((PropertyTile)newLocation));
     }
 
-    *//**
+    /**
      * AI pay rent
-     *//*
+     */
     public void aiPayRent () {
         int rent = ((PropertyTile)newLocation).getRent();
-        currentPlayer.pay(rent);
+        currentPlayer.removeMoney(rent);
         ((PropertyTile)newLocation).getOwner().addMoney(rent);
-    }
-
-    *//**
-     * when an AI player goes bankrupt
-     *//*
-    public void aiBankrupt () {
-        currentPlayer.setBankruptcy(true);
     }
 
     public void aiInJail (){
@@ -637,9 +614,9 @@ public class Game implements Serializable {
             aiMove();
             aiLand();
             pass();
-            currentPlayer.resetJailCounter();
+            currentPlayer.resetJailRollCounter();
         } else {
-            if (currentPlayer.getJailCounter() < 3) {
+            if (currentPlayer.getJailRollCounter() < MAX_JAIL_COUNTER) {
                 pass(); //Do nothing, because no double and don't want to pay
             }
             // Then its time to get out, jail counter is 3 and no double
@@ -649,7 +626,7 @@ public class Game implements Serializable {
                     pass();
                 } else {
                     payJailFee();
-                    currentPlayer.resetJailCounter(); //He has paid and its time to get out
+                    currentPlayer.resetJailRollCounter(); //He has paid and its time to get out
                     aiMove(); // and then
                     aiLand();
                     pass();
@@ -657,25 +634,6 @@ public class Game implements Serializable {
             }
         }
     }
-
-    *//**
-     * same nextPlayerMethod but adjusted for AI
-     * decide the next player, in the order as found in the list starting from index 0
-     *//*
-    public void nextPlayerAI() {
-        if (players.size() == players.indexOf(currentPlayer) + 1) {
-
-            currentPlayer = players.get(0);
-            if (currentPlayer.getAIStatus()){
-                AITurn();
-            }
-        } else {
-            currentPlayer = players.get(players.indexOf(currentPlayer) + 1);
-            if (currentPlayer.getAIStatus()){
-                AITurn();
-            }
-        }
-    }*/
 
 }
 

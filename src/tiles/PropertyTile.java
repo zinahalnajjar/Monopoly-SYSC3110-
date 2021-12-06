@@ -1,11 +1,12 @@
 import java.awt.*;
+import java.io.Serializable;
 
 /**
  * Property tile that holds the blue color set with their defined constant rent and cost
  *
  * @author Tooba
  */
-public class PropertyTile extends Tile {
+public class PropertyTile extends Tile  implements Serializable {
 
     //Color of the property
     private PropertyState state;
