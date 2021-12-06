@@ -295,6 +295,16 @@ public class MainFrame extends JFrame implements MonopolyView  {
         commandNotifications(info, command);
     }
 
+    @Override
+    public void handleMonopolyBuy(String info, PropertyTile newLocation) {
+
+    }
+
+    @Override
+    public void handleMonopolySell(boolean success, Tile newLocation) {
+
+    }
+
     /**
      * displays player info
      */
@@ -346,6 +356,11 @@ public class MainFrame extends JFrame implements MonopolyView  {
             roll.setEnabled(false);
             pass.setEnabled(true);
         }
+
+    }
+
+    @Override
+    public void handleMonopolyJailFeePaymentResult(String info) {
 
     }
 }

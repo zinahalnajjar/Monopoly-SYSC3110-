@@ -78,7 +78,7 @@ public class CardFrame extends JFrame implements MonopolyView, ActionListener {
             initInfoPanel("Houses Owned: None", propertyHouses);
         }
         else {
-            initInfoPanel("Rent Level: 1", propertyHouses);
+            initInfoPanel("Rent Level: Unowned", propertyHouses);
         }
 
         //initialize the buy and sell button the card
@@ -225,5 +225,15 @@ public class CardFrame extends JFrame implements MonopolyView, ActionListener {
             sell.setEnabled(false);
             this.setVisible(true);
         }
+    }
+
+    @Override
+    public void handleMonopolyRoll(String info) {
+
+    }
+
+    @Override
+    public void handleMonopolyJailFeePaymentResult(String info) {
+
     }
 }

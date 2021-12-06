@@ -17,7 +17,7 @@ import java.util.List;
 public class Player {
 
     public final int playerId;
-    private final List<Tile> properties;
+    private final ArrayList<Tile> properties;
     private int money;
     private boolean isBankrupt;
     private Tile location;
@@ -151,6 +151,13 @@ public class Player {
 
             }
         }
+    }
+
+    /**
+     * @return the list of properties in string version
+     */
+    public ArrayList<Tile> getOwnedProperties() {
+        return properties;
     }
 
     /**

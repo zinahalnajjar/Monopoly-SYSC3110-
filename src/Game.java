@@ -86,7 +86,7 @@ public class Game {
         if (ROLL.equals(command)) {
             String info = rollCommand();
             for (MonopolyView view : views) {
-                ((MainFrame)view).handleMonopolyRoll(info);
+                view.handleMonopolyRoll(info);
             }
         }
 
@@ -94,21 +94,21 @@ public class Game {
             String info = "";
             info = buy((PropertyTile)newLocation);
             for (MonopolyView view : views) {
-                ((CardFrame)view).handleMonopolyBuy(info, (PropertyTile)newLocation);
+                view.handleMonopolyBuy(info, (PropertyTile)newLocation);
             }
         }
 
         if (SELL.equals(command)) {
             boolean success = sell((PropertyTile)newLocation);
             for (MonopolyView view : views) {
-                ((CardFrame)view).handleMonopolySell(success, newLocation);
+                view.handleMonopolySell(success, newLocation);
             }
         }
 
         if (FEE.equals(command)) {
             String info = payJailFee();
             for (MonopolyView view : views) {
-                ((JailFrame)view).handleMonopolyJailFeePaymentResult(info);
+                view.handleMonopolyJailFeePaymentResult(info);
             }
         }
 
@@ -174,21 +174,18 @@ public class Game {
                 info = "You have passed GO and collected: " + GO_AMOUNT +"$\n\n";
             }
 
-            //if landed on a property owned by another player
-            if(newLocation.getTYPE().equals(TileType.PROPERTY)){
-                if (((PropertyTile) newLocation).getOwner() != null) {
-                    if (((PropertyTile) newLocation).getOwner() != currentPlayer) {
-                        info += payRent((PropertyTile)newLocation);
-                    }
-                }
-            }
-
             //if landed on go to jail
             if(newLocation.getTYPE().equals(TileType.CORNERTILE)){
                 if (((CornerTile) newLocation).isGoToJail()) {
                     currentPlayer.setLocation(board.moveToJail());
                     info += "Oh no! You have ended up in " + newLocation.getTileName() + "\n";
                     info += "You need to pay the fee or roll doubles to get free";
+                }
+            } else { //if landed on a property owned by another player
+                if (((PropertyTile) newLocation).getOwner() != null) {
+                    if (((PropertyTile) newLocation).getOwner() != currentPlayer) {
+                        info += payRent((PropertyTile)newLocation);
+                    }
                 }
             }
 
@@ -228,53 +225,113 @@ public class Game {
 
     public String buy(PropertyTile property){
         String info = "";
-            if(property.getState() == PropertyState.UNOWNED) {
-                if (currentPlayer.getLocation() == property){
-                    int cost = property.getCost();
-                    int money = currentPlayer.getMoney(); //return players total money
 
-                    if (cost > money){
-                        info = "You don't have enough money.";
-                    } else{
-                        property.setOwner(currentPlayer);
-                        currentPlayer.addProperty(property);
-                        currentPlayer.removeMoney(cost);
+        if(property.getTYPE() == TileType.PROPERTY){
+            info = buyProperty(property);
+        } else if(property.getTYPE() == TileType.RAILROAD) {
+            info = buyRailRoadUtility(property, TileType.RAILROAD);
+        } else if(property.getTYPE() == TileType.UTILITY){
+            info = buyRailRoadUtility(property, TileType.UTILITY);
+        }
 
-                        property.incrementState();
+        return info;
+    }
 
-                        info = "You have successfully bought the property.\n";
-                        info += "You have " + currentPlayer.getMoney() +"$ left.";
-                    }
-                } else {
-                    info = "You are ineligible to buy this property";
-                }
-            } else if (property.getState() == PropertyState.HOTEL) {
-                info = "This property has the maximum number of houses built on it";
-            } else if (currentPlayer == property.getOwner()) {
-                int cost = property.getCostPerHouse();
+    public String buyProperty(PropertyTile property){
+        String info = "";
+
+        if(property.getState() == PropertyState.UNOWNED) {
+            if (currentPlayer.getLocation() == property){
+                int cost = property.getCost();
                 int money = currentPlayer.getMoney(); //return players total money
 
                 if (cost > money){
                     info = "You don't have enough money.";
                 } else{
+                    property.setOwner(currentPlayer);
+                    currentPlayer.addProperty(property);
                     currentPlayer.removeMoney(cost);
+
                     property.incrementState();
 
-                    info = "You have successfully bought " + property.getState().getHouseNum() + " houses\n";
-
-                    if(property.getState().getHouseNum() == 5){
-                        info = "You have successfully bought a Hotel\n";
-                    }
-
-                    if(property.getState().getHouseNum() == 1){
-                        info = "You have successfully bought " + property.getState().getHouseNum() + " house\n";
-                    }
-
+                    info = "You have successfully bought the property.\n";
                     info += "You have " + currentPlayer.getMoney() +"$ left.";
                 }
-            } else {
-                info = "You are not the owner of this property";
+            }else{
+                info = "You are not eligible to buy this property";
             }
+        } else if (property.getState() == PropertyState.HOTEL) {
+            info = "This property has the maximum number of houses built on it";
+        } else if (currentPlayer == property.getOwner()) {
+            int cost = property.getCostPerHouse();
+            int money = currentPlayer.getMoney(); //return players total money
+
+            if (cost > money){
+                info = "You don't have enough money.";
+            } else{
+                currentPlayer.removeMoney(cost);
+                property.incrementState();
+
+                info = "You have successfully bought " + property.getState().getHouseNum() + " houses\n";
+
+                if(property.getState().getHouseNum() == 5){
+                    info = "You have successfully bought a Hotel\n";
+                }
+
+                if(property.getState().getHouseNum() == 1){
+                    info = "You have successfully bought " + property.getState().getHouseNum() + " house\n";
+                }
+
+                info += "You have " + currentPlayer.getMoney() +"$ left.";
+            }
+        } else {
+            info = "You are not the owner of this property";
+        }
+
+        return info;
+    }
+
+    public String buyRailRoadUtility(PropertyTile property, TileType type){
+        String info = "";
+
+        if(property.getState() == PropertyState.UNOWNED) {
+            if (currentPlayer.getLocation() == property){
+                int cost = property.getCost();
+                int money = currentPlayer.getMoney(); //return players total money
+
+                if (cost > money){
+                    info = "You don't have enough money.";
+                } else{
+                    property.setOwner(currentPlayer);
+                    currentPlayer.addProperty(property);
+                    currentPlayer.removeMoney(cost);
+
+                    int i = 0;
+
+                    for(Tile t : currentPlayer.getOwnedProperties()){
+                        if(t.getTYPE() == type){
+                            i++;
+                        }
+                    }
+
+                    if(i == 1){
+                        property.setState(PropertyState.RENT1);
+                    } if(i == 2){
+                        property.setState(PropertyState.RENT2);
+                    } if(i == 3){
+                        property.setState(PropertyState.RENT3);
+                    } if(i == 4){
+                        property.setState(PropertyState.RENT4);
+                    }
+
+                    info = "You have successfully bought the property.\n";
+                    info += "You have " + currentPlayer.getMoney() +"$ left.";
+                }
+            }
+        } else {
+            info = "You are not eligible to buy this property";
+        }
+
         return info;
     }
 
