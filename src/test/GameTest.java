@@ -1,4 +1,4 @@
-
+/*
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -9,6 +9,8 @@ import static org.junit.Assert.*;
  *
  * @Tooba
  */
+
+/*
 public class GameTest {
 
     final Game g = new Game(3, "Original.xml");
@@ -89,3 +91,6 @@ public class GameTest {
         assertEquals(g.getPlayerCount(),3);
     }
 }
+
+
+ */

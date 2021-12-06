@@ -13,14 +13,17 @@ import java.io.IOException;
 public class ChooseVersionScreen extends JFrame implements ActionListener{
 
     private int numPlayers;
+    private int numAIPlayers;
+
     private JPanel panel;
     /**
      * Initializes the start screen
      */
-    public ChooseVersionScreen (int numPlayers) {
+    public ChooseVersionScreen (int numPlayers, int numAIPlayers) {
         super("Monopoly");
 
         this.numPlayers = numPlayers;
+        this.numAIPlayers = numAIPlayers;
 
         panel = new JPanel();
 
@@ -55,7 +58,7 @@ public class ChooseVersionScreen extends JFrame implements ActionListener{
     public void actionPerformed(ActionEvent e) {
         this.dispose();
         try {
-            new MainFrame(numPlayers,e.getActionCommand()+".xml");
+            new MainFrame(numPlayers, numAIPlayers,e.getActionCommand()+".xml");
         } catch (IOException ex) {
             ex.printStackTrace();
         }

@@ -52,10 +52,10 @@ public class MainFrame extends JFrame implements MonopolyView  {
      *
      * @param playerCount
      */
-    public MainFrame(int playerCount, String filename) throws IOException {
+    public MainFrame(int playerCount, int aiCount, String filename) throws IOException {
         super("Monopoly!!");
   
-        model = new Game(playerCount, filename);
+        model = new Game(playerCount, aiCount, filename);
 
         model.addMonopolyView(this);
 

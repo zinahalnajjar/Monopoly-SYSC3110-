@@ -12,6 +12,7 @@ import java.awt.event.ActionListener;
 public class WelcomeScreen {
     final JFrame frame;
     int numPlayers;
+    int numAIPlayers;
 
     /**
      * Initializes the start screen
@@ -21,27 +22,33 @@ public class WelcomeScreen {
         final FlowLayout layout = new FlowLayout();
         layout.setVgap(10);
 
+        // creating instance of JFrame with name "first way"
         frame = new JFrame("Monopoly");
+        //frame.setLayout(new GridLayout(10, 1, 5, 5));
         frame.setLayout(layout);
 
         JLabel l = new JLabel("Enter the number of players:");
-        JLabel err = new JLabel("Invalid Entry. Input must be an integer above 1.");
+        JLabel l2 = new JLabel("Enter the desired number of AI players:");
+        JLabel err = new JLabel("Invalid Entry. Input must be an integer above 1, and AI players must be less than or equal to total number of players.");
         err.setVisible(false);
         JTextField in = new JTextField(20);
+        JTextField in2 = new JTextField(20);
         // creates instance of JButton
         JButton button = new JButton("Play");
         button.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 String input = in.getText();
+                String inputAI = in2.getText();
 
-                if (input.length() == 0) {
+                if (input.length() == 0 || Integer.parseInt(inputAI) > Integer.parseInt(input)) {
                     err.setVisible(true);
                 } else {
                     try {
                         numPlayers = Integer.parseInt(input);
+                        numAIPlayers = Integer.parseInt(inputAI);
                         if (numPlayers > 1) {
                             frame.dispose();
-                            new ChooseVersionScreen(numPlayers);
+                            new ChooseVersionScreen(numPlayers, numAIPlayers);
                         } else {
                             err.setVisible(true);
                         }
@@ -91,22 +98,18 @@ public class WelcomeScreen {
 
         frame.add(l);
         frame.add(in);
+
+        frame.add(l2);
+        frame.add(in2);
+
         frame.add(button);
         frame.add(help);
         frame.add(err);
-        frame.setSize(300, 200);
+        frame.setSize(500, 200);
         // makes the frame visible
         frame.setVisible(true);
 
 
-    }
-
-    public void setNumPlayers(int players) {
-        numPlayers = players;
-    }
-
-    public int getNumPlayers() {
-        return this.numPlayers;
     }
 
     public static void main(String[] args) {
