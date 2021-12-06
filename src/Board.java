@@ -5,6 +5,7 @@ import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import java.io.File;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.Arrays;
 
 /**
@@ -15,7 +16,7 @@ import java.util.Arrays;
  * @author Kareem
  * @author Zinah
  */
-public class Board {
+public class Board  implements Serializable {
 
     private boolean passedGo = false;
 

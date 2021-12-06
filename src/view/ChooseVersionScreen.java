@@ -39,9 +39,9 @@ public class ChooseVersionScreen extends JFrame implements ActionListener{
 
         editionButton(new JButton("Original"));
         editionButton(new JButton("Here and Now Edition"));
+        editionButton(new JButton("Carleton University Edition"));
 
-
-        this.setSize(400, 200);
+        this.setSize(400, 300);
         this.add(panel);
         this.setVisible(true);
     }

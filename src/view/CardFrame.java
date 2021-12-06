@@ -228,11 +228,6 @@ public class CardFrame extends JFrame implements MonopolyView, ActionListener {
     }
 
     @Override
-    public void handleMonopolyRoll(String info) {
-
-    }
-
-    @Override
     public void handleMonopolyJailFeePaymentResult(String info) {
 
     }

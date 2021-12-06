@@ -1,6 +1,6 @@
+import java.io.Serializable;
 
-
-public abstract class Tile {
+public abstract class Tile  implements Serializable {
 
     private TileType type;
     private final String tileName;

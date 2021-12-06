@@ -1,9 +1,9 @@
-
+import java.io.Serializable;
 
 /**
  * Passing tiles are tiles such as free parking that can be passed with no affect to the player
  */
-public class CornerTile extends Tile {
+public class CornerTile extends Tile implements Serializable {
 
     private boolean isJail;
     private boolean isGoToJail;

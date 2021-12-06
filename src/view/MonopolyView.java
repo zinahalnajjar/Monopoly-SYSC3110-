@@ -11,7 +11,5 @@ public interface MonopolyView {
 
     void handleMonopolySell(boolean success, Tile newLocation);
 
-    void handleMonopolyRoll(String info);
-
     void handleMonopolyJailFeePaymentResult(String info);
 }

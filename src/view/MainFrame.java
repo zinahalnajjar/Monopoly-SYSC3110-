@@ -1,6 +1,8 @@
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Objects;
@@ -14,7 +16,9 @@ import java.util.Objects;
  * @author Tooba
  * @author Zinah
  */
-public class MainFrame extends JFrame implements MonopolyView  {
+public class MainFrame extends JFrame implements MonopolyView, ActionListener {
+
+    public static final String GAME_FILE_PATH = "monopoly-game";
 
     private final Color BG_COLOR = new Color(69, 255, 156);
 
@@ -78,11 +82,36 @@ public class MainFrame extends JFrame implements MonopolyView  {
         //Set up the content pane.
         addComponentsToPane(this.getContentPane(), mc);
 
+        //Add Save And Exit Button
+        JButton saveAndExit = new JButton("Save And Exit");
+        sidePanel.add(saveAndExit);
+        saveAndExit.addActionListener(this);
+
         addListeners(model, mc);
 
         //Display the window.
         this.pack();
         this.setVisible(true);
+    }
+
+    // method to relaod the saved version of the game
+    public static void reloadGame() {
+        try {
+            //Read game object from file.
+            Object object = FileUtil.readFromFile(GAME_FILE_PATH);
+
+            //Cast to MainFrame Object.
+            MainFrame mainFrame = (MainFrame) object;
+            System.out.println("Game loaded from file.");
+            mainFrame.setVisible(true);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Could NOT read game from file: " + GAME_FILE_PATH , "Error", JOptionPane.ERROR_MESSAGE);
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
     }
 
     /**
@@ -292,7 +321,11 @@ public class MainFrame extends JFrame implements MonopolyView  {
     @Override
     public void handleMonopolyStatusUpdate(String command, String info) {
         System.out.println("...Notified of command: " + command);
-        commandNotifications(info, command);
+        if(command.equals("roll")){
+            handleMonopolyRoll(info);
+        } else {
+            commandNotifications(info, command);
+        }
     }
 
     @Override
@@ -362,6 +395,24 @@ public class MainFrame extends JFrame implements MonopolyView  {
     @Override
     public void handleMonopolyJailFeePaymentResult(String info) {
 
+    }
+
+    private void saveGame() {
+        try {
+            //Save the 'CURRENT OBJECT'
+            FileUtil.writeToFile(this, GAME_FILE_PATH);
+            System.out.println("Game Saved!");
+            System.exit(0);
+        } catch (IOException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Could NOT save game", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        saveGame();
     }
 }
 
