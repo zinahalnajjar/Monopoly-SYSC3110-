@@ -1,7 +1,11 @@
 
+
 import javax.swing.*;
 import java.io.IOException;
 import java.io.Serializable;
+
+import java.io.*;
+
 import java.util.*;
 
 /**
@@ -9,13 +13,9 @@ import java.util.*;
  * Starts going through a while loop, that goes till the game ends.
  * Game ends with when all but one player have quit or gone bankrupt.
  *
- * @author Tooba
- * @author Zinah
- * @author Kareem
  */
 public class Game implements Serializable {
-//
-//    public static final String GAME_FILE_PATH = "monopoly-game";
+    public static final String GAME_FILE_PATH = "monopoly-game";
 
     private static final int JAIL_FEE = 50;
     private static final int GO_AMOUNT = 200;
@@ -45,8 +45,62 @@ public class Game implements Serializable {
     private Property newLocation;
     boolean win = false;
     private boolean passByJail = false;
+    private int numAIPlayers;
+    private boolean ifAI;
 
-    private List<MonopolyView> views;
+    /**
+     * @return
+     */
+    public void payJailFee() {
+        String info = "";
+        System.out.println("Player " + currentPlayer.getPlayerId() + " has $" + currentPlayer.getMoney()); //dispay how much the player owns
+        currentPlayer.removeMoney(JAIL_FEE);// remove money from player based on what they paid
+        boolean bankrupt = checkBankruptcy();
+
+        boolean paymentSuccess;
+        if (bankrupt) {
+            paymentSuccess = false;
+        } else {
+            info = "Player " + currentPlayer.getPlayerId() + " PAID JAIL FEE: " + JAIL_FEE +
+                    "\nPlayer" + currentPlayer.getPlayerId() + " has $" + currentPlayer.getMoney();
+            System.out.println(info);
+            paymentSuccess = true;
+            jailPlayerPaymentStatusMap.put(currentPlayer.getPlayerId(), true);
+
+        }
+
+        for (MonopolyView view : views) {
+            view.handleMonopolyJailFeePaymentResult(paymentSuccess);
+        }
+
+    }
+
+    public void collect() {
+        currentPlayer.addMoney(GO_AMOUNT);
+        for (MonopolyView view : views) {
+            view.handleMonopolyGOResult();
+        }
+    }
+
+    public boolean isPlayerInJail() {
+        return board.getJailProperty().equals(currentPlayer.getLocation());
+    }
+
+    public Board getBoard() {
+        return this.board;
+    }
+
+    public Dice getDice() {
+        return this.dice;
+    }
+
+    public Player getCurrentPlayer() {
+        return this.currentPlayer;
+    }
+
+    public enum Status {}
+
+    private final List<MonopolyView> views;
 
     /**
      * Initializes the game, sets up the scanner
@@ -699,6 +753,163 @@ public class Game implements Serializable {
 
     public boolean isPassByJail(){
         return passByJail;
+    }
+
+
+    /**
+     * sets the AI players in the game
+     *
+     * @param numberOfAIPlayers number of AI players in the game
+     */
+    public void setNumberOfAIPlayers(int numberOfAIPlayers) {
+        numAIPlayers = numberOfAIPlayers;
+
+        if (numberOfAIPlayers != 0) {
+            ifAI = true;
+        } else {
+            ifAI = false;
+        }
+    }
+
+    /**
+     * sets the AI players in the game
+     * by changing the AI field in the player class to true
+     *
+     * @param numAIPlayers number of AI players in the game
+     */
+    private void setAIPlayers(int numAIPlayers) {
+        if (!(numAIPlayers == 0)) {
+            for (int i = 0; i < numAIPlayers; i++) {
+                players.get(i).setAI();
+            }
+        }
+    }
+
+    /**
+     * Processes the entirety of the AITurn
+     */
+    public void AITurn() {
+        aiRollDice();
+        if (currentPlayer.getLocation().getPropertyName().equals("JAIL")) {
+            currentPlayer.addJailCounter();
+            aiInJail();
+        } else {
+            aiMove();
+            aiLand();
+            if (dice.getDie1() == dice.getDie2()) {
+                AITurn();
+            } else {
+                pass();
+            }
+        }
+    }
+
+    /**
+     * Method to roll dice for the AI player
+     */
+    public void aiRollDice() {
+        dice.roll();
+    }
+
+    /**
+     * Moves the AI to the rolled on location
+     */
+    public void aiMove() {
+        int diceRoll = dice.sumOfDice();
+        Property currentPosition = currentPlayer.getLocation();
+        newLocation = board.move(diceRoll, currentPosition);
+        currentPlayer.setLocation(newLocation);
+    }
+
+    /**
+     * Determines what the AI does after it lands
+     */
+    public void aiLand() {
+        if (newLocation.getPropertyName().equals("JAIL") && newLocation.getPropertyName().equals("FREE PARKING") && newLocation.getOwner() == currentPlayer && newLocation.getPropertyName().equals("GO")) {
+            pass();
+        } else {
+            if (newLocation.getOwner() == null && newLocation.getCost() < currentPlayer.getMoney()) {
+                aiBuy();
+            } else {
+                if (newLocation.getRent() < currentPlayer.getMoney()) {
+                    aiPayRent();
+                } else {
+                    currentPlayer.setBankruptcy(true);
+                    newLocation.getOwner().addMoney(currentPlayer.getMoney());
+                }
+            }
+        }
+    }
+
+    /**
+     * Buys property for AI player
+     */
+    public void aiBuy () {
+        currentPlayer.pay(newLocation.getCost());
+        newLocation.setOwner(currentPlayer);
+        currentPlayer.addProperty(newLocation);
+    }
+
+    /**
+     * AI pay rent
+     */
+    public void aiPayRent () {
+        int rent = newLocation.getRent();
+        currentPlayer.pay(rent);
+        newLocation.getOwner().addMoney(rent);
+    }
+
+    /**
+     * when an AI player goes bankrupt
+     */
+    public void aiBankrupt () {
+        currentPlayer.setBankruptcy(true);
+    }
+
+    public void aiInJail (){
+        // Check jailCounter
+        if (dice.getDie1() == dice.getDie2()) {
+            aiMove();
+            aiLand();
+            pass();
+            currentPlayer.resetJailCounter();
+        } else {
+            if (currentPlayer.getJailCounter() < 3) {
+                pass(); //Do nothing, because no double and don't want to pay
+            }
+            // Then its time to get out, jail counter is 3 and no double
+            else {
+                if (currentPlayer.getMoney() < 50) {
+                    currentPlayer.setBankruptcy(true);
+                    pass();
+                } else {
+                    payJailFee();
+                    currentPlayer.resetJailCounter(); //He has paid and its time to get out
+                    aiMove(); // and then
+                    aiLand();
+                    pass();
+                }
+            }
+        }
+    }
+
+    /**
+     * same nextPlayerMethod but adjusted for AI
+     * decide the next player, in the order as found in the list starting from index 0
+     */
+    public void nextPlayerAI() {
+        if (players.size() == players.indexOf(currentPlayer) + 1) {
+
+            currentPlayer = players.get(0);
+            if (currentPlayer.getAIStatus()){
+                AITurn();
+            }
+        } else {
+            currentPlayer = players.get(players.indexOf(currentPlayer) + 1);
+            if (currentPlayer.getAIStatus()){
+                AITurn();
+            }
+        }
     }
 
 }
