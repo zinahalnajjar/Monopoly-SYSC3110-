@@ -9,7 +9,6 @@ Zip File containing
  - executable jar file
  - UML diagram
  - Manual
- - Javadoc
  - Sequence diagrams
  - readme
 
