@@ -1,21 +1,19 @@
 Authors:
+ - Tooba Sheikh - 101028915
+ - Kareem Abdo  - 101140382
+ - Zinah Al-Najjar - 101108056
 
-- Tooba Sheikh - 101028915
-- Kareem Abdo - 101140382
-- Zinah Al-Najjar - 101108056
-
-Deliverables: Zip File containing
-
-- executable jar file
-- UML diagram
-- Manual
-- Sequence diagrams
-- readme
+Deliverables: 
+Zip File containing
+ - executable jar file
+ - UML diagram
+ - Manual
+ - Sequence diagrams
+ - readme
 
 Classes:
 
 Model:
-
 - Board: Calls the XML Handler to create tiles array and implaments moving the players position
 - XmlFileHandler: Parses all the xml files to create the baord (includes three xml files with three different versions)
 - Dice: Rolls the dice, can return sums of both die or individual values
@@ -31,7 +29,7 @@ Model:
 
 View:
 
-MonopolyView (interface)
+- MonopolyView (interface)
 - MainFrame - Implements the main game view implementing MonopolyView
 - CardFrame - Implements the deed card, each CardFram considered its own view implementing MonopolyView
 - ChooseVersionScreen - lets you choose the version to play
@@ -40,7 +38,6 @@ MonopolyView (interface)
 - WelcomeScreen - Start screen that asks the user to start the game by entering number of players and help button that prints instructions
 
 Controller:
-
 - MonopolyController - connects view to model
 
 Contributions:
