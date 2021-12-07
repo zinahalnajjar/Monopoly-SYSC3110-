@@ -42,9 +42,9 @@ Controller:
  - MonopolyController - connects view to model
 
 Contributions:
-Kareem - AI
-Zinah: - save/load, Uml, Manual, Javadoc
-Tooba: Xml international versions, working on smelly code feedback, Sequence Diagrams, javadoc, readme
+- Kareem - AI
+- Zinah: - save/load, Uml, Manual, Javadoc
+- Tooba: Xml international versions, working on smelly code feedback, Sequence Diagrams, javadoc, readme
 
 Changes From last Version: 
  - All the colored properties, Railroads and Utilities are now implemented within one class called PropertyTiles.
