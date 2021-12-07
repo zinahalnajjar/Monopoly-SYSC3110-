@@ -418,6 +418,11 @@ public class Game implements Serializable {
      */
     public String quit(){
         currentPlayer.setBankruptcy(true);
+        for(PropertyTile t : currentPlayer.getOwnedProperties()){
+            t.setState(PropertyState.UNOWNED);
+            t.setOwner(null);
+        }
+
         nextPlayer();
         String info = "Player "+ previousPlayer.getPlayerId()+" has quit\n" +
                 "It is now Player " +currentPlayer.getPlayerId()+ "'s turn";
