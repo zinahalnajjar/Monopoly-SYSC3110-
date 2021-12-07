@@ -18,7 +18,7 @@ import java.util.List;
 public class Player implements Serializable {
 
     public final int playerId;
-    private final ArrayList<Tile> properties;
+    private final ArrayList<PropertyTile> properties;
     private int money;
     private boolean isBankrupt;
     private Tile location;
@@ -159,7 +159,7 @@ public class Player implements Serializable {
     /**
      * @return the list of properties in string version
      */
-    public ArrayList<Tile> getOwnedProperties() {
+    public ArrayList<PropertyTile> getOwnedProperties() {
         return properties;
     }
 
