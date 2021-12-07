@@ -6,7 +6,7 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 
 /**
- * Welcome Screen
+ * choose version of game screen
  *
  * @author Tooba Sheikh
  */
@@ -17,6 +17,7 @@ public class ChooseVersionScreen extends JFrame implements ActionListener{
 
     private JPanel panel;
     /**
+     * constructor
      * Initializes the start screen
      */
     public ChooseVersionScreen (int numPlayers, int numAIPlayers) {
@@ -46,6 +47,10 @@ public class ChooseVersionScreen extends JFrame implements ActionListener{
         this.setVisible(true);
     }
 
+    /**
+     * method that adds action listner to button
+     * @param button is the any button being initialized
+     */
     private void editionButton(JButton button){
         button.setActionCommand(button.getText());
         button.addActionListener(this);
@@ -54,6 +59,10 @@ public class ChooseVersionScreen extends JFrame implements ActionListener{
 
     }
 
+    /**
+     * performs the action of closing the chooseVersionScreen and openeing the mainframe
+     * @param e text on the button
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
         this.dispose();

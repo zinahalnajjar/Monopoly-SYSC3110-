@@ -1,5 +1,10 @@
 import java.io.Serializable;
 
+/**
+ * Abstract class that holds common features between it tile subclasses
+ *
+ * @author Tooba
+ */
 public abstract class Tile  implements Serializable {
 
     private TileType type;

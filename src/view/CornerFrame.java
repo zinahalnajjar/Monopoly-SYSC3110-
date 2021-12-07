@@ -4,6 +4,11 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * Corner Frame
+ *
+ * @author Tooba Sheikh
+ */
 public class CornerFrame extends JFrame implements ActionListener{
 
     private Tile property;
@@ -14,6 +19,10 @@ public class CornerFrame extends JFrame implements ActionListener{
 
     private JLabel info = new JLabel();
 
+    /**
+     * constructor that initilizes everything
+     * @param property the property which is being represented by the view
+     */
     public CornerFrame(CornerTile property) {
         super("Monopoly!!");
 
@@ -49,7 +58,10 @@ public class CornerFrame extends JFrame implements ActionListener{
         this.add(infoPanel);
 
     }
-
+    /**
+     * performs the action of setting this frame visible
+     * @param e
+     */
     public void actionPerformed(ActionEvent e) {
         this.setVisible(true);
     }

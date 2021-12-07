@@ -4,7 +4,11 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-
+/**
+ * Corner Frame
+ *
+ * @author Zinah
+ */
 public class JailFrame extends JFrame implements MonopolyView, ActionListener {
 
 
