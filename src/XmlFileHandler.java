@@ -3,6 +3,11 @@ import org.xml.sax.helpers.DefaultHandler;
 
 import java.awt.*;
 
+/**
+ * Parses XML files into tiles
+ *
+ * @author Tooba Sheikh
+ */
 public class XmlFileHandler extends DefaultHandler {
 
 
@@ -25,6 +30,9 @@ public class XmlFileHandler extends DefaultHandler {
 
     private Tile[] tiles = new Tile[32];
 
+    /**
+     * @return fully initialized tile class
+     */
     public Tile[] getBoardTiles()
     {
         return tiles;
@@ -103,14 +111,23 @@ public class XmlFileHandler extends DefaultHandler {
         currentElement = "";
     }
 
+    /**
+     * @return the go amount
+     */
     public int getGo() {
         return go;
     }
 
+    /**
+     * @return the jail amount
+     */
     public int getJail() {
         return jail;
     }
 
+    /**
+     * @return the inital fee
+     */
     public int getInit() {
         return initMoney;
     }
